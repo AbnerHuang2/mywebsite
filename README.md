@@ -11,3 +11,6 @@
 
 # 评论系统 utterances
 在theme/congo/layouts/partials/sharing-links.html 添加了一段脚本（api：https://utteranc.es/）
+
+# 看板娘 live2d
+在theme/congo/layouts/partials/footer.html 添加了一段脚本
