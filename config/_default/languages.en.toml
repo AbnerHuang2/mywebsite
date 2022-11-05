@@ -5,7 +5,7 @@ isoCode = "en"
 weight = 1
 rtl = false
 
-title = "Congo"
+title = "Skitii"
 # logo = "img/logo.jpg"
 # description = "My awesome website"
 # copyright = "Copy, _right?_ :thinking_face:"
@@ -13,8 +13,8 @@ title = "Congo"
 dateFormat = "2 January 2006"
 
 [author]
-  # name = "Your name here"
-  # image = "img/author.jpg"
+  name = "Skitii"
+  image = "img/skitii.png"
   # headline = "I'm only human"
   # bio = "A little bit about you"
   # links = [
