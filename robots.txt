@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: sitemap.xml
+Sitemap: skitii-website.vercel.app/sitemap.xml
