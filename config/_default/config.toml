@@ -4,7 +4,7 @@ theme = "congo"
 # Refer to the theme docs for more details about each of these parameters.
 # https://jpanther.github.io/congo/docs/getting-started/
 
-#baseURL = "https://abnerhuang2.github.io/mywebsite/"
+baseURL = "skitii-website.vercel.app"
 defaultContentLanguage = "en"
 
 enableRobotsTXT = true
