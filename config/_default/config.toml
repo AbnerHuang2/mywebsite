@@ -18,3 +18,10 @@ summaryLength = 0
 [taxonomies]
   tag = "tags"
   category = "categories"
+
+
+[params.utterances]
+  enable = true
+  repo = "AbnerHuang2/mywebsite" ##换成自己得
+  issueTerm = "pathname"
+  theme = "github-light"

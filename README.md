@@ -7,3 +7,7 @@
 # 工作机制
 1. git push到master之后，会触发github actions构建部署静态页面到gh-pages分支
 2. gh-pages分支被更新后，会触发vercel的hook，重新构建部署到vercel上。
+
+
+# 评论系统 utterances
+在theme/congo/layouts/partials/sharing-links.html 添加了一段脚本（api：https://utteranc.es/）
