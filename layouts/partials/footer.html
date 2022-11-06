@@ -72,7 +72,19 @@
 <!-- 你也可以把js文件下载下来，放到static/js/目录下，就不依赖别人的服务了 -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
-
+<!-- 配置chatra -->
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
 <script type="text/javascript">
     L2Dwidget.init({
         model: {
@@ -87,7 +99,7 @@
             width: 120,         // canvas的宽度
             height: 300,        // canvas的高度
             position: 'right',   // 显示位置：左或右
-            hOffset: 0,         // canvas水平偏移
+            hOffset: 20,         // canvas水平偏移
             vOffset: 0,         // canvas垂直偏移
         },
         mobile: {

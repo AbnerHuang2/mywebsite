@@ -24,7 +24,7 @@
 
 # 看板娘 live2d
 在theme/congo/layouts/partials/footer.html 添加了一段脚本
-``````JS
+```javascript
 //live2d
 <!-- Live2D，网页上的小人，可以修改live2d_config.js来修改模型，模型都在static/live2d_models里面 -->
 <!-- 你也可以把js文件下载下来，放到static/js/目录下，就不依赖别人的服务了 -->
@@ -59,4 +59,28 @@
         },
      });
 </script>
+```
+
+# 聊天 chatra
+footer.html添加脚本
+
+```javascript
+<script>
+    (function(d, w, c) {
+        w.ChatraID = 'your ChatraID'; //配置你自己的chatraID
+        var s = d.createElement('script');
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        s.async = true;
+        s.src = 'https://call.chatra.io/chatra.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'Chatra');
+</script>
+```
+
+# 网易云音乐
+找个合适的页面添加iframe
+```javascript
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=450 src="//music.163.com/outchain/player?type=0&id=7179117219&auto=1&height=430"></iframe>
 ```
