@@ -1,3 +1,6 @@
+# 主题
+    "name": "hugo-congo-theme",
+    "version": "2.3.1"
 # 使用
 1. git clone项目到本地， 后面记得增加参数 --recurse-submodules ，用于初始化子模块（git clone git@github.com:AbnerHuang2/mywebsite.git --recurse-submodules）
 2. git checkout master (master才是工作分支， gh-pages是部署分支)
@@ -83,4 +86,21 @@ footer.html添加脚本
 找个合适的页面添加iframe
 ```javascript
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=450 src="//music.163.com/outchain/player?type=0&id=7179117219&auto=1&height=430"></iframe>
+```
+
+# 图片放大
+footer.html增加 
+```javascript
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+```
+
+render-image.html 对所有的img标签加上 下面这段代码
+```javascript
+<div class="post-img-view">
+    <a data-fancybox="gallery" href="{{ .Destination | safeURL }}">
+        <!-- img 标签 -->
+    </a>
+</div>
 ```
