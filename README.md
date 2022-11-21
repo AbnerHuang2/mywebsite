@@ -27,6 +27,7 @@
 
 # 看板娘 live2d
 在theme/congo/layouts/partials/footer.html 添加了一段脚本
+更多选项 ： https://github.com/stevenjoezhang/live2d-widget
 ```javascript
 //live2d
 <!-- Live2D，网页上的小人，可以修改live2d_config.js来修改模型，模型都在static/live2d_models里面 -->
