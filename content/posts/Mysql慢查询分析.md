@@ -12,9 +12,11 @@ categories:
 <!-- more -->
 
 # 从mybatis日志中获取sql语句，通过explain进行分析。
+
 ```bash
 grep -E '==>  Preparing:' bytello.log | sed 's/.*==>  Preparing:/explain/' | sed 's/\($\)/;/' | sed 's/\?/""/g' | sed 's/LIMIT ""/LIMIT 5/' | sort -u | uniq > test.txt
 ```
+
 稍微解释一下，怕以后忘了。
 grep -E '==>  Preparing:' bytello.log 是通过正则匹配包含'==>  Preparing:'的行。
 然后通过管道将每一行的结果输出到下一个命令。
@@ -22,7 +24,9 @@ grep -E '==>  Preparing:' bytello.log 是通过正则匹配包含'==>  Preparing
 后面的sed含义类似。
 sort -u | uniq 是去除重复行。
 最后输出到test.txt
+
 ----
+
 #### explain type含义
 
 - system：系统表，少量数据，往往不需要进行磁盘IO
@@ -46,12 +50,14 @@ show variables like '%slow_query_log%';
 - slow_query_log_file //慢查询日志存放目录
 ### 开启慢查询
 **set global** slow_query_log = **on**;
+
 ### 查询慢查询时间，默认是10s，但是测试推荐设置0。因为代价不高，然后方便分析。
-**show **variables **like **'%long_query_time%';
+
+show variables like '%long_query_time%';
 
 
 **慢查询测试**
-**select sleep**(11);
+select sleep**(11);
 
 
 # 慢查询分析工具
