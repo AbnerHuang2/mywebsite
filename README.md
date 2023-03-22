@@ -107,4 +107,4 @@ render-image.html 对所有的img标签加上 下面这段代码
 ```
 
 # 修复中文字数显示问题
-config.toml 文件languages配置下面添加 hasCJKLanguage = true
+config.toml 文件languages配置下面添加 hasCJKLanguage = true 
