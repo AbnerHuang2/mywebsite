@@ -3,7 +3,7 @@ title: Mysql主从同步竟然这么多细节
 date: 2022-07-27 17:07:07
 description: 踩踩Mysql主从同步的坑
 tags:
-- Mysql
+- 主从同步
 categories:
 - Mysql
 
@@ -11,7 +11,7 @@ categories:
 <meta name="referrer" content="no-referrer" />
 <!-- more -->
 
-# 整体流程
+## 整体流程
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1657979751192-3c6cd1bc-61e8-4cbe-84e4-2c2025b9690b.png#clientId=uff23d712-cab8-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=707&id=ub805f8af&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1414&originWidth=2174&originalType=binary&ratio=1&rotation=0&showTitle=false&size=557877&status=done&style=none&taskId=uf7436d59-bb9c-4005-9754-13c7cd0f9e4&title=&width=1087)
 
 1. 主库发生数据变更，将数据写入到binlog文件中
@@ -20,7 +20,7 @@ categories:
 1. 从库I/O线程写入本地的中转日志（relay log）文件（与binlog文件一致）
 1. 从库SQL线程读取relay log文件重放
 
-# 传输文件格式
+## 传输文件格式
 通过上图可以看见，主库会将binlog推送从库。
 那么binlog是什么格式？
 
@@ -47,9 +47,9 @@ categories:
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1657981768550-a2718efe-e195-4cd3-bab8-0fc1a8b47448.png#clientId=uff23d712-cab8-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=488&id=uaea0d4cb&margin=%5Bobject%20Object%5D&name=image.png&originHeight=976&originWidth=2062&originalType=binary&ratio=1&rotation=0&showTitle=false&size=325690&status=done&style=none&taskId=u6e16e84d-46d1-4b28-a197-4ce9a762196&title=&width=1031)
 
 
-# 主从模式下的高可用
+## 主从模式下的高可用
 
-## 主从延迟
+### 主从延迟
 什么情况下会造成主从延迟？
 
 1. 从库机器性能差
@@ -63,9 +63,9 @@ categories:
 
 主从延迟了怎么处理？
 
-### 主从延迟策略
+#### 主从延迟策略
 
-#### 可靠性优先策略
+##### 可靠性优先策略
 主库发现和从库存在延迟，先关闭写状态，等到延迟为0时，再开启从库写，然后将流量达到从库。
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1658027490508-e7ee5120-7e68-4cfb-80ee-c28524cbd330.png#clientId=uff23d712-cab8-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=485&id=ud72141fa&margin=%5Bobject%20Object%5D&name=image.png&originHeight=970&originWidth=2036&originalType=binary&ratio=1&rotation=0&showTitle=false&size=294398&status=done&style=none&taskId=u674ce459-c4b4-4c2b-b160-f1c35dba391&title=&width=1018)
 备注：图中的SBM，是seconds_behind_master参数的简写。
@@ -77,7 +77,7 @@ categories:
 1. 把业务请求切到备库B。
 
 这个切换流程，一般是由专门的HA系统来完成的，我们暂时称之为可靠性优先流程。
-#### 可用性优先策略
+##### 可用性优先策略
 如果强行把步骤4、5调整到最开始执行，也就是说不等主备数据同步，直接把连接切到备库B，并且让备库B可以读写，那么系统几乎就没有不可用时间了。
 我们把这个切换流程，暂时称作可用性优先流程。这个切换流程的代价，就是可能出现数据不一致的情况。
 ### 从库并行复制
@@ -171,7 +171,7 @@ a. 如果不包含，表示A’已经把实例B需要的binlog给删掉了，直
 b. 如果确认全部包含，A’从自己的binlog文件里面，找出第一个不在set_b的事务，发给B；
 1. 之后就从这个事务开始，往后读文件，按顺序取binlog发给B去执行。
 
-# 总结
+## 总结
 本篇主要是剖析Mysql的主从同步。
 
 1. 先从整体流程上看Mysql的同步过程。

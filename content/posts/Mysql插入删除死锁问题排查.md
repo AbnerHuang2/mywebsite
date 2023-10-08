@@ -3,7 +3,6 @@ title: Mysql插入删除死锁问题排查
 description: 搞懂Mysql插入删除是如何加锁的
 date: 2022-02-10 19:58:16
 tags:
-- Mysql
 - 问题排查
 categories:
 - Mysql
@@ -11,9 +10,10 @@ categories:
 <meta name="referrer" content="no-referrer" />
 <!-- more -->
 
-# 查看业务日志
+
+## 查看业务日志
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1642074072500-6db92ae1-eaff-462f-af20-9f0fb579d2c0.png#clientId=u1d0a973d-d39c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=207&id=uc5138bc1&margin=%5Bobject%20Object%5D&name=image.png&originHeight=207&originWidth=961&originalType=binary&ratio=1&rotation=0&showTitle=false&size=81604&status=done&style=none&taskId=u9feaf1b7-3944-4bda-b069-fb48f7151cd&title=&width=961)
-# 查看死锁日志
+## 查看死锁日志
 show engine innodb status; （查询语句）
 ```c
 ------------------------
@@ -132,10 +132,9 @@ RECORD LOCKS space id 61 page no 30545 n bits 672 index device_id of table `ifp_
 | 回滚 |  |
 
 从死锁日志上，可以，事务A并没有持有事务B所需要的资源啊，但是从现象上来看，事务A应该是持有了672的行锁。那我们就必须先了解insert的加锁过程。
-# insert加锁
+## insert加锁
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1642377267905-4e7f60c8-004b-4c62-9313-7e4a6d6738c5.png#clientId=ub48be365-8441-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=293&id=u060c8838&margin=%5Bobject%20Object%5D&name=image.png&originHeight=586&originWidth=1910&originalType=binary&ratio=1&rotation=0&showTitle=false&size=181462&status=done&style=none&taskId=u5f6f6851-c0a1-4849-a00b-ee7576e4bdb&title=&width=955)
 #### insert加锁过程
-
 1. 先加插入意向Gap锁(insert intention gap lock)【如果别的事务已经有了这个间隙的锁Gap Lock，就无法加insert intention gap lock】
 1. 然后对插入的记录加索引记录锁（index-record lock）不会加gap锁，不影响其他insert的执行，除非他们插入的记录的索引值相同。
 1. 如果插入的记录索引值相同，则会出现duplicate-key error，就会对改索引加一个共享锁（shared lock）。但是如果有多个请求同时插入同一个索引值，这种情况可能会出现死锁。
@@ -180,11 +179,12 @@ RECORD LOCKS space id 61 page no 30545 n bits 672 index device_id of table `ifp_
 |  | 死锁 | 死锁 |
 
 #### 结论
+
 **三个以上的并发插入，如果一个回滚了，可能会存在死锁（原因是出现**duplicate-key error，其他事务都获取不到排他锁**）**
 **一个删除，两个并发插入，删除提交后也会造成死锁。**
 ​
 
-# Delete加锁
+## Delete加锁
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1642516633446-beceaa9f-6468-424d-b493-0dcf38284708.png#clientId=u56f5bcdf-874a-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=65&id=u9e1f885a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=130&originWidth=1896&originalType=binary&ratio=1&rotation=0&showTitle=false&size=38765&status=done&style=none&taskId=u443b9767-dbf8-4aaf-9327-418f0eb25c4&title=&width=948)
 delete加锁过程
 
@@ -193,8 +193,7 @@ delete加锁过程
 
 
 
-# 复现
-
+## 复现
 
 复现方式1
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/21760570/1642595958486-9b6c7bd9-d820-4732-88de-07943b535904.png#clientId=u8b19cdb6-bf92-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=348&id=u90cbff8d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=348&originWidth=881&originalType=binary&ratio=1&rotation=0&showTitle=false&size=57322&status=done&style=none&taskId=ua0cb8125-6d19-43f7-b468-58cae125d82&title=&width=881)
@@ -293,8 +292,9 @@ RECORD LOCKS space id 61 page no 30545 n bits 712 index device_id of table `ifp_
 
 
 
-# 死锁原因分析
+## 死锁原因分析
 虽然复现方式不一样，但是死锁日志是一样的。
+
 #### 复现1原因分析：
 | 事务A | 事务B |
 | --- | --- |
@@ -341,7 +341,7 @@ insert默认是通过主键id去查找，然后插入都是很快的，所以不
 如果复现1还不能说明问题的话，复现2就很能说明问题了。只要insert的够慢，delete 先拿到insert接下来要删除的行锁，就会死锁。
 ​
 
-# 参考
+## 参考
 [https://blog.csdn.net/varyall/article/details/80219459](https://blog.csdn.net/varyall/article/details/80219459) (insert加锁分析)
 [https://cloud.tencent.com/developer/article/1900240](https://cloud.tencent.com/developer/article/1900240) (insert加锁分析)
 [https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html](https://dev.mysql.com/doc/refman/5.7/en/innodb-locks-set.html) （mysql官网innodb加锁说明）

@@ -3,7 +3,6 @@ title: Redis分布式锁
 date: 2022-04-27 09:30:31
 description: 回顾一下之前写的分布式锁的实现逻辑
 tags: 
-- Redis
 - 分布式锁
 categories:
 - Redis

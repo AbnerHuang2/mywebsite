@@ -2,9 +2,7 @@
 title: Redis网络事件模型
 date: 2022-02-08 19:31:59
 description: Redis的设计中，有一个被大家熟知的概念，就是在6.0之前，Redis是单线程模型，6.0之后才引入的多线程。
-tags: 
-- Redis
-- Cache
+
 categories:
 - Redis
 ---

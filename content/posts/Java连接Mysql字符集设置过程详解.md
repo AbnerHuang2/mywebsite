@@ -3,9 +3,7 @@ title: Java连接Mysql字符集设置过程详解
 description: utf8mb4设置无效引发的java-mysql字符集设置探索
 date: 2022-02-13 11:08:37
 tags:
-- Mysql
 - utf8mb4
-- java-mysql
 
 categories:
 - Mysql
