@@ -18,6 +18,9 @@ fingerprintAlgorithm = "sha256"
 
 [header]
   layout = "basic" # valid options: basic, hamburger, custom
+  logo = "img/octopus.png"
+  logoDark = "img/octopus.png"
+  showTitle = false
 
 [footer]
   showCopyright = true
