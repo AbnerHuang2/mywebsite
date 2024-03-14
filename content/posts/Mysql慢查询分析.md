@@ -10,7 +10,10 @@ categories:
 <meta name="referrer" content="no-referrer" />
 <!-- more -->
 
-# 从mybatis日志中获取sql语句，通过explain进行分析。
+![](https://cdn.nlark.com/yuque/0/2024/jpeg/21760570/1710403305281-d4228fec-8970-4567-ae36-a0c5f8bf3574.jpeg)
+
+## 获取sql
+从mybatis日志中获取sql语句，通过explain进行分析。
 
 ```bash
 grep -E '==>  Preparing:' bytello.log | sed 's/.*==>  Preparing:/explain/' | sed 's/\($\)/;/' | sed 's/\?/""/g' | sed 's/LIMIT ""/LIMIT 5/' | sort -u | uniq > test.txt
@@ -25,9 +28,9 @@ sort -u | uniq 是去除重复行。
 最后输出到test.txt
 
 ----
-
-#### explain type含义
-
+### explain 
+#### type含义
+性能由好到坏
 - system：系统表，少量数据，往往不需要进行磁盘IO
 - const：常量连接
 - eq_ref：主键索引(primary key)或者非空唯一索引(unique not null)等值扫描
@@ -40,8 +43,7 @@ sort -u | uniq 是去除重复行。
 explain确实可以分析，但是sql太多了，难道一行一行看嘛。我们可是程序员。不能干这种事吧。
 应该会有一些工具帮助我们做这些事的。
 
-
-# 通过慢查询日志分析
+## 通过慢查询日志分析
 ### 查看数据库是否开启慢查询，以及慢查询日志存放位置。
 show variables like '%slow_query_log%';
 
@@ -49,17 +51,13 @@ show variables like '%slow_query_log%';
 - slow_query_log_file //慢查询日志存放目录
 ### 开启慢查询
 **set global** slow_query_log = **on**;
-
 ### 查询慢查询时间，默认是10s，但是测试推荐设置0。因为代价不高，然后方便分析。
-
-show variables like '%long_query_time%';
-
+**show **variables **like **'%long_query_time%';
 
 **慢查询测试**
-select sleep**(11);
+**select sleep**(11);
 
-
-# 慢查询分析工具
+## 慢查询分析工具
 ### mysqldumpslow （mysql自带）
 常用命令
 ```bash
@@ -76,15 +74,27 @@ mysqldumpslow -s t -t 10 -g "left join" /var/lib/mysql/mysql-slow.log | more //�
 ```
 ### pt-query-digest （percona-toolkit中的产品）
 
-
-# 通过profilling来追踪具体的查询开销
+## 通过profilling来追踪具体的查询开销
 ```bash
-查看profiling的开启状态。默认关闭。
+# 查看profiling的开启状态。默认关闭。
 show variables like 'profiling';
-开启profiling
+# 开启profiling
 set profiling = 'ON';
-查询具体的查询开销
-show profile;
+
+# 执行sql
+select * from <table>;
+# 查询具体的查询开销
+show profiles;
+
+# 根据query_id查询具体的情况
+SHOW PROFILE CPU, ALL FOR QUERY <query_id>;
 ```
-# 为什么会慢
-可以通过mysql-slow.log来查看sql具体的执行情况【记得开启slowlog】
+## 为什么会慢
+可以通过mysql-slow.log来查看sql具体的执行情况【应该需要开启slowlog】
+
+### 常见的慢查询场景
+
+1. 大数据量没走索引
+2. sql过于复杂（各种嵌套，联查之类的）
+3. Mysql选错了索引
+4. 产生了死锁
