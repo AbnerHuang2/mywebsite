@@ -4,9 +4,9 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=theme-color content="rgb(255,255,255)">
 <meta http-equiv=x-ua-compatible content="ie=edge">
-<title>彻底搞懂幻读 &#183; Skitii</title><meta name=title content="彻底搞懂幻读 &#183; Skitii">
-<meta name=description content="彻底搞懂幻读">
-<link rel=canonical href=https://skitii.vercel.app/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B9%BB%E8%AF%BB/>
+<title>彻底搞懂Synchonized &#183; Skitii</title><meta name=title content="彻底搞懂Synchonized &#183; Skitii">
+<meta name=description content>
+<link rel=canonical href=https://skitii.vercel.app/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82synchronized/>
 <link type=text/css rel=stylesheet href=/css/main.bundle.min.a6debbb9c2752cfaaf987cbf5014fd1df44fb95b3494591ae67b7f8b99579a03.css integrity="sha256-pt67ucJ1LPqvmHy/UBT9HfRPuVs0lFka5nt/i5lXmgM=">
 <script type=text/javascript src=/js/appearance.min.7f7b30f0ba943330271ff38160b14e9c164505e6f179554bd8adc33a39049d93.js integrity="sha256-f3sw8LqUMzAnH/OBYLFOnBZFBebxeVVL2K3DOjkEnZM="></script>
 <script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.b2852bbdc562f7fecf1a559c126aff98d4d9ea82e4d5356974459efd911ff15e.js integrity="sha256-soUrvcVi9/7PGlWcEmr/mNTZ6oLk1TVpdEWe/ZEf8V4=" data-copy=Copy data-copied=Copied></script>
@@ -15,16 +15,16 @@
 <link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
 <link rel=manifest href=/site.webmanifest>
 <meta name=google-site-verification content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc">
-<meta property="og:title" content="彻底搞懂幻读">
-<meta property="og:description" content="彻底搞懂幻读">
+<meta property="og:title" content="彻底搞懂Synchonized">
+<meta property="og:description" content>
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://skitii.vercel.app/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B9%BB%E8%AF%BB/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2023-08-02T09:53:49+00:00">
-<meta property="article:modified_time" content="2023-08-02T09:53:49+00:00"><meta property="og:site_name" content="Skitii">
+<meta property="og:url" content="https://skitii.vercel.app/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82synchronized/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-05-22T21:32:32+00:00">
+<meta property="article:modified_time" content="2023-05-22T21:32:32+00:00"><meta property="og:site_name" content="Skitii">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="彻底搞懂幻读">
-<meta name=twitter:description content="彻底搞懂幻读">
-<script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"","name":"彻底搞懂幻读","headline":"彻底搞懂幻读","description":"彻底搞懂幻读","inLanguage":"en","url":"https:\/\/skitii.vercel.app\/posts\/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B9%BB%E8%AF%BB\/","author":{"@type":"Person","name":"Skitii"},"copyrightYear":"2023","dateCreated":"2023-08-02T09:53:49\u002b00:00","datePublished":"2023-08-02T09:53:49\u002b00:00","dateModified":"2023-08-02T09:53:49\u002b00:00","mainEntityOfPage":"true","wordCount":"1288"}]</script>
+<meta name=twitter:title content="彻底搞懂Synchonized">
+<meta name=twitter:description content>
+<script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"","name":"彻底搞懂Synchonized","headline":"彻底搞懂Synchonized","inLanguage":"en","url":"https:\/\/skitii.vercel.app\/posts\/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82synchronized\/","author":{"@type":"Person","name":"Skitii"},"copyrightYear":"2023","dateCreated":"2023-05-22T21:32:32\u002b00:00","datePublished":"2023-05-22T21:32:32\u002b00:00","dateModified":"2023-05-22T21:32:32\u002b00:00","keywords":["Java并发"],"mainEntityOfPage":"true","wordCount":"669"}]</script>
 <meta name=author content="Skitii">
 </head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32">
 <div id=the-top class="absolute flex self-center">
@@ -63,14 +63,15 @@
 </li><li class=inline>
 <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href=/posts/>posts</a><span class="px-1 text-primary-500">/</span>
 </li><li class="inline hidden">
-<a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B9%BB%E8%AF%BB/>彻底搞懂幻读</a><span class="px-1 text-primary-500">/</span>
+<a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82synchronized/>彻底搞懂Synchonized</a><span class="px-1 text-primary-500">/</span>
 </li></ol><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-彻底搞懂幻读
+彻底搞懂Synchonized
 </h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
 <div class="flex flex-row flex-wrap items-center">
-<time datetime="2023-08-02 09:53:49 +0000 UTC">2 August 2023</time><span class="px-2 text-primary-500">&#183;</span><span>1288 words</span><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">3 mins</span>
+<time datetime="2023-05-22 21:32:32 +0000 UTC">22 May 2023</time><span class="px-2 text-primary-500">&#183;</span><span>669 words</span><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">2 mins</span>
 </div><div class="my-1 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
-<a href=/categories/mysql/ class="rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">Mysql</a>
+<a href=/categories/java/ class="rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">Java</a>
+<a href=/tags/java%E5%B9%B6%E5%8F%91/ class="rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">Java并发</a>
 </div></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
 <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
 <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
@@ -81,87 +82,45 @@ Table of Contents
 <div class="-ms-5 border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
 <nav id=TableOfContents>
 <ul>
-<li><a href=#前置内容>前置内容</a>
+<li><a href=#cpu执行过程>CPU执行过程</a></li><li><a href=#监控锁原子性保证>监控锁（原子性保证）</a>
 <ul>
-<li><a href=#事务隔离级别>事务隔离级别</a></li><li><a href=#mvcc>MVCC</a></li><li><a href=#mysql读取行的方式>Mysql读取行的方式</a>
-<ul>
-<li><a href=#快照读>快照读</a></li><li><a href=#当前读>当前读</a></li></ul></li></ul></li><li><a href=#幻读是什么>幻读是什么</a></li><li><a href=#幻读怎么产生的>幻读怎么产生的</a>
-<ul>
-<li><a href=#快照读场景>快照读场景</a></li><li><a href=#当前读场景>当前读场景</a></li></ul></li><li><a href=#幻读会导致什么问题>幻读会导致什么问题</a></li><li><a href=#怎么解决幻读>怎么解决幻读</a>
-<ul>
-<li><a href=#会引入什么新的问题>会引入什么新的问题</a></li><li><a href=#究竟应该如何设置隔离级别>究竟应该如何设置隔离级别</a></li></ul></li><li><a href=#业务思考>业务思考</a>
-<ul>
-<li><a href=#读已提交隔离级别会有什么问题>读已提交隔离级别会有什么问题？</a></li><li><a href=#同一个事务先查询然后根据数据状态更新数据会不会有问题>同一个事务，先查询，然后根据数据状态更新数据会不会有问题？</a></li><li><a href=#什么业务应该设置为可重复读>什么业务应该设置为可重复读？</a></li></ul></li></ul></nav></div></details>
+<li><a href=#总线锁定>总线锁定</a></li><li><a href=#缓存锁定>缓存锁定</a></li></ul></li></ul><ul>
+<li><a href=#锁状态>锁状态</a></li><li><a href=#锁升级过程>锁升级过程</a></li></ul></nav></div></details>
 </div></div><div class="min-w-0 min-h-0 max-w-prose grow">
 <meta name=referrer content="no-referrer">
-<h2 id=前置内容 class="relative group">前置内容 </h2><h3 id=事务隔离级别 class="relative group">事务隔离级别 </h3><p>未提交读
-读已提交【RC】
-可重复读（默认隔离级别）【RR】
-序列化</p><h3 id=mvcc class="relative group">MVCC </h3><p>多版本并发控制（在没行记录后面增加插入版本号和删除版本号）</p><h3 id=mysql读取行的方式 class="relative group">Mysql读取行的方式 </h3><h4 id=快照读 class="relative group">快照读 </h4><blockquote>
-<p>如果事务 隔离级别为 REPEATABLE READ（默认级别），则同一事务中的所有一致读取都会读取该事务中第一个此类读取建立的快照。您可以通过提交当前事务并在之后发出新查询来获取更新的查询快照。
-通过READ COMMITTED隔离级别，事务中的每个一致读取都会设置并读取其自己的最新快照。</p></blockquote><p>来自mysql官方文档 17.7.2.3 一致的非锁定读取<a href=https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html target=_blank rel="noreferrer noopener">https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html</a></p><h4 id=当前读 class="relative group">当前读 </h4><p>读取最新的行（select for update. 会读取到最新的行。）</p><h2 id=幻读是什么 class="relative group">幻读是什么 </h2><p>在同一个事务中，同一个查询执行多次所看到的数据不一致。</p><h2 id=幻读怎么产生的 class="relative group">幻读怎么产生的 </h2><h3 id=快照读场景 class="relative group">快照读场景 </h3><p>每次查询都是基于快照查询，后面的修改是无法查询到的，所以不存在幻读问题。</p><h3 id=当前读场景 class="relative group">当前读场景 </h3><p>当前读只会锁住被查询的行。
-但是如果这时候更新了其他行，导致满足查询条件，就也会同样出现在查询结果中。
-这样的话，查询结果就不一致了。但是在当前读下，读到最新的数据看起来是合理的。
-如果我改一下数据，就会把后面事务更新的数据给更新掉，导致前一个小的事务id更新了后一个大的事务id的数据。这就不合理了。
+<h2 id=cpu执行过程 class="relative group">CPU执行过程 </h2><p>我们都知道Synchonized可以保证原子性，可以保证线程的同步。那么Synchonized是怎么保证的呢。
+从CPU说起，
 <figure>
 <div class=post-img-view>
-<a data-fancybox=gallery href="https://cdn.nlark.com/yuque/0/2023/png/21760570/1678709224637-47e95c27-3357-46d8-b154-f1cb12ed3980.png#averageHue=%23f9f9f9&clientId=u7fa24a84-0e5c-4&from=paste&height=567&id=u4b0088ce&originHeight=1134&originWidth=1870&originalType=binary&ratio=1&rotation=0&showTitle=false&size=211999&status=done&style=none&taskId=u84e393f0-c11c-411a-81ec-3521987f319&title=&width=935">
-<img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2023/png/21760570/1678709224637-47e95c27-3357-46d8-b154-f1cb12ed3980.png#averageHue=%23f9f9f9&clientId=u7fa24a84-0e5c-4&from=paste&height=567&id=u4b0088ce&originHeight=1134&originWidth=1870&originalType=binary&ratio=1&rotation=0&showTitle=false&size=211999&status=done&style=none&taskId=u84e393f0-c11c-411a-81ec-3521987f319&title=&width=935" alt=image.png>
+<a data-fancybox=gallery href=https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657025657089-bd585f3c-da74-4a4d-a51b-e2fdecbd44ec.jpeg>
+<img class="my-0 rounded-md" src=https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657025657089-bd585f3c-da74-4a4d-a51b-e2fdecbd44ec.jpeg alt>
 </a>
-</div></figure></p><h2 id=幻读会导致什么问题 class="relative group">幻读会导致什么问题 </h2><ol>
-<li>当前读数据不一致（范围查询）</li><li>更新序列错乱</li></ol><h2 id=怎么解决幻读 class="relative group">怎么解决幻读 </h2><p>了解了幻读的产生，就知道要怎么解决了。
-幻读产生的两个根本原因：</p><ol>
-<li>更新其他行数据满足查询条件</li><li>增加新行</li></ol><p>mysql引入了间隙锁来解决幻读问题
-下一键锁 = 行锁 + 间隙锁</p><p>问题：</p><ol>
-<li>mysql是按照主键进行数据追加的。如果查询不按主键查询，那要怎么防止其他事务更新的数据满足查询条件呢？（间隙是指两行数据直接的间隙吗？或者对索引也加锁。）</li><li>如果间隙是指两行数据直接的间隙，那不就是类似于锁全表吗？</li></ol><p>eg:</p><pre tabindex=0><code>create table t(
-a int primary key,
-b int ,
-c int
-);
-insert into t values(1,1,1);
-insert into t values(2,2,5);
-insert into t values(3,3,10);
-insert into t values(4,4,16);
-</code></pre><table>
-<thead>
-<tr>
-<th>A</th><th>B</th><th>C</th></tr></thead><tbody>
-<tr>
-<td>begin</td><td></td><td></td></tr><tr>
-<td>select * from t where c>=10 for update;</td><td></td><td></td></tr><tr>
-<td></td><td>insert into t values(5,5,28);</td><td></td></tr><tr>
-<td>[blocked]</td><td></td><td></td></tr><tr>
-<td></td><td></td><td>update t set c = 10 where a = 1;</td></tr><tr>
-<td>[blocked]</td><td></td><td></td></tr><tr>
-<td>select * from t where c>=10 for update;</td><td></td><td></td></tr><tr>
-<td>commit</td><td></td><td></td></tr></tbody></table><p>实测结果：
-事务B和C都会被锁住。【所以这个间隙大概率是两行记录直接的间隙】</p><h3 id=会引入什么新的问题 class="relative group">会引入什么新的问题 </h3><p>并发插入问题[间隙锁可以在两个事务中存在]</p><table>
-<thead>
-<tr>
-<th>SessionA</th><th>SessionB</th></tr></thead><tbody>
-<tr>
-<td>select * from t where id = 9 for update</td><td></td></tr><tr>
-<td></td><td>select * from t where id = 9 for update</td></tr><tr>
-<td></td><td>insert into t values(8,8,8) [blocked]</td></tr><tr>
-<td>insert into t values(10,10,10) [blocked]</td><td></td></tr><tr>
-<td>dead lock</td><td></td></tr></tbody></table><h3 id=究竟应该如何设置隔离级别 class="relative group">究竟应该如何设置隔离级别 </h3><p>既然可重复读处理这么麻烦也存在问题，那么究竟应该怎么设置隔离级别呢？
-目前也有这样的玩法</p><ol>
-<li>读已提交 + binlog=row(用于处理数据不一致的情况)</li><li>可重复读</li></ol><h2 id=业务思考 class="relative group">业务思考 </h2><h3 id=读已提交隔离级别会有什么问题 class="relative group">读已提交隔离级别会有什么问题？ </h3><p>【数据不一致】 但其实我们大部分情况下，都是一次性事务。而且基本查询都是快照读。
-快照读在查询会不会有问题，举个例子，</p><table>
-<thead>
-<tr>
-<th>事务1:</th><th>事务2</th></tr></thead><tbody>
-<tr>
-<td>创建订单</td><td></td></tr><tr>
-<td>查询订单</td><td></td></tr><tr>
-<td>向三方查询</td><td></td></tr><tr>
-<td>查询失败</td><td></td></tr><tr>
-<td>查询订单状态为新建</td><td></td></tr><tr>
-<td></td><td>订单成功了-回调</td></tr><tr>
-<td></td><td>更新订单状态为成功</td></tr><tr>
-<td>更新订单状态为失败</td><td></td></tr><tr>
-<td></td><td></td></tr></tbody></table><p>怎么解决呢？ 查询和更新放在同一个事务中，查询改为当前读。
-所以还是需要可重复读级别啊</p><h3 id=同一个事务先查询然后根据数据状态更新数据会不会有问题 class="relative group">同一个事务，先查询，然后根据数据状态更新数据会不会有问题？ </h3><p>如上，还是会有问题的。</p><h3 id=什么业务应该设置为可重复读 class="relative group">什么业务应该设置为可重复读？ </h3><p>对数据一致性要求没那么高的业务。</p></div></section><footer class="pt-8 max-w-prose print:hidden">
+</div></figure>这是CPU的处理流程图，而线程之间无法同步的本质，就是数据的副本在多个CPU上操作，导致数据的不一致。那么要怎么解决这个问题呢？之前讲过volatile是在总线上通过MESI协议来保证对单个数据的读/写的原子性。但是无法解决i++这种读-改-写的复合操作。那么Synchonized是怎么做的呢？</p><h2 id=监控锁原子性保证 class="relative group">监控锁（原子性保证） </h2><p>使用Synchonized关键字封装的代码块在编译成汇编语言时，会在这段代码块之前加上monitorenter关键字，之后加上monitorexit关键字。加上这两个关键字怎么就可以保证数据的同步呢？</p><h3 id=总线锁定 class="relative group">总线锁定 </h3><p>当cpu执行到monitorenter时，会在总线上发出lock信号，其他cpu收到lock信号之后，就不能操作缓存和内存中的值了。所以这个代价挺高的。</p><h3 id=缓存锁定 class="relative group">缓存锁定 </h3><p>总线锁定封锁了缓存和主存数据的读取和修改，为了降低总线锁定的代价，有些cpu把单个值的更新优化成了缓存锁定。对于下图的场景，当CPU1修改了缓存中的值时，CPU2修改时就发现缓存锁定了，无法修改了。
+<figure>
+<div class=post-img-view>
+<a data-fancybox=gallery href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1657027629849-34b642db-8547-4556-b037-f7e51c033137.png#averageHue=%23fcfdfa&clientId=uf7a4686d-c9e8-4&from=paste&height=445&id=ubef4febd&originHeight=890&originWidth=972&originalType=binary&ratio=1&rotation=0&showTitle=false&size=304195&status=done&style=none&taskId=u3403d70b-e8fb-4a2f-9681-0b40fa08f6a&title=&width=486">
+<img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1657027629849-34b642db-8547-4556-b037-f7e51c033137.png#averageHue=%23fcfdfa&clientId=uf7a4686d-c9e8-4&from=paste&height=445&id=ubef4febd&originHeight=890&originWidth=972&originalType=binary&ratio=1&rotation=0&showTitle=false&size=304195&status=done&style=none&taskId=u3403d70b-e8fb-4a2f-9681-0b40fa08f6a&title=&width=486" alt=image.png>
+</a>
+</div></figure>但是缓存锁定有两个限制：</p><ol>
+<li>只能针对单个缓存行的更改【缓存行：缓存的最小单位】</li><li>有些处理器不支持</li></ol><h1 id=锁升级 class="relative group">锁升级 </h1><p>虽然上诉过程可以在底层保证操作的原子性。但是总线锁定的成本也是很高的。而且JVM团队在实际场景中发现，出现并发的场景其实很少。
+于是在JDK1.6版本就优化Synchronized的实现。提出了锁升级的过程。</p><h2 id=锁状态 class="relative group">锁状态 </h2><p>
+<figure>
+<div class=post-img-view>
+<a data-fancybox=gallery href=https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657027934270-063210cb-dace-4f9d-a10e-587cca2e4cd3.jpeg>
+<img class="my-0 rounded-md" src=https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657027934270-063210cb-dace-4f9d-a10e-587cca2e4cd3.jpeg alt>
+</a>
+</div></figure></p><h2 id=锁升级过程 class="relative group">锁升级过程 </h2><p>
+<figure>
+<div class=post-img-view>
+<a data-fancybox=gallery href=https://cdn.nlark.com/yuque/0/2024/jpeg/21760570/1710337738567-aacb719f-d283-48f4-b446-9618da34f5f7.jpeg>
+<img class="my-0 rounded-md" src=https://cdn.nlark.com/yuque/0/2024/jpeg/21760570/1710337738567-aacb719f-d283-48f4-b446-9618da34f5f7.jpeg alt>
+</a>
+</div></figure><figure>
+<div class=post-img-view>
+<a data-fancybox=gallery href="https://cdn.nlark.com/yuque/0/2024/png/21760570/1710337312164-0d63d048-629e-4f7f-a6a6-c385f0f2496e.png#averageHue=%2398ab5b&clientId=u1e4897e6-c9d5-4&from=paste&height=451&id=u9ca41cae&originHeight=902&originWidth=1890&originalType=binary&ratio=2&rotation=0&showTitle=false&size=661770&status=done&style=none&taskId=u1ec4a00c-5372-4872-9fda-fd75aa33744&title=&width=945">
+<img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2024/png/21760570/1710337312164-0d63d048-629e-4f7f-a6a6-c385f0f2496e.png#averageHue=%2398ab5b&clientId=u1e4897e6-c9d5-4&from=paste&height=451&id=u9ca41cae&originHeight=902&originWidth=1890&originalType=binary&ratio=2&rotation=0&showTitle=false&size=661770&status=done&style=none&taskId=u1ec4a00c-5372-4872-9fda-fd75aa33744&title=&width=945" alt=image.png>
+</a>
+</div></figure></p></div></section><footer class="pt-8 max-w-prose print:hidden">
 <div class=flex>
 <img class="!mb-0 !mt-0 me-4 h-24 w-24 rounded-full" width=96 height=96 alt=Skitii src=/img/donatello_hu71dba6f0b14209fcd6a03b819133ef67_44229_192x192_fill_box_center_3.png loading=lazy>
 <div class=place-self-center>
@@ -175,22 +134,22 @@ Skitii
 <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
 <div class="flex justify-between pt-3">
 <span>
-<a class="group flex" href=/posts/mysql%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/>
+<a class="group flex" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82java%E7%BA%BF%E7%A8%8B%E6%B1%A0/>
 <span class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&larr;</span><span class="ltr:hidden rtl:inline">&rarr;</span></span>
 <span class="flex flex-col">
-<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Mysql思维导图</span>
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">彻底搞懂Java线程池</span>
 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
-<time datetime="2023-08-30 10:00:49 +0000 UTC">30 August 2023</time>
+<time datetime="2023-06-18 19:52:32 +0000 UTC">18 June 2023</time>
 </span>
 </span>
 </a>
 </span>
 <span>
-<a class="group flex text-right" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82java%E7%BA%BF%E7%A8%8B%E6%B1%A0/>
+<a class="group flex text-right" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82volatile/>
 <span class="flex flex-col">
-<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">彻底搞懂Java线程池</span>
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">彻底搞懂Volatile</span>
 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
-<time datetime="2023-06-18 19:52:32 +0000 UTC">18 June 2023</time>
+<time datetime="2023-05-18 21:32:32 +0000 UTC">18 May 2023</time>
 </span>
 </span>
 <span class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&rarr;</span><span class="ltr:hidden rtl:inline">&larr;</span></span>
