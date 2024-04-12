@@ -1,6 +1,8 @@
+# hugo
+    版本    0.123.8
 # 主题
     "name": "hugo-congo-theme",
-    "version": "2.3.1"
+    "version": "2.8.1"
 # 使用
 1. git clone项目到本地， 后面记得增加参数 --recurse-submodules ，用于初始化子模块（git clone git@github.com:AbnerHuang2/mywebsite.git --recurse-submodules）
 2. git checkout master (master才是工作分支， gh-pages是部署分支)
