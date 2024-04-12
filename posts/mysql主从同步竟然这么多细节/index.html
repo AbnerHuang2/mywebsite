@@ -19,12 +19,12 @@
 <meta property="og:description" content="踩踩Mysql主从同步的坑">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://skitii.vercel.app/posts/mysql%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%9A%E7%BB%86%E8%8A%82/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2022-07-27T17:07:07+00:00">
-<meta property="article:modified_time" content="2022-07-27T17:07:07+00:00"><meta property="og:site_name" content="Skitii">
+<meta property="article:published_time" content="2023-07-27T17:07:07+00:00">
+<meta property="article:modified_time" content="2023-07-27T17:07:07+00:00"><meta property="og:site_name" content="Skitii">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Mysql主从同步竟然这么多细节">
 <meta name=twitter:description content="踩踩Mysql主从同步的坑">
-<script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"","name":"Mysql主从同步竟然这么多细节","headline":"Mysql主从同步竟然这么多细节","description":"踩踩Mysql主从同步的坑","inLanguage":"en","url":"https:\/\/skitii.vercel.app\/posts\/mysql%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%9A%E7%BB%86%E8%8A%82\/","author":{"@type":"Person","name":"Skitii"},"copyrightYear":"2022","dateCreated":"2022-07-27T17:07:07\u002b00:00","datePublished":"2022-07-27T17:07:07\u002b00:00","dateModified":"2022-07-27T17:07:07\u002b00:00","keywords":["主从同步"],"mainEntityOfPage":"true","wordCount":"3345"}]</script>
+<script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"","name":"Mysql主从同步竟然这么多细节","headline":"Mysql主从同步竟然这么多细节","description":"踩踩Mysql主从同步的坑","inLanguage":"en","url":"https:\/\/skitii.vercel.app\/posts\/mysql%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%AB%9F%E7%84%B6%E8%BF%99%E4%B9%88%E5%A4%9A%E7%BB%86%E8%8A%82\/","author":{"@type":"Person","name":"Skitii"},"copyrightYear":"2023","dateCreated":"2023-07-27T17:07:07\u002b00:00","datePublished":"2023-07-27T17:07:07\u002b00:00","dateModified":"2023-07-27T17:07:07\u002b00:00","keywords":["主从同步"],"mainEntityOfPage":"true","wordCount":"3345"}]</script>
 <meta name=author content="Skitii">
 </head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32">
 <div id=the-top class="absolute flex self-center">
@@ -68,7 +68,7 @@
 Mysql主从同步竟然这么多细节
 </h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
 <div class="flex flex-row flex-wrap items-center">
-<time datetime="2022-07-27 17:07:07 +0000 UTC">27 July 2022</time><span class="px-2 text-primary-500">&#183;</span><span>3345 words</span><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">7 mins</span>
+<time datetime="2023-07-27 17:07:07 +0000 UTC">27 July 2023</time><span class="px-2 text-primary-500">&#183;</span><span>3345 words</span><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">7 mins</span>
 </div><div class="my-1 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
 <a href=/categories/mysql/ class="rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">Mysql</a>
 <a href=/tags/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/ class="rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">主从同步</a>
@@ -194,22 +194,22 @@ Skitii
 <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
 <div class="flex justify-between pt-3">
 <span>
-<a class="group flex" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82volatile/>
+<a class="group flex" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B9%BB%E8%AF%BB/>
 <span class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&larr;</span><span class="ltr:hidden rtl:inline">&rarr;</span></span>
 <span class="flex flex-col">
-<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">彻底搞懂Volatile</span>
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">彻底搞懂幻读</span>
 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
-<time datetime="2023-05-18 21:32:32 +0000 UTC">18 May 2023</time>
+<time datetime="2023-08-02 09:53:49 +0000 UTC">2 August 2023</time>
 </span>
 </span>
 </a>
 </span>
 <span>
-<a class="group flex text-right" href=/posts/spring%E7%9C%9F%E7%9A%84%E5%AE%8C%E5%85%A8%E8%A7%A3%E5%86%B3%E4%BA%86%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/>
+<a class="group flex text-right" href=/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82java%E7%BA%BF%E7%A8%8B%E6%B1%A0/>
 <span class="flex flex-col">
-<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Spring真的完全解决了循环依赖吗</span>
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">彻底搞懂Java线程池</span>
 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
-<time datetime="2022-06-20 17:51:15 +0000 UTC">20 June 2022</time>
+<time datetime="2023-06-18 19:52:32 +0000 UTC">18 June 2023</time>
 </span>
 </span>
 <span class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&rarr;</span><span class="ltr:hidden rtl:inline">&larr;</span></span>
