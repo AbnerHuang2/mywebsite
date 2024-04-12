@@ -1,6 +1,6 @@
 ---
 title: Mysql主从同步竟然这么多细节
-date: 2022-07-27 17:07:07
+date: 2023-07-27 17:07:07
 description: 踩踩Mysql主从同步的坑
 tags:
 - 主从同步
