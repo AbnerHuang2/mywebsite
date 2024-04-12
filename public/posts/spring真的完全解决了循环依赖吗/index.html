@@ -1,0 +1,813 @@
+
+
+
+  
+
+
+  
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>Spring真的完全解决了循环依赖吗 &middot; Skitii</title>
+    <meta name="title" content="Spring真的完全解决了循环依赖吗 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.022d0ebc3b46a335eb1c7ef79b7f2de143d7cd5156d433638592ef1ce5f8554e.js"
+    integrity="sha256-Ai0OvDtGozXrHH73m38t4UPXzVFW1DNjhZLvHOX4VU4="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.8cd4199ad423a763e2dd42a32c20643d8eb472bc550188be85b60444140826dd.css"
+    integrity="sha256-jNQZmtQjp2Pi3UKjLCBkPY60crxVAYi&#43;hbYERBQIJt0="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.f29ffdffd9ab4cc95250c3c7196b2d5dae8ee6ef0a4139451073f90183ae7e31.js"
+      integrity="sha256-8p/9/9mrTMlSUMPHGWstXa6O5u8KQTlFEHP5AYOufjE="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      Spring循环依赖竟然还有坑
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/spring%E7%9C%9F%E7%9A%84%E5%AE%8C%E5%85%A8%E8%A7%A3%E5%86%B3%E4%BA%86%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Spring真的完全解决了循环依赖吗" />
+<meta property="og:description" content="Spring循环依赖竟然还有坑" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/spring%E7%9C%9F%E7%9A%84%E5%AE%8C%E5%85%A8%E8%A7%A3%E5%86%B3%E4%BA%86%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-20T17:51:15+00:00" />
+<meta property="article:modified_time" content="2022-06-20T17:51:15+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Spring真的完全解决了循环依赖吗"/>
+<meta name="twitter:description" content="Spring循环依赖竟然还有坑"/>
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "Spring真的完全解决了循环依赖吗",
+    "headline": "Spring真的完全解决了循环依赖吗",
+    "description": "Spring循环依赖竟然还有坑",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/spring%E7%9C%9F%E7%9A%84%E5%AE%8C%E5%85%A8%E8%A7%A3%E5%86%B3%E4%BA%86%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97\/",
+    "author" : {
+      "@type": "Person",
+      "name": ""
+    },
+    "copyrightYear": "2022",
+    "dateCreated": "2022-06-20T17:51:15\u002b00:00",
+    "datePublished": "2022-06-20T17:51:15\u002b00:00",
+    
+    "dateModified": "2022-06-20T17:51:15\u002b00:00",
+    
+    "keywords": ["问题排查"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "1180"
+  }
+  </script>
+
+
+  
+  
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        hidden dark:flex"
+        alt="Skitii"
+      />
+        <img
+          src="/img/octopus.png"
+          width="64"
+          height="64"
+          class="max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:hidden"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/spring%E7%9C%9F%E7%9A%84%E5%AE%8C%E5%85%A8%E8%A7%A3%E5%86%B3%E4%BA%86%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/"
+      >Spring真的完全解决了循环依赖吗</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Spring真的完全解决了循环依赖吗
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2022-06-20 17:51:15 &#43;0000 UTC">20 June 2022</time><span class="px-2 text-primary-500">&middot;</span><span>1180 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">3 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/spring/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Spring</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >问题排查</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#排查思路">排查思路</a></li>
+        <li><a href="#源码分析">源码分析</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#两种方案">两种方案</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#循环依赖处理失效的场景">循环依赖处理失效的场景</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<p>感觉好久没写过博客了，刚好最近遇到一个还挺有意思的问题，就记录一下吧。</p>
+<h1 id="现象" class="relative group">现象 </h1><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655356733646-073b8a94-2149-4b23-aee0-cf52bfee4f33.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=164&amp;id=u0978593f&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=328&amp;originWidth=2658&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=137850&amp;status=done&amp;style=none&amp;taskId=u4686c31e-51cd-42b0-9b7d-583fcc47d30&amp;title=&amp;width=1329">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655356733646-073b8a94-2149-4b23-aee0-cf52bfee4f33.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=164&amp;id=u0978593f&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=328&amp;originWidth=2658&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=137850&amp;status=done&amp;style=none&amp;taskId=u4686c31e-51cd-42b0-9b7d-583fcc47d30&amp;title=&amp;width=1329" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655356770032-1a67d61a-25c2-4ee5-b3cd-5fe4f5762d7f.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=355&amp;id=u3199fdc2&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=710&amp;originWidth=1104&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=129014&amp;status=done&amp;style=none&amp;taskId=ua38aa6b4-a57f-423f-8028-8ea5d08c7a4&amp;title=&amp;width=552">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655356770032-1a67d61a-25c2-4ee5-b3cd-5fe4f5762d7f.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=355&amp;id=u3199fdc2&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=710&amp;originWidth=1104&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=129014&amp;status=done&amp;style=none&amp;taskId=ua38aa6b4-a57f-423f-8028-8ea5d08c7a4&amp;title=&amp;width=552" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655356803893-522894d9-b177-40df-99b5-5c09844d356d.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=168&amp;id=uabdf2325&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=336&amp;originWidth=1070&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=65515&amp;status=done&amp;style=none&amp;taskId=u239d0500-9b89-4159-aeef-27b06a3c65d&amp;title=&amp;width=535">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655356803893-522894d9-b177-40df-99b5-5c09844d356d.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=168&amp;id=uabdf2325&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=336&amp;originWidth=1070&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=65515&amp;status=done&amp;style=none&amp;taskId=u239d0500-9b89-4159-aeef-27b06a3c65d&amp;title=&amp;width=535" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<p>??? Spring不是通过三级缓存解决了循环依赖问题吗？
+这不就是A依赖B，然后B依赖A吗？怎么也报循环依赖啊。</p>
+<h1 id="问题排查" class="relative group">问题排查 </h1><h3 id="排查思路" class="relative group">排查思路 </h3><ol>
+<li>难道这个版本的Spring没解决？写个Demo验证一下（简单写个TestService1和TestService2相互依赖就行）。启动很成功啊。【不过这里还有一个比较好玩的现象，就是在TestService1的方法上加上@Async注解，就会报循环依赖了，这个google上有很多答案，其实就是TestService1被代理了，引用变了，然后TestService2还保留的是原始的引用】</li>
+<li>把相关依赖去掉试试（把ConnectServiceImpl和UserServiceImpl中的其他依赖去掉试试看了），还是报错循环依赖。</li>
+</ol>
+<h3 id="源码分析" class="relative group">源码分析 </h3><p>what&rsquo;s the hell? 只能捋捋源码了。
+看看Spring解决循环依赖的过程
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1655717886881-61b7e403-bc8f-4ba0-9d6e-4a2c05a15e83.jpeg">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1655717886881-61b7e403-bc8f-4ba0-9d6e-4a2c05a15e83.jpeg" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<p>当我发现初始化前后，这个ConnectService的引用不一样时，问题就已经浮出水面了。这个情况应该跟@Async的情况是一样的，就是UserService中注入了ConnectService的引用，然后后续ConnectService初始化的时候，被包装了，引用变了，然后ConnectService初始化会判断新的引用和旧的是否相同，如果不相同，会去找ConnectService实际上依赖的bean(userService)是否创建了，如果创建了就添加到依赖列表中，如果依赖列表不为空，就报错循环依赖。
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655690682070-19445d07-de7e-46f7-aca9-7d31680bf5dd.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=255&amp;id=u20f89496&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=255&amp;originWidth=1757&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=97476&amp;status=done&amp;style=none&amp;taskId=ufc72dc1b-7b37-4199-bbd9-069507b32a0&amp;title=&amp;width=1757">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655690682070-19445d07-de7e-46f7-aca9-7d31680bf5dd.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=255&amp;id=u20f89496&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=255&amp;originWidth=1757&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=97476&amp;status=done&amp;style=none&amp;taskId=ufc72dc1b-7b37-4199-bbd9-069507b32a0&amp;title=&amp;width=1757" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+<strong>那么问题来了</strong>，实例化的时候包装了ConnectService，引用变成新的了，但是正常来讲，不应该包装啊。 Test1和Test2相互引用也没有被包装啊。
+那就来看看源码吧
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655704728621-34a05b4a-b350-4f36-bf31-2230501ba70b.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=654&amp;id=u1ff9b18e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1308&amp;originWidth=2778&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=432468&amp;status=done&amp;style=none&amp;taskId=u5507bbe9-324b-4f22-9c64-0d274080290&amp;title=&amp;width=1389">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655704728621-34a05b4a-b350-4f36-bf31-2230501ba70b.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=654&amp;id=u1ff9b18e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1308&amp;originWidth=2778&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=432468&amp;status=done&amp;style=none&amp;taskId=u5507bbe9-324b-4f22-9c64-0d274080290&amp;title=&amp;width=1389" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655704836889-f9fdc2a7-d41d-45d7-a87b-d714f27436d0.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=673&amp;id=u95c9f560&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1346&amp;originWidth=2718&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=476852&amp;status=done&amp;style=none&amp;taskId=ua786477a-e213-4b7a-a13f-b282049c757&amp;title=&amp;width=1359">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655704836889-f9fdc2a7-d41d-45d7-a87b-d714f27436d0.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=673&amp;id=u95c9f560&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1346&amp;originWidth=2718&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=476852&amp;status=done&amp;style=none&amp;taskId=ua786477a-e213-4b7a-a13f-b282049c757&amp;title=&amp;width=1359" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<p>可以看到，在初始化这个ConnectService类的时候，会调用一个applyBeanPostProcessorsAfterInitialization方法，这个方法的会应用所有的beanPostProcessor，其中有一个方法参数校验的beanPostProcessor会代理这个类。所以导致引用变了。
+那罪魁祸首就出来了呀，就是这个MethodValidationPostProcessor会代理这个bean，然后修改引用。那为啥会被这个MethodValidationPostProcessor代理呢。当然是这个AOP啦。
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655714772658-7318e28a-cb36-47ae-87d8-b979b3678d6d.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=266&amp;id=u81ab7db7&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=266&amp;originWidth=543&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=30652&amp;status=done&amp;style=none&amp;taskId=u658bc219-d0e1-4412-bed3-0f6e6e80cb6&amp;title=&amp;width=543">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1655714772658-7318e28a-cb36-47ae-87d8-b979b3678d6d.png#clientId=uf5832294-d1ff-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=266&amp;id=u81ab7db7&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=266&amp;originWidth=543&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=30652&amp;status=done&amp;style=none&amp;taskId=u658bc219-d0e1-4412-bed3-0f6e6e80cb6&amp;title=&amp;width=543" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h1 id="解决" class="relative group">解决 </h1><h3 id="两种方案" class="relative group">两种方案 </h3><ol>
+<li>去除@Validated校验。</li>
+<li>注入UserService时加上@Lazy注解</li>
+</ol>
+<p>方案一得加好多校验代码，选择方案二吧。</p>
+<h1 id="总结" class="relative group">总结 </h1><h3 id="循环依赖处理失效的场景" class="relative group">循环依赖处理失效的场景 </h3><ol>
+<li><strong>初始化过程生成了新的代理对象</strong>（一般应该是初始化过程中使用了一些前后置处理器）</li>
+<li>使用@DependOn产生循环依赖</li>
+<li>非单例产生循环依赖</li>
+</ol>
+<p>虽然2，3在本案例中并没有提到，但是应该也是可以明白的</p>
+<h1 id="参考" class="relative group">参考 </h1><p><a href="https://zhuanlan.zhihu.com/p/344624139" target="_blank" rel="noreferrer">https://zhuanlan.zhihu.com/p/344624139</a> （三级缓存分析的还比较清晰）</p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+  <div class="flex">
+    
+    
+    
+    <div class="place-self-center">
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/posts/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82volatile/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >彻底搞懂Volatile</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-05-18 21:32:32 &#43;0000 UTC">18 May 2023</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/posts/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Redis分布式锁</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-04-27 09:30:31 &#43;0000 UTC">27 April 2022</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    
+    
+      <div
+        class="text-sm cursor-pointer text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-14 rtl:ml-14"
+      >
+        <button
+          id="appearance-switcher"
+          class="w-12 h-12 "
+          type="button"
+          title="Switch to dark appearance"
+        >
+          <span class="inline dark:hidden"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span></span>
+          <span class="hidden dark:inline"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span></span>
+        </button>
+      </div>
+    
+  </div>
+  
+  
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 
+              'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+            
+            
+        },
+        display: {
+            superSample: 1,     
+            width: 120,         
+            height: 300,        
+            position: 'right',   
+            hOffset: 20,         
+            vOffset: 0,         
+        },
+        mobile: {
+            show: true,         
+            scale: 1,           
+            motion: true,       
+        },
+        react: {
+            opacityDefault: 0.8,  
+            opacityOnHover: 1,  
+        },
+     });
+</script><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

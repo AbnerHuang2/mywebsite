@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cache on Skitii</title>
+    <link>http://localhost:1313/categories/cache/</link>
+    <description>Recent content in Cache on Skitii</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 09 Feb 2022 19:27:10 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/cache/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>缓存一致性问题思考</title>
+      <link>http://localhost:1313/posts/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83/</link>
+      <pubDate>Wed, 09 Feb 2022 19:27:10 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

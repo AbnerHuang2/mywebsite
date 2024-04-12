@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Skitii</title>
+    <link>http://localhost:1313/categories/</link>
+    <description>Recent content in Categories on Skitii</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 02 Dec 2023 09:53:49 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Software Engineering</title>
+      <link>http://localhost:1313/categories/software-engineering/</link>
+      <pubDate>Sat, 02 Dec 2023 09:53:49 +0000</pubDate>
+      <guid>http://localhost:1313/categories/software-engineering/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>RocketMQ</title>
+      <link>http://localhost:1313/categories/rocketmq/</link>
+      <pubDate>Sat, 02 Sep 2023 10:53:49 +0000</pubDate>
+      <guid>http://localhost:1313/categories/rocketmq/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mysql</title>
+      <link>http://localhost:1313/categories/mysql/</link>
+      <pubDate>Wed, 30 Aug 2023 10:00:49 +0000</pubDate>
+      <guid>http://localhost:1313/categories/mysql/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>http://localhost:1313/categories/java/</link>
+      <pubDate>Sun, 18 Jun 2023 19:52:32 +0000</pubDate>
+      <guid>http://localhost:1313/categories/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spring</title>
+      <link>http://localhost:1313/categories/spring/</link>
+      <pubDate>Mon, 20 Jun 2022 17:51:15 +0000</pubDate>
+      <guid>http://localhost:1313/categories/spring/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Redis</title>
+      <link>http://localhost:1313/categories/redis/</link>
+      <pubDate>Wed, 27 Apr 2022 09:30:31 +0000</pubDate>
+      <guid>http://localhost:1313/categories/redis/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ElasticSearch</title>
+      <link>http://localhost:1313/categories/elasticsearch/</link>
+      <pubDate>Wed, 02 Mar 2022 09:53:49 +0000</pubDate>
+      <guid>http://localhost:1313/categories/elasticsearch/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cache</title>
+      <link>http://localhost:1313/categories/cache/</link>
+      <pubDate>Wed, 09 Feb 2022 19:27:10 +0000</pubDate>
+      <guid>http://localhost:1313/categories/cache/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,903 @@
+
+
+
+  
+
+
+  
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>OrderBy踩坑之路 &middot; Skitii</title>
+    <meta name="title" content="OrderBy踩坑之路 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.022d0ebc3b46a335eb1c7ef79b7f2de143d7cd5156d433638592ef1ce5f8554e.js"
+    integrity="sha256-Ai0OvDtGozXrHH73m38t4UPXzVFW1DNjhZLvHOX4VU4="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.8cd4199ad423a763e2dd42a32c20643d8eb472bc550188be85b60444140826dd.css"
+    integrity="sha256-jNQZmtQjp2Pi3UKjLCBkPY60crxVAYi&#43;hbYERBQIJt0="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.f29ffdffd9ab4cc95250c3c7196b2d5dae8ee6ef0a4139451073f90183ae7e31.js"
+      integrity="sha256-8p/9/9mrTMlSUMPHGWstXa6O5u8KQTlFEHP5AYOufjE="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      OrderBy并不是你想象的这么简单
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/orderby%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="OrderBy踩坑之路" />
+<meta property="og:description" content="OrderBy并不是你想象的这么简单" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/orderby%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-10T20:13:06+00:00" />
+<meta property="article:modified_time" content="2022-02-10T20:13:06+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="OrderBy踩坑之路"/>
+<meta name="twitter:description" content="OrderBy并不是你想象的这么简单"/>
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "OrderBy踩坑之路",
+    "headline": "OrderBy踩坑之路",
+    "description": "OrderBy并不是你想象的这么简单",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/orderby%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF\/",
+    "author" : {
+      "@type": "Person",
+      "name": ""
+    },
+    "copyrightYear": "2022",
+    "dateCreated": "2022-02-10T20:13:06\u002b00:00",
+    "datePublished": "2022-02-10T20:13:06\u002b00:00",
+    
+    "dateModified": "2022-02-10T20:13:06\u002b00:00",
+    
+    "keywords": ["问题排查"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "1920"
+  }
+  </script>
+
+
+  
+  
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        hidden dark:flex"
+        alt="Skitii"
+      />
+        <img
+          src="/img/octopus.png"
+          width="64"
+          height="64"
+          class="max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:hidden"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/orderby%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/"
+      >OrderBy踩坑之路</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        OrderBy踩坑之路
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2022-02-10 20:13:06 &#43;0000 UTC">10 February 2022</time><span class="px-2 text-primary-500">&middot;</span><span>1920 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">4 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/mysql/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Mysql</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >问题排查</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#索引的存储方式">索引的存储方式</a></li>
+        <li><a href="#索引排序查询执行过程分析">索引排序查询执行过程分析</a>
+          <ul>
+            <li><a href="#表结构">表结构</a></li>
+            <li><a href="#where走索引案例">where走索引案例</a></li>
+            <li><a href="#order-by走索引案例">order by走索引案例</a></li>
+            <li><a href="#where和order-by都走索引">where和order by都走索引</a></li>
+            <li><a href="#where和order-by都不走索引">where和order by都不走索引</a></li>
+          </ul>
+        </li>
+        <li><a href="#filesort">filesort</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<h1 id="先看一条社死sql" class="relative group">先看一条社死SQL </h1><blockquote>
+<p><strong>SELECT</strong>*<strong>FROM</strong> t_device_online <strong>where</strong> device_id=8788 <strong>orderby</strong> start_time **desc limit **1;</p>
+</blockquote>
+<p>其中 device_id 没有索引， start_time有索引。表中数据量大概200w。这条语句执行平均耗时3s多。同时十几条这个请求。直接占住了数据库链接。导致后续请求调用都超时了。
+200w数据查一条数据要花这么久吗？device_id 没有索引，全表扫描可能需要是吧。
+但是我们通过执行计划分析，发现它走了start_time的联合索引。
+好，我们去掉 <strong>orderby</strong> start_time <strong>desc</strong> 试试，结果只花了600ms。？ 索引比全表扫描还慢？
+去掉 <strong>where</strong> device_id=8788 试试，也就 不到 10ms。 ？
+这里涉及到两个知识点，一是索引，二是排序。</p>
+<h1 id="索引排序详解" class="relative group">索引排序详解 </h1><h3 id="索引的存储方式" class="relative group">索引的存储方式 </h3><p>主键索引
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2021/png/21760570/1640936474883-61cb4d73-c389-4594-89cb-4a14206dc3f7.png#clientId=u59529091-3b42-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=147&amp;id=u82d37e53&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=147&amp;originWidth=354&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=6339&amp;status=done&amp;style=none&amp;taskId=u46f7b41f-446e-43b4-be8d-c181006d446&amp;title=&amp;width=354">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2021/png/21760570/1640936474883-61cb4d73-c389-4594-89cb-4a14206dc3f7.png#clientId=u59529091-3b42-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=147&amp;id=u82d37e53&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=147&amp;originWidth=354&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=6339&amp;status=done&amp;style=none&amp;taskId=u46f7b41f-446e-43b4-be8d-c181006d446&amp;title=&amp;width=354" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+联合索引
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641391457565-51184cb0-bb21-4d18-a2ce-22d80d6626d0.png#clientId=u32680ef7-dac2-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=331&amp;id=u82d961fa&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=662&amp;originWidth=821&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=286633&amp;status=done&amp;style=none&amp;taskId=u3444be28-f0e2-4a15-bdc4-c743785dd80&amp;title=&amp;width=410.5">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641391457565-51184cb0-bb21-4d18-a2ce-22d80d6626d0.png#clientId=u32680ef7-dac2-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=331&amp;id=u82d961fa&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=662&amp;originWidth=821&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=286633&amp;status=done&amp;style=none&amp;taskId=u3444be28-f0e2-4a15-bdc4-c743785dd80&amp;title=&amp;width=410.5" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h3 id="索引排序查询执行过程分析" class="relative group">索引排序查询执行过程分析 </h3><p>一次查询最多只会用到一个索引，所以可能存在下面几种情况</p>
+<ol>
+<li>where走索引</li>
+<li>order by 走索引</li>
+<li>where和order by都走索引</li>
+<li>where和order by都不走索引</li>
+</ol>
+<h4 id="表结构" class="relative group">表结构 </h4><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641350356024-e686092a-4f2b-4839-86e7-76279c056aaa.png#clientId=ucfe51a14-d7a8-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=184&amp;id=u334558af&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=184&amp;originWidth=562&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=23314&amp;status=done&amp;style=none&amp;taskId=ub784c7c7-78e2-48d9-9cd2-b319335832d&amp;title=&amp;width=562">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641350356024-e686092a-4f2b-4839-86e7-76279c056aaa.png#clientId=ucfe51a14-d7a8-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=184&amp;id=u334558af&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=184&amp;originWidth=562&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=23314&amp;status=done&amp;style=none&amp;taskId=ub784c7c7-78e2-48d9-9cd2-b319335832d&amp;title=&amp;width=562" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641350388019-c5df714f-a78f-4d27-b3ee-52803649bcfb.png#clientId=ucfe51a14-d7a8-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=u9fb0fdb4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=295&amp;originWidth=1039&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=34447&amp;status=done&amp;style=none&amp;taskId=ue8aa8218-778b-46e0-b77e-a5f5c1a588b&amp;title=&amp;width=1039">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641350388019-c5df714f-a78f-4d27-b3ee-52803649bcfb.png#clientId=ucfe51a14-d7a8-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=u9fb0fdb4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=295&amp;originWidth=1039&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=34447&amp;status=done&amp;style=none&amp;taskId=ue8aa8218-778b-46e0-b77e-a5f5c1a588b&amp;title=&amp;width=1039" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h4 id="where走索引案例" class="relative group">where走索引案例 </h4><p><strong>SELECT</strong> * **FROM **test_online **where **start_time &gt; 1609842103 **order by **device_id  <strong>desc</strong>; 【索引值start_time】
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641350307226-6c2f01a6-bb56-4954-a410-c01f95eee9a6.png#clientId=ucfe51a14-d7a8-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=uf9d74344&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=295&amp;originWidth=1042&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=46997&amp;status=done&amp;style=none&amp;taskId=u8863e4fc-21d0-4e19-aefe-7e880c8844c&amp;title=&amp;width=1042">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641350307226-6c2f01a6-bb56-4954-a410-c01f95eee9a6.png#clientId=ucfe51a14-d7a8-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=uf9d74344&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=295&amp;originWidth=1042&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=46997&amp;status=done&amp;style=none&amp;taskId=u8863e4fc-21d0-4e19-aefe-7e880c8844c&amp;title=&amp;width=1042" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+执行过程：</p>
+<ol>
+<li>走索引过程找出 start_time &gt; 1609842103 的 rowid（默认是主键id）</li>
+<li>将符合条件的rowid和排序字段（device_id）放入到排序缓存区中排序。</li>
+<li>然后在根据排序好的rowid去查询row记录。</li>
+</ol>
+<h4 id="order-by走索引案例" class="relative group">order by走索引案例 </h4><blockquote>
+<p>order by走索引的情况特别坑，如果走错了索引，效率比全表扫描还慢的多，而且，加上limit还会帮你加上索引。这里就能解释上面的社死SQL问题了。</p>
+</blockquote>
+<p><strong>SELECT</strong> * **FROM **test_online **where **device_id=10060 **order by **start_time **desc **;
+<strong>SELECT</strong> * **FROM **test_online **where **device_id=10060 **order by **start_time <strong>desc limit</strong> 0,20;
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641298798315-e0ebaf93-37ab-4ed1-9d6c-86361c3f0917.png#clientId=u2cf24bf6-ebca-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=267&amp;id=u2372b142&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=267&amp;originWidth=1048&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=43638&amp;status=done&amp;style=none&amp;taskId=u6d05b52a-804f-4976-8e6b-308279251e6&amp;title=&amp;width=1048">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641298798315-e0ebaf93-37ab-4ed1-9d6c-86361c3f0917.png#clientId=u2cf24bf6-ebca-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=267&amp;id=u2372b142&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=267&amp;originWidth=1048&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=43638&amp;status=done&amp;style=none&amp;taskId=u6d05b52a-804f-4976-8e6b-308279251e6&amp;title=&amp;width=1048" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641298878764-07c44d9b-a640-4e50-810d-f78df27b05e9.png#clientId=u2cf24bf6-ebca-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=100&amp;id=u412b29a4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=100&amp;originWidth=711&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=16748&amp;status=done&amp;style=none&amp;taskId=u64fa963d-e263-43c7-9636-0cd7f224f25&amp;title=&amp;width=711">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641298878764-07c44d9b-a640-4e50-810d-f78df27b05e9.png#clientId=u2cf24bf6-ebca-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=100&amp;id=u412b29a4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=100&amp;originWidth=711&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=16748&amp;status=done&amp;style=none&amp;taskId=u64fa963d-e263-43c7-9636-0cd7f224f25&amp;title=&amp;width=711" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<p>执行过程(不加limit)：</p>
+<ol>
+<li>全部扫描找到 device_id=10060 的 rowid（全表顺序扫描）。</li>
+<li>将符合条件的rowid和排序字段（start_time）放入到排序缓存区中排序</li>
+<li>然后在根据排序好的rowid去查询row记录（回表查）</li>
+</ol>
+<p>执行过程（加上limit）：</p>
+<ol>
+<li>先根据order by的索引去查询符合where条件的数据；（相当于是走一个无效的索引去查找值，就是随机查找了，效率自然慢）</li>
+<li>将符合条件的rowid和排序字段（start_time）放入到排序缓存区中排序</li>
+<li>然后在根据排序好的rowid去查询row记录</li>
+</ol>
+<p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641344175886-63f4be2a-c38a-4a4d-b312-96981b04429c.png#clientId=u96a7a8cc-ca77-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=57&amp;id=u20adb565&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=57&amp;originWidth=916&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=9574&amp;status=done&amp;style=none&amp;taskId=u8011232e-f09c-4510-82cd-a7cb31ef99e&amp;title=&amp;width=916">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641344175886-63f4be2a-c38a-4a4d-b312-96981b04429c.png#clientId=u96a7a8cc-ca77-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=57&amp;id=u20adb565&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=57&amp;originWidth=916&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=9574&amp;status=done&amp;style=none&amp;taskId=u8011232e-f09c-4510-82cd-a7cb31ef99e&amp;title=&amp;width=916" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<blockquote>
+<p>有些博客讲这个慢在第三步，但是我想不通，
+1.通过主键id回表应该也不至于很慢，而且mysql也有优化，数据量小的情况下，就会将所有的数据在排序缓存区中处理，不需要二次回表。
+2.无法解释上面的情况，两次查询数据都为null，但是耗时差距却这么大。</p>
+</blockquote>
+<p>​</p>
+<p>​</p>
+<h4 id="where和order-by都走索引" class="relative group">where和order by都走索引 </h4><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641430639579-afd72ac0-7b42-41d2-98b9-2e41fe7fd94b.png#clientId=u21c5884e-59d6-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=338&amp;id=u8a6cb280&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=338&amp;originWidth=1014&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=50951&amp;status=done&amp;style=none&amp;taskId=ubb5d1f7d-2ab5-4fed-87ef-acbd0b7468c&amp;title=&amp;width=1014">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641430639579-afd72ac0-7b42-41d2-98b9-2e41fe7fd94b.png#clientId=u21c5884e-59d6-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=338&amp;id=u8a6cb280&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=338&amp;originWidth=1014&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=50951&amp;status=done&amp;style=none&amp;taskId=ubb5d1f7d-2ab5-4fed-87ef-acbd0b7468c&amp;title=&amp;width=1014" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+执行过程：</p>
+<ol>
+<li>通过索引去过滤where条件的数据</li>
+<li>将符合条件的rowid和排序字段放入到排序缓存区中排序</li>
+<li>根据排序好的rowid查询row记录</li>
+</ol>
+<p>​</p>
+<h4 id="where和order-by都不走索引" class="relative group">where和order by都不走索引 </h4><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641430719394-81da8131-9083-481c-af24-e48d7cf54759.png#clientId=u21c5884e-59d6-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=341&amp;id=u46755490&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=341&amp;originWidth=1029&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=50745&amp;status=done&amp;style=none&amp;taskId=uf47167cc-ba41-42c2-ad6a-37cdbb8e795&amp;title=&amp;width=1029">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1641430719394-81da8131-9083-481c-af24-e48d7cf54759.png#clientId=u21c5884e-59d6-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=341&amp;id=u46755490&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=341&amp;originWidth=1029&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=50745&amp;status=done&amp;style=none&amp;taskId=uf47167cc-ba41-42c2-ad6a-37cdbb8e795&amp;title=&amp;width=1029" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+执行过程：</p>
+<ol>
+<li>全表扫描where条件的数据</li>
+<li>将符合条件的rowid和排序字段放入到排序缓存区中排序</li>
+<li>根据排序好的rowid查询row记录</li>
+</ol>
+<h3 id="filesort" class="relative group">filesort </h3><p>我们注意到order by走索引不加limit和加limit的两种情况下，他们的explain最后一列，走全表扫描的有use filesort，另一个没有。
+在我们的认知中，使用文件排序肯定比没有使用文件排序要快对吧，比较磁盘IO肯定更耗时嘛。
+但是这里却相反了。当然现在我们知道了，是因为它走错了索引，导致了非常多无效的随机IO。
+但是我们也可以了解一下这个filesort。
+filesort不一定就会在文件中排序，</p>
+<blockquote>
+<p><em>filesort is not always bad and it does not mean that a file is saved on disk. If the size of the data is small, it is performed in memory.</em></p>
+</blockquote>
+<p>按排序方式分为：</p>
+<ol>
+<li>数据量小时，在内存中快排</li>
+<li>数据量大时，在内存中分块快排，再在磁盘上将各个块做归并</li>
+</ol>
+<p>上面在分析排序过程时，排序完都会回表查询row记录，但是这个不一定是这样，也可以直接将行记录全查询出来在去排序，所以排序按回表次数又可以分为：</p>
+<ol>
+<li>两次传输排序（只将rowid和排序字段放入排序缓存区，然后在回表查询）</li>
+<li>单次传输排序（直接将要查询的行数据放入排序缓存区排序，排序完直接返回，避免二次随机回表查询）</li>
+</ol>
+<p>我们知道随机回表的效率肯定比顺序IO慢，所以在mysql4.1之后的版本中，mysql优化了这个排序，
+MySQL做了以下限制：</p>
+<ul>
+<li>所有需要的列或<strong>ORDER BY</strong>的列只要是<strong>BLOB</strong>或者<strong>TEXT</strong>类型，则使用<strong>两次传输排序</strong>。</li>
+<li>所有需要的列和<strong>ORDER BY</strong>的列总大小超过<strong>max_length_for_sort_data</strong>字节，则使<strong>用两次传输排序</strong>。</li>
+</ul>
+<h1 id="总结" class="relative group">总结 </h1><ol>
+<li>走索引不一定比全表扫描快，还得看你索引用的对不对，order by用索引where不用索引就是血淋淋的教训。</li>
+<li>mysql会帮你优化查询，但是优化不一定是最好的，比如本来查询走全表扫描才几百ms，但这个limit觉得才查几条数据，走索引肯定更快，结果这个索引反而更慢了。</li>
+<li>use filesort不一定就是使用文件排序，得看数据量大不大。也不一定会两次回表，看你列的数据多不多。</li>
+</ol>
+<h1 id="参考" class="relative group">参考 </h1><p><a href="https://segmentfault.com/a/1190000015987895" target="_blank" rel="noreferrer">https://segmentfault.com/a/1190000015987895</a>
+<a href="https://petrunia.net/2007/08/29/how-mysql-executes-order-by/" target="_blank" rel="noreferrer">https://petrunia.net/2007/08/29/how-mysql-executes-order-by/</a> (order by 执行过程详解)
+<a href="https://dev.mysql.com/doc/refman/5.7/en/order-by-optimization.html#order-by-optimizer-control" target="_blank" rel="noreferrer">https://dev.mysql.com/doc/refman/5.7/en/order-by-optimization.html#order-by-optimizer-control</a> (mysql order by)
+<a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html" target="_blank" rel="noreferrer">https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html</a> (mysql limit)</p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+  <div class="flex">
+    
+    
+    
+    <div class="place-self-center">
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/posts/mysql%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Mysql慢查询分析</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-02-12 09:53:49 &#43;0000 UTC">12 February 2022</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/posts/mysql%E6%8F%92%E5%85%A5%E5%88%A0%E9%99%A4%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Mysql插入删除死锁问题排查</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-02-10 19:58:16 &#43;0000 UTC">10 February 2022</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    
+    
+      <div
+        class="text-sm cursor-pointer text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-14 rtl:ml-14"
+      >
+        <button
+          id="appearance-switcher"
+          class="w-12 h-12 "
+          type="button"
+          title="Switch to dark appearance"
+        >
+          <span class="inline dark:hidden"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span></span>
+          <span class="hidden dark:inline"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span></span>
+        </button>
+      </div>
+    
+  </div>
+  
+  
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 
+              'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+            
+            
+        },
+        display: {
+            superSample: 1,     
+            width: 120,         
+            height: 300,        
+            position: 'right',   
+            hOffset: 20,         
+            vOffset: 0,         
+        },
+        mobile: {
+            show: true,         
+            scale: 1,           
+            motion: true,       
+        },
+        react: {
+            opacityDefault: 0.8,  
+            opacityOnHover: 1,  
+        },
+     });
+</script><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

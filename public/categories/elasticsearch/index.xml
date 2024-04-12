@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ElasticSearch on Skitii</title>
+    <link>http://localhost:1313/categories/elasticsearch/</link>
+    <description>Recent content in ElasticSearch on Skitii</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 02 Mar 2022 09:53:49 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ES核心原理</title>
+      <link>http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Wed, 02 Mar 2022 09:53:49 +0000</pubDate>
+      <guid>http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

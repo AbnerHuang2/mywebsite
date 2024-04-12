@@ -1,0 +1,844 @@
+
+
+
+  
+
+
+  
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>缓存一致性问题思考 &middot; Skitii</title>
+    <meta name="title" content="缓存一致性问题思考 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.022d0ebc3b46a335eb1c7ef79b7f2de143d7cd5156d433638592ef1ce5f8554e.js"
+    integrity="sha256-Ai0OvDtGozXrHH73m38t4UPXzVFW1DNjhZLvHOX4VU4="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.8cd4199ad423a763e2dd42a32c20643d8eb472bc550188be85b60444140826dd.css"
+    integrity="sha256-jNQZmtQjp2Pi3UKjLCBkPY60crxVAYi&#43;hbYERBQIJt0="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.f29ffdffd9ab4cc95250c3c7196b2d5dae8ee6ef0a4139451073f90183ae7e31.js"
+      integrity="sha256-8p/9/9mrTMlSUMPHGWstXa6O5u8KQTlFEHP5AYOufjE="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      缓存也是有套路的
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="缓存一致性问题思考" />
+<meta property="og:description" content="缓存也是有套路的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-09T19:27:10+00:00" />
+<meta property="article:modified_time" content="2022-02-09T19:27:10+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="缓存一致性问题思考"/>
+<meta name="twitter:description" content="缓存也是有套路的"/>
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "缓存一致性问题思考",
+    "headline": "缓存一致性问题思考",
+    "description": "缓存也是有套路的",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83\/",
+    "author" : {
+      "@type": "Person",
+      "name": ""
+    },
+    "copyrightYear": "2022",
+    "dateCreated": "2022-02-09T19:27:10\u002b00:00",
+    "datePublished": "2022-02-09T19:27:10\u002b00:00",
+    
+    "dateModified": "2022-02-09T19:27:10\u002b00:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "2066"
+  }
+  </script>
+
+
+  
+  
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        hidden dark:flex"
+        alt="Skitii"
+      />
+        <img
+          src="/img/octopus.png"
+          width="64"
+          height="64"
+          class="max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:hidden"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83/"
+      >缓存一致性问题思考</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        缓存一致性问题思考
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2022-02-09 19:27:10 &#43;0000 UTC">9 February 2022</time><span class="px-2 text-primary-500">&middot;</span><span>2066 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">5 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/cache/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Cache</a
+            >
+          
+        
+      
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#缓存优缺点">缓存优缺点</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#cache-aside">Cache Aside</a>
+      <ul>
+        <li><a href="#解决缓存击穿脏数据">解决缓存击穿&amp;脏数据</a></li>
+        <li><a href="#解决缓存雪崩">解决缓存雪崩</a></li>
+        <li><a href="#解决缓存穿透">解决缓存穿透</a></li>
+        <li><a href="#其他方式">其他方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#readwrite-through">Read/Write Through</a>
+      <ul>
+        <li><a href="#存在问题">存在问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#write-behind-caching">Write Behind Caching</a>
+      <ul>
+        <li><a href="#存在问题-1">存在问题</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<h1 id="概述" class="relative group">概述 </h1><p>缓存是一件很复杂的事情。我认为比较核心的知识应该是，</p>
+<ol>
+<li>缓存一致性保证</li>
+<li>缓存数据结构设计和缓存内存管理</li>
+<li>缓存中间件的建设（包含通信设计，故障处理，高可用保障等一系列知识）
+本文主要从使用的角度去剖析缓存中的一些核心的内容。
+在使用上，我把缓存比较核心的东西总结为，
+<strong>一个业务难题</strong>，缓存使用场景
+<strong>一个核心问题</strong>，并发和异常的情况下，如何尽可能的保证数据的一致性。
+<strong>两个核心操作</strong>，查询，更新；</li>
+</ol>
+<h1 id="业务难题" class="relative group">业务难题 </h1><p>之前我们聊过一轮缓存相关的内容，我们之前一直纠结于要不要使用缓存，以及什么情况下该使用缓存。
+这个业务难题，你很难去笼统的说，什么情况下该用缓存，什么情况下不该用缓存？
+我觉得我们只能根据缓存带来的优点和可能出现的问题然后在结合我们的业务场景去考虑，我们究竟要不要使用缓存。</p>
+<h4 id="缓存优缺点" class="relative group">缓存优缺点 </h4><p>优点：</p>
+<ol>
+<li>快，提高响应速度和系统吞吐量</li>
+<li>减轻数据库压力</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>数据一致性问题</li>
+<li>增加系统的复杂性和维护成本</li>
+</ol>
+<p>建议使用缓存的场景，</p>
+<ol>
+<li>读多写少</li>
+<li>高频访问且耗时服务</li>
+</ol>
+<p>不管是哪种场景，一旦我们决定在业务中使用缓存，有一个问题是不可避免的，就是如何保证数据的一致性。
+我甚至有一个偏执的想法，就是，如果你能cover住缓存的可能带来的问题。那其实只要能带来性能上的提升，我们可以大胆的使用缓存。</p>
+<h1 id="缓存更新探讨" class="relative group">缓存更新探讨 </h1><h2 id="cache-aside" class="relative group">Cache Aside </h2><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/__puml/7b520a9451b29c16d478db6a7d1a5b7c.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcblxuYXV0b251bWJlclxuXG5wYXJ0aWNpcGFudCBcIldlYlNlcnZlclwiIGFzIFdlYlNlcnZlclxucGFydGljaXBhbnQgXCJDYWNoZVwiIGFzIENhY2hlICNkYXJrY3lhblxucGFydGljaXBhbnQgXCJEQlwiIGFzIERCICNvcmFuZ2Vcbj09IOafpeivoiA9PVxuV2ViU2VydmVyIC0-IENhY2hlOiDmn6Xor6LmlbDmja5cblx0Z3JvdXAg57yT5a2Y5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5Zue57yT5a2Y5pWw5o2uXG5cdGVsc2Ug57yT5a2Y5LiN5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5ZuebnVsbFxuXHRcdFdlYlNlcnZlciAtPiBEQjog5p-l6K-i5pWw5o2uXG5cdFx0REIgLS0-IFdlYlNlcnZlcjog6L-U5Zue5pWw5o2uXG5cdFx0V2ViU2VydmVyIC0-IENhY2hlOiDorr7nva7mlbDmja5cblx0ZW5kXG49PSDmm7TmlrDmlbDmja4gPT1cbldlYlNlcnZlciAtPiBEQjog5pu05paw5pWw5o2uXG5EQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mm7TmlrDnu5PmnpxcbldlYlNlcnZlciAtPiBDYWNoZTog5aSx5pWI57yT5a2YXG5AZW5kdW1sIiwidXJsIjoiaHR0cHM6Ly9jZG4ubmxhcmsuY29tL3l1cXVlL19fcHVtbC83YjUyMGE5NDUxYjI5YzE2ZDQ3OGRiNmE3ZDFhNWI3Yy5zdmciLCJpZCI6ImRHRFVLIiwibWFyZ2luIjp7InRvcCI6dHJ1ZSwiYm90dG9tIjp0cnVlfSwiY2FyZCI6ImRpYWdyYW0ifQ==">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/__puml/7b520a9451b29c16d478db6a7d1a5b7c.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcblxuYXV0b251bWJlclxuXG5wYXJ0aWNpcGFudCBcIldlYlNlcnZlclwiIGFzIFdlYlNlcnZlclxucGFydGljaXBhbnQgXCJDYWNoZVwiIGFzIENhY2hlICNkYXJrY3lhblxucGFydGljaXBhbnQgXCJEQlwiIGFzIERCICNvcmFuZ2Vcbj09IOafpeivoiA9PVxuV2ViU2VydmVyIC0-IENhY2hlOiDmn6Xor6LmlbDmja5cblx0Z3JvdXAg57yT5a2Y5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5Zue57yT5a2Y5pWw5o2uXG5cdGVsc2Ug57yT5a2Y5LiN5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5ZuebnVsbFxuXHRcdFdlYlNlcnZlciAtPiBEQjog5p-l6K-i5pWw5o2uXG5cdFx0REIgLS0-IFdlYlNlcnZlcjog6L-U5Zue5pWw5o2uXG5cdFx0V2ViU2VydmVyIC0-IENhY2hlOiDorr7nva7mlbDmja5cblx0ZW5kXG49PSDmm7TmlrDmlbDmja4gPT1cbldlYlNlcnZlciAtPiBEQjog5pu05paw5pWw5o2uXG5EQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mm7TmlrDnu5PmnpxcbldlYlNlcnZlciAtPiBDYWNoZTog5aSx5pWI57yT5a2YXG5AZW5kdW1sIiwidXJsIjoiaHR0cHM6Ly9jZG4ubmxhcmsuY29tL3l1cXVlL19fcHVtbC83YjUyMGE5NDUxYjI5YzE2ZDQ3OGRiNmE3ZDFhNWI3Yy5zdmciLCJpZCI6ImRHRFVLIiwibWFyZ2luIjp7InRvcCI6dHJ1ZSwiYm90dG9tIjp0cnVlfSwiY2FyZCI6ImRpYWdyYW0ifQ==" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+### 存在问题
+脏数据 : 读请求先读数据库，然后写请求更新数据库，然后失效缓存，最后读请求在更新缓存（出现概率很低，但是如果是多个节点，某个节点很慢，确实会出现这个场景，但是，一般来讲，不同节点请求的数据应该是不同的）【加锁；lease；延时双删】
+缓存击穿 ： 写请求失效缓存后，大量读请求访问数据库。【加锁，获取不到锁的请求尝试等一下在访问数据库；facebook采用lease的方式处理】
+异常情况：写数据库成功，删缓存失败；【异步确保；分布式事务保证】
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2021/png/21760570/1635123541336-143553c3-54a4-4b06-9fa5-12f5c0d8ed6e.png#clientId=u0e5344b7-79aa-4&amp;from=paste&amp;height=494&amp;id=u840b8fcb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=494&amp;originWidth=399&amp;originalType=binary&amp;ratio=1&amp;size=53418&amp;status=done&amp;style=none&amp;taskId=ud9f2bafd-41ac-42c9-ae68-01468166e6a&amp;width=399">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2021/png/21760570/1635123541336-143553c3-54a4-4b06-9fa5-12f5c0d8ed6e.png#clientId=u0e5344b7-79aa-4&amp;from=paste&amp;height=494&amp;id=u840b8fcb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=494&amp;originWidth=399&amp;originalType=binary&amp;ratio=1&amp;size=53418&amp;status=done&amp;style=none&amp;taskId=ud9f2bafd-41ac-42c9-ae68-01468166e6a&amp;width=399" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+<em>缓存脏数据图解</em></p>
+<p>带着上面的问题，我们先来看看facebook的lease设计
+lease设计主要解决两个问题：</p>
+<ol>
+<li>过期设置（Cache Aside的脏数据问题）</li>
+<li>大量频繁的读写请求，导致读总是查询数据库。</li>
+</ol>
+<p>但是它有自己的客户端和服务器。为了方便理解，我这里沿用了上诉Cache Aside图。
+这里先说明一下lease生成规则，</p>
+<ol>
+<li>当缓存中的key失效时，生成一个lease; 然后每10s更新lease并清除返回标识。</li>
+<li>对于查询请求，缓存未命中时，将lease返回给客户端，然后清除该key的lease。</li>
+</ol>
+<p>于是针对每个过期key，都会对应一个lease:key-value的缓存。
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/__puml/cf1b0a5e748083fd8c369bd0024fba64.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcbnRpdGxlIEZhY2Vib29rIExlYXNl6K6-6K6hXG5hdXRvbnVtYmVyXG5cbnBhcnRpY2lwYW50IFwiV2ViU2VydmVyXCIgYXMgV2ViU2VydmVyXG5wYXJ0aWNpcGFudCBcIkNhY2hlXCIgYXMgQ2FjaGUgI2RhcmtjeWFuXG5wYXJ0aWNpcGFudCBcIkRCXCIgYXMgREIgI29yYW5nZVxuPT0g5p-l6K-iID09XG5XZWJTZXJ2ZXIgLT4gQ2FjaGU6IOafpeivouaVsOaNrlxuXHRncm91cCDnvJPlrZjlkb3kuK1cblx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cblx0ZWxzZSDnvJPlrZjkuI3lkb3kuK1cblx0XHRncm91cCBjYWNoZeS4reS4jeWtmOWcqGxlYXNlXG5cdFx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm55udWxs5oiW6ICF6L-H5pyf5YC877yI5qC55o2u6YWN572u77yJXG5cdFx0XHRXZWJTZXJ2ZXIgLT4gV2ViU2VydmVyOiDnrYnkuIDmrrXml7bpl7Rcblx0XHRcdFdlYlNlcnZlciAtPiBDYWNoZTog5p-l6K-i5pWw5o2uXG5cdFx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cblx0XHRlbHNlIGNhY2hl5Lit5a2Y5ZyobGVhc2Vcblx0XHRcdENhY2hlIC0tPiBXZWJTZXJ2ZXI6IOi_lOWbnm51bGws5bim5pyJbGVhc2XmoIfor4Zcblx0XHRcdFdlYlNlcnZlciAtPiBEQjog5p-l6K-i5pWw5o2uXG5cdFx0XHREQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mlbDmja5cblx0XHRcdFdlYlNlcnZlciAtPiBDYWNoZTogbGVhc2XmsqHmnInov4fmnJ_vvIzmiY3orr7nva7mlbDmja5cblx0XHRlbmRcblx0ZW5kXG49PSDmm7TmlrDmlbDmja4gPT1cbldlYlNlcnZlciAtPiBEQjog5pu05paw5pWw5o2uXG5EQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mm7TmlrDnu5PmnpxcbldlYlNlcnZlciAtPiBDYWNoZTog5aSx5pWI57yT5a2YXG5DYWNoZSAtPiBDYWNoZSA6IOabtOaWsGxlYXNlXG5AZW5kdW1sIiwidXJsIjoiaHR0cHM6Ly9jZG4ubmxhcmsuY29tL3l1cXVlL19fcHVtbC9jZjFiMGE1ZTc0ODA4M2ZkOGMzNjliZDAwMjRmYmE2NC5zdmciLCJpZCI6Im5CcU9SIiwibWFyZ2luIjp7InRvcCI6dHJ1ZSwiYm90dG9tIjp0cnVlfSwiY2FyZCI6ImRpYWdyYW0ifQ==">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/__puml/cf1b0a5e748083fd8c369bd0024fba64.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcbnRpdGxlIEZhY2Vib29rIExlYXNl6K6-6K6hXG5hdXRvbnVtYmVyXG5cbnBhcnRpY2lwYW50IFwiV2ViU2VydmVyXCIgYXMgV2ViU2VydmVyXG5wYXJ0aWNpcGFudCBcIkNhY2hlXCIgYXMgQ2FjaGUgI2RhcmtjeWFuXG5wYXJ0aWNpcGFudCBcIkRCXCIgYXMgREIgI29yYW5nZVxuPT0g5p-l6K-iID09XG5XZWJTZXJ2ZXIgLT4gQ2FjaGU6IOafpeivouaVsOaNrlxuXHRncm91cCDnvJPlrZjlkb3kuK1cblx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cblx0ZWxzZSDnvJPlrZjkuI3lkb3kuK1cblx0XHRncm91cCBjYWNoZeS4reS4jeWtmOWcqGxlYXNlXG5cdFx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm55udWxs5oiW6ICF6L-H5pyf5YC877yI5qC55o2u6YWN572u77yJXG5cdFx0XHRXZWJTZXJ2ZXIgLT4gV2ViU2VydmVyOiDnrYnkuIDmrrXml7bpl7Rcblx0XHRcdFdlYlNlcnZlciAtPiBDYWNoZTog5p-l6K-i5pWw5o2uXG5cdFx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cblx0XHRlbHNlIGNhY2hl5Lit5a2Y5ZyobGVhc2Vcblx0XHRcdENhY2hlIC0tPiBXZWJTZXJ2ZXI6IOi_lOWbnm51bGws5bim5pyJbGVhc2XmoIfor4Zcblx0XHRcdFdlYlNlcnZlciAtPiBEQjog5p-l6K-i5pWw5o2uXG5cdFx0XHREQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mlbDmja5cblx0XHRcdFdlYlNlcnZlciAtPiBDYWNoZTogbGVhc2XmsqHmnInov4fmnJ_vvIzmiY3orr7nva7mlbDmja5cblx0XHRlbmRcblx0ZW5kXG49PSDmm7TmlrDmlbDmja4gPT1cbldlYlNlcnZlciAtPiBEQjog5pu05paw5pWw5o2uXG5EQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mm7TmlrDnu5PmnpxcbldlYlNlcnZlciAtPiBDYWNoZTog5aSx5pWI57yT5a2YXG5DYWNoZSAtPiBDYWNoZSA6IOabtOaWsGxlYXNlXG5AZW5kdW1sIiwidXJsIjoiaHR0cHM6Ly9jZG4ubmxhcmsuY29tL3l1cXVlL19fcHVtbC9jZjFiMGE1ZTc0ODA4M2ZkOGMzNjliZDAwMjRmYmE2NC5zdmciLCJpZCI6Im5CcU9SIiwibWFyZ2luIjp7InRvcCI6dHJ1ZSwiYm90dG9tIjp0cnVlfSwiY2FyZCI6ImRpYWdyYW0ifQ==" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+有兴趣的话，可以看看这篇文档
+<a href="https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf" target="_blank" rel="noreferrer">https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf</a>
+​</p>
+<h3 id="解决缓存击穿脏数据" class="relative group">解决缓存击穿&amp;脏数据 </h3><p>1.数据库查询加锁
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/__puml/8e3c4decea0b2feed13b21312e2b2f28.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcbnRpdGxlIOaVsOaNruW6k-afpeivouWKoOmUgVxuYXV0b251bWJlclxuXG5wYXJ0aWNpcGFudCBcIldlYlNlcnZlclwiIGFzIFdlYlNlcnZlclxucGFydGljaXBhbnQgXCJDYWNoZVwiIGFzIENhY2hlICNkYXJrY3lhblxucGFydGljaXBhbnQgXCJEQlwiIGFzIERCICNvcmFuZ2Vcbj09IOafpeivoiA9PVxuV2ViU2VydmVyIC0-IENhY2hlOiDmn6Xor6LmlbDmja5cblx0Z3JvdXAg57yT5a2Y5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5Zue57yT5a2Y5pWw5o2uXG5cdGVsc2Ug57yT5a2Y5LiN5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5ZuebnVsbFxuXHRcdFdlYlNlcnZlciAtPiBXZWJTZXJ2ZXIgOiDojrflj5bliIbluIPlvI_plIFcblx0XHRncm91cCDojrflj5bmiJDlip9cblx0XHRcdFdlYlNlcnZlciAtPiBDYWNoZSA6IOiuvue9rmxlYXNlX2tleToxXG5cdFx0XHRXZWJTZXJ2ZXIgLT4gREI6IOafpeivouaVsOaNrlxuXHRcdFx0REIgLS0-IFdlYlNlcnZlcjog6L-U5Zue5pWw5o2uXG5cdFx0XHRncm91cCBsZWFzZV9rZXnlrZjlnKhcblx0XHRcdFx0V2ViU2VydmVyIC0-IENhY2hlOiDorr7nva7mlbDmja5cblx0XHRcdGVuZFxuXHRcdFx0V2ViU2VydmVyIC0-IFdlYlNlcnZlciA6IOmHiuaUvuWIhuW4g-W8j-mUgVxuXHRcdGVsc2Ug6I635Y-W5aSx6LSlXG5cdFx0XHRXZWJTZXJ2ZXIgLT4gV2ViU2VydmVyIDog562J5b6F5LiA5bCP5q615pe26Ze0XG5cdFx0XHRXZWJTZXJ2ZXIgLT4gQ2FjaGU6IOafpeivoue8k-WtmOaVsOaNrlxuXHRcdFx0bm90ZSByaWdodFxuXHRcdFx05Li65LuA5LmI6KaB562J5LiA5q615pe26Ze05YaN5Y675p-l6K-i57yT5a2Y77yM6ICM5LiN5piv562J6ZSB5ZGi77yfXG5cdFx0XHTmiYDmnInnmoTlubblj5Hpg73lnKjnrYnplIHvvIzpnIDopoHkuIDkuKrkuKrmiafooYzjgIJcblx0XHRcdGVuZCBub3RlXG5cdFx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cblx0ZW5kXG49PSDmm7TmlrDmlbDmja4gPT1cbldlYlNlcnZlciAtPiBEQjog5pu05paw5pWw5o2uXG5EQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mm7TmlrDnu5PmnpxcbldlYlNlcnZlciAtPiBDYWNoZTog5aSx5pWI57yT5a2YXG5XZWJTZXJ2ZXIgLT4gQ2FjaGU6IOWIoOmZpGxlYXNlX2tleVxuQGVuZHVtbCIsInVybCI6Imh0dHBzOi8vY2RuLm5sYXJrLmNvbS95dXF1ZS9fX3B1bWwvOGUzYzRkZWNlYTBiMmZlZWQxM2IyMTMxMmUyYjJmMjguc3ZnIiwiaWQiOiJmYm1WdyIsIm1hcmdpbiI6eyJ0b3AiOnRydWUsImJvdHRvbSI6dHJ1ZX0sImNhcmQiOiJkaWFncmFtIn0=">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/__puml/8e3c4decea0b2feed13b21312e2b2f28.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcbnRpdGxlIOaVsOaNruW6k-afpeivouWKoOmUgVxuYXV0b251bWJlclxuXG5wYXJ0aWNpcGFudCBcIldlYlNlcnZlclwiIGFzIFdlYlNlcnZlclxucGFydGljaXBhbnQgXCJDYWNoZVwiIGFzIENhY2hlICNkYXJrY3lhblxucGFydGljaXBhbnQgXCJEQlwiIGFzIERCICNvcmFuZ2Vcbj09IOafpeivoiA9PVxuV2ViU2VydmVyIC0-IENhY2hlOiDmn6Xor6LmlbDmja5cblx0Z3JvdXAg57yT5a2Y5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5Zue57yT5a2Y5pWw5o2uXG5cdGVsc2Ug57yT5a2Y5LiN5ZG95LitXG5cdFx0Q2FjaGUgLS0-IFdlYlNlcnZlcjog6L-U5ZuebnVsbFxuXHRcdFdlYlNlcnZlciAtPiBXZWJTZXJ2ZXIgOiDojrflj5bliIbluIPlvI_plIFcblx0XHRncm91cCDojrflj5bmiJDlip9cblx0XHRcdFdlYlNlcnZlciAtPiBDYWNoZSA6IOiuvue9rmxlYXNlX2tleToxXG5cdFx0XHRXZWJTZXJ2ZXIgLT4gREI6IOafpeivouaVsOaNrlxuXHRcdFx0REIgLS0-IFdlYlNlcnZlcjog6L-U5Zue5pWw5o2uXG5cdFx0XHRncm91cCBsZWFzZV9rZXnlrZjlnKhcblx0XHRcdFx0V2ViU2VydmVyIC0-IENhY2hlOiDorr7nva7mlbDmja5cblx0XHRcdGVuZFxuXHRcdFx0V2ViU2VydmVyIC0-IFdlYlNlcnZlciA6IOmHiuaUvuWIhuW4g-W8j-mUgVxuXHRcdGVsc2Ug6I635Y-W5aSx6LSlXG5cdFx0XHRXZWJTZXJ2ZXIgLT4gV2ViU2VydmVyIDog562J5b6F5LiA5bCP5q615pe26Ze0XG5cdFx0XHRXZWJTZXJ2ZXIgLT4gQ2FjaGU6IOafpeivoue8k-WtmOaVsOaNrlxuXHRcdFx0bm90ZSByaWdodFxuXHRcdFx05Li65LuA5LmI6KaB562J5LiA5q615pe26Ze05YaN5Y675p-l6K-i57yT5a2Y77yM6ICM5LiN5piv562J6ZSB5ZGi77yfXG5cdFx0XHTmiYDmnInnmoTlubblj5Hpg73lnKjnrYnplIHvvIzpnIDopoHkuIDkuKrkuKrmiafooYzjgIJcblx0XHRcdGVuZCBub3RlXG5cdFx0XHRDYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cblx0ZW5kXG49PSDmm7TmlrDmlbDmja4gPT1cbldlYlNlcnZlciAtPiBEQjog5pu05paw5pWw5o2uXG5EQiAtLT4gV2ViU2VydmVyOiDov5Tlm57mm7TmlrDnu5PmnpxcbldlYlNlcnZlciAtPiBDYWNoZTog5aSx5pWI57yT5a2YXG5XZWJTZXJ2ZXIgLT4gQ2FjaGU6IOWIoOmZpGxlYXNlX2tleVxuQGVuZHVtbCIsInVybCI6Imh0dHBzOi8vY2RuLm5sYXJrLmNvbS95dXF1ZS9fX3B1bWwvOGUzYzRkZWNlYTBiMmZlZWQxM2IyMTMxMmUyYjJmMjguc3ZnIiwiaWQiOiJmYm1WdyIsIm1hcmdpbiI6eyJ0b3AiOnRydWUsImJvdHRvbSI6dHJ1ZX0sImNhcmQiOiJkaWFncmFtIn0=" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<p>当然，还有一些保底手段去处理缓存不命中的问题。
+比如，定时更新缓存数据。</p>
+<h3 id="解决缓存雪崩" class="relative group">解决缓存雪崩 </h3><p>缓存雪崩与缓存击穿的最大的区别，就是
+击穿是一个key或者少量key失效时，大量并发请求；
+而缓存雪崩则是大量key同时失效。
+引发这个问题的根本原因是，</p>
+<ol>
+<li>key的设置时间相同；【失效时间设置加一个随机值】</li>
+<li>缓存不可用；【缓存高可用建设，少量机器宕机；大量机器宕机之类的故障处理】</li>
+</ol>
+<h3 id="解决缓存穿透" class="relative group">解决缓存穿透 </h3><p>根本原因：请求缓存中不存在的值。然后就请求就必须去数据库。
+处理方案：</p>
+<ol>
+<li>接口校验；</li>
+<li>缓存null值或无效值。</li>
+<li>增加布隆过滤器。【就是去缓存拿数据之前，先去布隆过滤器里查询数据是不是存在；不存在就直接返回了】</li>
+</ol>
+<p>​</p>
+<h3 id="其他方式" class="relative group">其他方式 </h3><p>当然，这个Cache Aside还会有很多变种误导大家。有些说法让我一度也觉得没啥问题；
+比如。</p>
+<ol>
+<li>先删缓存，再更新数据库【并发查询和更新，可能出现脏数据；缓存击穿；异常】【也有解决方案：延时双删】</li>
+<li>更新数据库，再更新缓存【并发更新脏数据；异常】</li>
+<li>更新缓存，再更新数据库【并发更新脏数据；异常】</li>
+</ol>
+<p>这些也不一定是错的。我们可以辩证的去看待，他们都在努力的去解决一个问题，就是数据一致性的问题。
+<a href="https://juejin.cn/post/6844904137654534158#heading-12" target="_blank" rel="noreferrer">https://juejin.cn/post/6844904137654534158#heading-12</a>这个博客分析的挺好的。
+​</p>
+<h2 id="readwrite-through" class="relative group">Read/Write Through </h2><h3 id="存在问题" class="relative group">存在问题 </h3><p>并发：更新请求处理时，读请求是否要被阻塞。
+阻塞的话，更新数据库时，大量读请求阻塞。跟直接访问数据库的区别在哪呢。
+不阻塞的话，获取的就不是最新的数据。如果更新数据库失败就会出现幻读。
+或者引入版本管理。那开发的代价就很高了。
+异常：更新数据库失败，出现幻读。
+所以要花很大的代价去维护缓存和数据库的一致性，而且数据库表的数据不尽相同，这一点处理起来应该也很困难。</p>
+<h2 id="write-behind-caching" class="relative group">Write Behind Caching </h2><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/__puml/a0ed468999d29a3a2f0c91e2e9f3e647.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcbnNraW5wYXJhbSBQYXJ0aWNpcGFudFBhZGRpbmcgMjBcbmF1dG9udW1iZXJcblxucGFydGljaXBhbnQgXCJXZWJTZXJ2ZXJcIiBhcyBXZWJTZXJ2ZXJcbmJveCBjYWNoZSBzZXZpY2VcbnBhcnRpY2lwYW50IFwiQ2FjaGVcIiBhcyBDYWNoZSAjZGFya2N5YW5cbnBhcnRpY2lwYW50IFwiREJcIiBhcyBEQiAjb3JhbmdlXG5lbmQgYm94XG49PSDmn6Xor6IgPT1cbldlYlNlcnZlciAtPiBDYWNoZTog5p-l6K-i5pWw5o2uXG5cdGdyb3VwIOe8k-WtmOS4jeWRveS4rVxuXHRcdENhY2hlIC0-IERCOiDmn6Xor6LmlbDmja5cblx0XHREQiAtLT4gQ2FjaGU6IOi_lOWbnuaVsOaNrlxuXHRcdENhY2hlIC0-IENhY2hlOiDorr7nva7mlbDmja5cblx0ZW5kXG5DYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cbj09IOabtOaWsO-8iOW8guatpe-8iSA9PVxuV2ViU2VydmVyIC0-IENhY2hlOiDmm7TmlrDmlbDmja5cbkNhY2hlIC0-IENhY2hlOiDmm7TmlrDnvJPlrZhcbkNhY2hlIC0tPiBXZWJTZXJ2ZXI6IOi_lOWbnuabtOaWsOe7k-aenFxuZ3JvdXAg5byC5q2l5pu05pawZGJcblx0Q2FjaGUgLT4gREI6IOabtOaWsOaVsOaNrlxuXHREQiAtLT4gQ2FjaGU6IOi_lOWbnuabtOaWsOe7k-aenFxuZW5kXG5AZW5kdW1sIiwidXJsIjoiaHR0cHM6Ly9jZG4ubmxhcmsuY29tL3l1cXVlL19fcHVtbC9hMGVkNDY4OTk5ZDI5YTNhMmYwYzkxZTJlOWYzZTY0Ny5zdmciLCJpZCI6IkNrQ05LIiwibWFyZ2luIjp7InRvcCI6dHJ1ZSwiYm90dG9tIjp0cnVlfSwiY2FyZCI6ImRpYWdyYW0ifQ==">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/__puml/a0ed468999d29a3a2f0c91e2e9f3e647.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcbnNraW5wYXJhbSBQYXJ0aWNpcGFudFBhZGRpbmcgMjBcbmF1dG9udW1iZXJcblxucGFydGljaXBhbnQgXCJXZWJTZXJ2ZXJcIiBhcyBXZWJTZXJ2ZXJcbmJveCBjYWNoZSBzZXZpY2VcbnBhcnRpY2lwYW50IFwiQ2FjaGVcIiBhcyBDYWNoZSAjZGFya2N5YW5cbnBhcnRpY2lwYW50IFwiREJcIiBhcyBEQiAjb3JhbmdlXG5lbmQgYm94XG49PSDmn6Xor6IgPT1cbldlYlNlcnZlciAtPiBDYWNoZTog5p-l6K-i5pWw5o2uXG5cdGdyb3VwIOe8k-WtmOS4jeWRveS4rVxuXHRcdENhY2hlIC0-IERCOiDmn6Xor6LmlbDmja5cblx0XHREQiAtLT4gQ2FjaGU6IOi_lOWbnuaVsOaNrlxuXHRcdENhY2hlIC0-IENhY2hlOiDorr7nva7mlbDmja5cblx0ZW5kXG5DYWNoZSAtLT4gV2ViU2VydmVyOiDov5Tlm57nvJPlrZjmlbDmja5cbj09IOabtOaWsO-8iOW8guatpe-8iSA9PVxuV2ViU2VydmVyIC0-IENhY2hlOiDmm7TmlrDmlbDmja5cbkNhY2hlIC0-IENhY2hlOiDmm7TmlrDnvJPlrZhcbkNhY2hlIC0tPiBXZWJTZXJ2ZXI6IOi_lOWbnuabtOaWsOe7k-aenFxuZ3JvdXAg5byC5q2l5pu05pawZGJcblx0Q2FjaGUgLT4gREI6IOabtOaWsOaVsOaNrlxuXHREQiAtLT4gQ2FjaGU6IOi_lOWbnuabtOaWsOe7k-aenFxuZW5kXG5AZW5kdW1sIiwidXJsIjoiaHR0cHM6Ly9jZG4ubmxhcmsuY29tL3l1cXVlL19fcHVtbC9hMGVkNDY4OTk5ZDI5YTNhMmYwYzkxZTJlOWYzZTY0Ny5zdmciLCJpZCI6IkNrQ05LIiwibWFyZ2luIjp7InRvcCI6dHJ1ZSwiYm90dG9tIjp0cnVlfSwiY2FyZCI6ImRpYWdyYW0ifQ==" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h3 id="存在问题-1" class="relative group">存在问题 </h3><p>并发：好像没啥问题
+异常：更新数据库失败了，重试保证最终一致性。好像也没啥问题。
+那这个异步处理的时机应该怎么维护才算合适呢？数据一设置马上就异步线程去同步数据库。
+但是还有一个问题，可能会出现刚更新完缓存，服务器宕机了。然后数据库没更新，就会导致数据丢失。这个问题好像没办法解。
+​</p>
+<h1 id="总结" class="relative group">总结 </h1><ol>
+<li>所以，其实综合来看，Cache Aside的方式是代价最小的。这可能也是目前被广泛使用的原因吧。</li>
+<li>如果对缓存带来的问题有相应的解决措施的话，其实，能提高性能的话，不必太过于纠结要不要使用缓存。</li>
+</ol>
+<p>​</p>
+<h1 id="参考" class="relative group">参考 </h1><p><a href="https://coolshell.cn/articles/17416.html" target="_blank" rel="noreferrer">https://coolshell.cn/articles/17416.html</a> （缓存更新套路）
+<a href="https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf" target="_blank" rel="noreferrer">https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf</a> （facebook缓存建设）
+<a href="https://juejin.cn/post/6844904137654534158#heading-12" target="_blank" rel="noreferrer">https://juejin.cn/post/6844904137654534158#heading-12</a> （缓存博客）
+<a href="https://draveness.me/papers-segcache/" target="_blank" rel="noreferrer">https://draveness.me/papers-segcache/</a> （如何提高缓存利用率）</p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+  <div class="flex">
+    
+    
+    
+    <div class="place-self-center">
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/posts/mysql%E6%8F%92%E5%85%A5%E5%88%A0%E9%99%A4%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Mysql插入删除死锁问题排查</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-02-10 19:58:16 &#43;0000 UTC">10 February 2022</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/posts/redis%E7%BD%91%E7%BB%9C%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Redis网络事件模型</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-02-08 19:31:59 &#43;0000 UTC">8 February 2022</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    
+    
+      <div
+        class="text-sm cursor-pointer text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-14 rtl:ml-14"
+      >
+        <button
+          id="appearance-switcher"
+          class="w-12 h-12 "
+          type="button"
+          title="Switch to dark appearance"
+        >
+          <span class="inline dark:hidden"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span></span>
+          <span class="hidden dark:inline"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span></span>
+        </button>
+      </div>
+    
+  </div>
+  
+  
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 
+              'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+            
+            
+        },
+        display: {
+            superSample: 1,     
+            width: 120,         
+            height: 300,        
+            position: 'right',   
+            hOffset: 20,         
+            vOffset: 0,         
+        },
+        mobile: {
+            show: true,         
+            scale: 1,           
+            motion: true,       
+        },
+        react: {
+            opacityDefault: 0.8,  
+            opacityOnHover: 1,  
+        },
+     });
+</script><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

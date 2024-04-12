@@ -1,0 +1,803 @@
+
+
+
+  
+
+
+  
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>Jstack-抓住摸鱼的线程 &middot; Skitii</title>
+    <meta name="title" content="Jstack-抓住摸鱼的线程 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.022d0ebc3b46a335eb1c7ef79b7f2de143d7cd5156d433638592ef1ce5f8554e.js"
+    integrity="sha256-Ai0OvDtGozXrHH73m38t4UPXzVFW1DNjhZLvHOX4VU4="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.8cd4199ad423a763e2dd42a32c20643d8eb472bc550188be85b60444140826dd.css"
+    integrity="sha256-jNQZmtQjp2Pi3UKjLCBkPY60crxVAYi&#43;hbYERBQIJt0="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.f29ffdffd9ab4cc95250c3c7196b2d5dae8ee6ef0a4139451073f90183ae7e31.js"
+      integrity="sha256-8p/9/9mrTMlSUMPHGWstXa6O5u8KQTlFEHP5AYOufjE="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      详解Jstack
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/jstack-%E6%8A%93%E4%BD%8F%E6%91%B8%E9%B1%BC%E7%9A%84%E7%BA%BF%E7%A8%8B/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Jstack-抓住摸鱼的线程" />
+<meta property="og:description" content="详解Jstack" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/jstack-%E6%8A%93%E4%BD%8F%E6%91%B8%E9%B1%BC%E7%9A%84%E7%BA%BF%E7%A8%8B/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-19T16:24:35+00:00" />
+<meta property="article:modified_time" content="2022-04-19T16:24:35+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Jstack-抓住摸鱼的线程"/>
+<meta name="twitter:description" content="详解Jstack"/>
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "Jstack-抓住摸鱼的线程",
+    "headline": "Jstack-抓住摸鱼的线程",
+    "description": "详解Jstack",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/jstack-%E6%8A%93%E4%BD%8F%E6%91%B8%E9%B1%BC%E7%9A%84%E7%BA%BF%E7%A8%8B\/",
+    "author" : {
+      "@type": "Person",
+      "name": ""
+    },
+    "copyrightYear": "2022",
+    "dateCreated": "2022-04-19T16:24:35\u002b00:00",
+    "datePublished": "2022-04-19T16:24:35\u002b00:00",
+    
+    "dateModified": "2022-04-19T16:24:35\u002b00:00",
+    
+    "keywords": ["JVM"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "2163"
+  }
+  </script>
+
+
+  
+  
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        hidden dark:flex"
+        alt="Skitii"
+      />
+        <img
+          src="/img/octopus.png"
+          width="64"
+          height="64"
+          class="max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:hidden"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/posts/jstack-%E6%8A%93%E4%BD%8F%E6%91%B8%E9%B1%BC%E7%9A%84%E7%BA%BF%E7%A8%8B/"
+      >Jstack-抓住摸鱼的线程</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Jstack-抓住摸鱼的线程
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2022-04-19 16:24:35 &#43;0000 UTC">19 April 2022</time><span class="px-2 text-primary-500">&middot;</span><span>2163 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">5 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/java/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Java</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/jvm/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >JVM</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#第一行基本信息">第一行（基本信息）</a></li>
+        <li><a href="#第二行线程状态">第二行（线程状态）</a>
+          <ul>
+            <li><a href="#不上图怎么理解">不上图怎么理解？</a></li>
+            <li><a href="#monitor监控锁">Monitor监控锁</a></li>
+          </ul>
+        </li>
+        <li><a href="#第三行调用堆栈">第三行（调用堆栈）</a></li>
+        <li><a href="#对于jstack做的threaddump的栈可以反映如下信息">对于jstack做的ThreadDump的栈，可以反映如下信息</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<h1 id="jstack是啥" class="relative group">jstack是啥 </h1><p>jstack是java虚拟机自带的一种堆栈跟踪工具，用于分析java线程的执行情况
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645021418946-2fa22a5b-894c-411b-b44a-c2fc926cc9d9.png#clientId=u36e5c111-c0ef-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=239&amp;id=ue4426d11&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=478&amp;originWidth=874&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=423792&amp;status=done&amp;style=none&amp;taskId=uc9aa862c-1d35-4134-94db-2950d4f590a&amp;title=&amp;width=437">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645021418946-2fa22a5b-894c-411b-b44a-c2fc926cc9d9.png#clientId=u36e5c111-c0ef-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=239&amp;id=ue4426d11&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=478&amp;originWidth=874&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=423792&amp;status=done&amp;style=none&amp;taskId=uc9aa862c-1d35-4134-94db-2950d4f590a&amp;title=&amp;width=437" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h1 id="jstack常用实践" class="relative group">jstack常用实践 </h1><ol>
+<li>死锁分析</li>
+<li>cpu高负载分析</li>
+<li>请求外部资源导致的长时间等待</li>
+</ol>
+<h1 id="jstack常用命令" class="relative group">jstack常用命令 </h1><p>jstack <pid></p>
+<blockquote>
+<p>Options
+-F  强制dump线程堆栈信息. 用于进程hung住， jstack <pid>命令没有响应的情况
+-m  同时打印java和本地(native)线程栈信息，m是mixed mode的简写
+-l  打印锁的额外信息</p>
+</blockquote>
+<h1 id="如何看懂jstack的dump结果" class="relative group">如何看懂jstack的dump结果 </h1><p>先来看一份dump结果<a href="https://www.yuque.com/attachments/yuque/0/2022/log/21760570/1645021994927-d63c76e0-6257-49c4-bfda-4fb55086a5fc.log?_lake_card=%7B%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2022%2Flog%2F21760570%2F1645021994927-d63c76e0-6257-49c4-bfda-4fb55086a5fc.log%22%2C%22name%22%3A%22abc.log%22%2C%22size%22%3A7206%2C%22type%22%3A%22%22%2C%22ext%22%3A%22log%22%2C%22status%22%3A%22done%22%2C%22taskId%22%3A%22u9a2b7dd6-63bd-4b5d-942e-1d7bc8cd87c%22%2C%22taskType%22%3A%22upload%22%2C%22id%22%3A%22ua794d24e%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noreferrer">abc.log</a>
+
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645021979672-5fa587b5-d63a-430b-b263-16c1a993e2c9.png#clientId=u7a35ebab-bd98-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=549&amp;id=u6cb45d8a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1098&amp;originWidth=2064&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1167461&amp;status=done&amp;style=none&amp;taskId=ud2dffc06-a764-4e6e-9fb2-98c0ce43b3a&amp;title=&amp;width=1032">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645021979672-5fa587b5-d63a-430b-b263-16c1a993e2c9.png#clientId=u7a35ebab-bd98-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=549&amp;id=u6cb45d8a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1098&amp;originWidth=2064&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1167461&amp;status=done&amp;style=none&amp;taskId=ud2dffc06-a764-4e6e-9fb2-98c0ce43b3a&amp;title=&amp;width=1032" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h3 id="第一行基本信息" class="relative group">第一行（基本信息） </h3><p>** main **  表示线程名称
+<strong>daemon</strong>  表示线程是否是守护线程
+<strong>prio</strong>  表示我们为线程设置的优先级
+<strong>os_prio</strong>  表示的对应的操作系统线程的优先级，由于并不是所有的操作系统都支持线程优先级，所以可能会出现都置为0的情况
+<strong>tid</strong>  表示java中为这个线程的id
+<strong>nid</strong> 表示这个线程对应的操作系统本地线程id的十六进制表示，每一个java线程都有一个对应的操作系统线程
+**[id] **线程栈初始地址</p>
+<h3 id="第二行线程状态" class="relative group">第二行（线程状态） </h3><p>第二行一般显示线程当前状态。一个Thread对象可以有多个状态，在java.lang.Thread.State中，总共定义六种状态：
+1.NEW
+线程刚刚被创建，也就是已经new过了，但是还没有调用start()方法，<strong>jstack命令不会列出处于此状态的线程信息</strong>
+2.RUNNABLE
+RUNNABLE这个名字很具有欺骗性，很容易让人误以为处于这个状态的线程正在运行。事实上，这个状态只是表示，线程是可运行的。一个单核CPU在同一时刻，只能运行一个线程。
+3.BLOCKED
+线程处于阻塞状态，正在等待一个monitor lock。通常情况下，是因为本线程与其他线程共用了一个锁。其他在线程正在使用这个锁进入某个synchronized同步方法块或者方法，而本线程进入这个同步代码块也需要这个锁，最终导致本线程处于阻塞状态。
+4.<strong>WAITING</strong>
+无限期等待另一个线程执行特定操作
+调用以下方法可能会导致一个线程处于等待状态：</p>
+<p><a href="">Object.wait</a> 不指定超时时间 # java.lang.Thread.State: WAITING (on object monitor)</p>
+<p><a href="">Thread.join</a> with no timeout</p>
+<p><a href="">LockSupport.park</a> #java.lang.Thread.State: WAITING (parking)</p>
+<p>例如：对于wait()方法，一个线程处于等待状态，通常是在等待其他线程完成某个操作。本线程调用某个对象的wait()方法，其他线程处于完成之后，调用同一个对象的notify或者notifyAll()方法。Object.wait()方法只能够在同步代码块中调用。调用了wait()方法后，会释放锁。</p>
+<p><strong>5.TIMED_WAITING</strong>
+有限期等待另一个线程执行特定操作
+对于以下方法的调用，可能会导致线程处于这个状态：</p>
+<p><a href="">Thread.sleep</a>#java.lang.Thread.State: TIMED_WAITING (sleeping)``</p>
+<p><a href="">Object.wait</a> 指定超时时间 #java.lang.Thread.State: TIMED_WAITING (on object monitor)</p>
+<p><a href="">Thread.join</a> with timeout</p>
+<p><a href="">LockSupport.parkNanos</a>#java.lang.Thread.State: TIMED_WAITING (parking)``</p>
+<p><a href="">LockSupport.parkUntil</a>#java.lang.Thread.State: TIMED_WAITING (parking)``</p>
+<p><strong>6.TERMINATED</strong>
+线程终止</p>
+<blockquote>
+<p>说明，对于** java.lang.Thread.State: WAITING (on object monitor)和java.lang.Thread.State: TIMED_WAITING (on object monitor)**，对于这两个状态，是因为调用了Object的wait方法(前者没有指定超时，后者指定了超时)，由于wait方法肯定要在syncronized代码中编写，因此肯定是如类似以下代码导致：
+synchronized(obj) {
+&hellip;&hellip;&hellip;
+obj.wait();
+&hellip;&hellip;..
+}
+因此通常的堆栈信息中，必然后一个lock标记，如下（来自上图的main线程）：
+&ldquo;main&rdquo; #1 prio=5 os_prio=0 tid=0x00007f160c009800 nid=0x43db9 <strong>waiting on condition [0x00007f161377a000]]</strong></p>
+</blockquote>
+<h4 id="不上图怎么理解" class="relative group">不上图怎么理解？ </h4><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645969193399-618adbe0-e2f3-4d34-8083-9f56c2b343a8.png#clientId=u6c022a99-1360-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=558&amp;id=u5ad3f333&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1116&amp;originWidth=2296&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=2334003&amp;status=done&amp;style=none&amp;taskId=u64c9318a-4c93-429e-a37d-457749057b8&amp;title=&amp;width=1148">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645969193399-618adbe0-e2f3-4d34-8083-9f56c2b343a8.png#clientId=u6c022a99-1360-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=558&amp;id=u5ad3f333&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1116&amp;originWidth=2296&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=2334003&amp;status=done&amp;style=none&amp;taskId=u64c9318a-4c93-429e-a37d-457749057b8&amp;title=&amp;width=1148" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+
+既然讲到线程状态，就不得不提锁了，如果多个线程都都在抢占同一资源，不就会造成死锁了。所以也能通过jstack来分析死锁问题。但是我们先要懂java是怎么上锁的。</p>
+<h4 id="monitor监控锁" class="relative group">Monitor监控锁 </h4><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645969287460-f0d387a2-4b9c-4f04-baaa-c998616ad65f.png#clientId=u6c022a99-1360-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=693&amp;id=u704c0ea8&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1386&amp;originWidth=2158&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=2509739&amp;status=done&amp;style=none&amp;taskId=ua22d64fc-146b-4ebb-9c24-d732bde6cf5&amp;title=&amp;width=1079">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1645969287460-f0d387a2-4b9c-4f04-baaa-c998616ad65f.png#clientId=u6c022a99-1360-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=693&amp;id=u704c0ea8&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1386&amp;originWidth=2158&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=2509739&amp;status=done&amp;style=none&amp;taskId=ua22d64fc-146b-4ebb-9c24-d732bde6cf5&amp;title=&amp;width=1079" alt="image.png" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<ul>
+<li>线程想要获取monitor,首先会进入Entry Set队列，它是Waiting Thread，线程状态是Waiting for monitor entry。</li>
+<li>当某个线程成功获取对象的monitor后,进入Owner区域，它就是Active Thread。</li>
+<li>如果线程调用了wait()方法，则会进入Wait Set队列，它会释放monitor锁，它也是Waiting Thread，线程状态in Object.wait()</li>
+<li>如果其他线程调用 notify() / notifyAll() ，会唤醒Wait Set中的某个线程，该线程再次尝试获取monitor锁，成功即进入Owner区域。</li>
+</ul>
+<p>For Example , 通过synchronized来举例。
+当线程执行到下面的逻辑时，就会进入到Entry Set队列，如果此时没有人占用obj，就会进入到Owner区域，当在synchronized内部调用obj.wait();方法时，就会进入到Wait Set队列，让其他线程获取obj执行相关逻辑。等待其他线程调用obj.notify()或者 notifyAll()时，就有可能会唤醒该线程，然后重新进入到Owner区域。</p>
+<blockquote>
+<p>synchronized(obj) {
+&hellip;&hellip;&hellip;
+}</p>
+</blockquote>
+<h3 id="第三行调用堆栈" class="relative group">第三行（调用堆栈） </h3><p>反应在dump时刻，线程的状态及调用堆栈。</p>
+<h3 id="对于jstack做的threaddump的栈可以反映如下信息" class="relative group">对于jstack做的ThreadDump的栈，可以反映如下信息 </h3><ol>
+<li>如果某个相同的call stack经常出现， 我们有80%的以上的理由确定这个代码存在性能问题（读网络的部分除外）；</li>
+<li>如果相同的call stack出现在同一个线程上（tid）上， 我们很很大理由相信， 这段代码可能存在较多的循环或者死循环；</li>
+<li>如果某call stack经常出现， 并且里面带有lock，请检查一下这个lock的产生的原因， 可能是全局lock造成了性能问题；</li>
+<li>在一个不大压力的群集里（w&lt;2）， 我们是很少拿到带有业务代码的stack的， 并且一般在一个完整stack中， 最多只有1-2业务代码的stack，</li>
+<li>如果经常出现， 一定要检查代码， 是否出现性能问题。</li>
+<li>如果你怀疑有dead lock问题， 那么请把所有的lock id找出来，看看是不是出现重复的lock id。</li>
+</ol>
+<h1 id="jstack分析工具" class="relative group">jstack分析工具 </h1><p>在线分析工具
+<a href="https://fastthread.io/" target="_blank" rel="noreferrer">https://fastthread.io/</a>
+<a href="http://spotify.github.io/threaddump-analyzer/" target="_blank" rel="noreferrer">http://spotify.github.io/threaddump-analyzer</a></p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+  <div class="flex">
+    
+    
+    
+    <div class="place-self-center">
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/posts/jstack%E5%AE%9E%E8%B7%B5-%E7%BA%BF%E7%A8%8B%E6%97%A0%E9%99%90%E5%A2%9E%E9%95%BF%E5%AF%BC%E8%87%B4%E8%A2%AB%E5%AE%B9%E5%99%A8oomkilled/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Jstack实践-线程无限增长导致被容器OOMkilled</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-04-19 16:30:09 &#43;0000 UTC">19 April 2022</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/posts/canal%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Canal核心原理</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-03-12 09:53:49 &#43;0000 UTC">12 March 2022</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    
+    
+      <div
+        class="text-sm cursor-pointer text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-14 rtl:ml-14"
+      >
+        <button
+          id="appearance-switcher"
+          class="w-12 h-12 "
+          type="button"
+          title="Switch to dark appearance"
+        >
+          <span class="inline dark:hidden"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span></span>
+          <span class="hidden dark:inline"><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span></span>
+        </button>
+      </div>
+    
+  </div>
+  
+  
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 
+              'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+            
+            
+        },
+        display: {
+            superSample: 1,     
+            width: 120,         
+            height: 300,        
+            position: 'right',   
+            hOffset: 20,         
+            vOffset: 0,         
+        },
+        mobile: {
+            show: true,         
+            scale: 1,           
+            motion: true,       
+        },
+        react: {
+            opacityDefault: 0.8,  
+            opacityOnHover: 1,  
+        },
+     });
+</script><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
