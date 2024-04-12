@@ -10,6 +10,6 @@ title = "Skitii"
 
 dateFormat = "2 January 2006"
 
-[author]
+[params.author]
   name = "Skitii"
   image = "/img/donatello.png"
