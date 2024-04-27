@@ -1,5 +1,5 @@
 ---
-title: 彻底搞懂Synchonized
+title: 彻底搞懂synchonized
 date: 2023-05-22 21:32:32
 tags:
 - Java并发
@@ -25,11 +25,60 @@ categories:
 
 1. 只能针对单个缓存行的更改【缓存行：缓存的最小单位】
 2. 有些处理器不支持
-# 锁升级
+## Synchronized优化
 虽然上诉过程可以在底层保证操作的原子性。但是总线锁定的成本也是很高的。而且JVM团队在实际场景中发现，出现并发的场景其实很少。
-于是在JDK1.6版本就优化Synchronized的实现。提出了锁升级的过程。
-## 锁状态
-![](https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657027934270-063210cb-dace-4f9d-a10e-587cca2e4cd3.jpeg)
-## 锁升级过程
+于是在JDK1.6版本就优化Synchronized的实现。主要包括锁消除，锁膨胀和锁升级的过程。
+### 锁消除
+在 synchronized 修饰的代码中，如果不存在操作[临界资源](https://so.csdn.net/so/search?q=%E4%B8%B4%E7%95%8C%E8%B5%84%E6%BA%90&spm=1001.2101.3001.7020)的情况，会触发锁消除，你即便写了 synchronized ，他也不会触发
+```java
+public synchronized void method(){
+    // 没有操作临界资源
+    // 此时这个方法的synchronized你可以认为没有
+}
+```
+### 锁膨胀
+如果一个循环中，频繁的获取和释放资源，这样的消耗很大。锁膨胀就会将锁的范围扩大，避免频繁的竞争和获取锁资源带来不必要的消耗。
+```java
+public void method(){
+    for(int i = 0;i < 999999;i++){
+        synchronized(对象){
+
+        }
+    }
+    
+    // 这是上面的代码会触发锁膨胀
+    synchronized(对象){
+        for(int i = 0;i < 999999;i++){
+
+        }
+    }
+}
+
+```
+### 锁升级
+#### 锁状态
+
+1. 无锁状态
+2. 偏向锁状态
+3. 轻量级锁状态
+4. 重量级锁状态
+#### 锁升级过程
 ![](https://cdn.nlark.com/yuque/0/2024/jpeg/21760570/1710337738567-aacb719f-d283-48f4-b446-9618da34f5f7.jpeg)
 ![image.png](https://cdn.nlark.com/yuque/0/2024/png/21760570/1710337312164-0d63d048-629e-4f7f-a6a6-c385f0f2496e.png#averageHue=%2398ab5b&clientId=u1e4897e6-c9d5-4&from=paste&height=451&id=u9ca41cae&originHeight=902&originWidth=1890&originalType=binary&ratio=2&rotation=0&showTitle=false&size=661770&status=done&style=none&taskId=u1ec4a00c-5372-4872-9fda-fd75aa33744&title=&width=945)
+## Sychronized实现原理
+### 锁升级过程
+### 重量级锁实现
+我们知道字节码层面，synchonized关键字会增加monitorenter和monitorexit，在在jvm层面是如何实现锁的处理的呢？主要是通过ObjectMonitor来实现操作的。
+##### ObjectMonitor处理流程
+
+1. 我们线程刚进来时，会进入 Cxq 的队列中
+2. 当我们的 owner 释放锁时，会将 Xcq 里面的线程放到 EntryList 中
+3. 这个时候由 OnDeck Thread 去进行锁竞争，竞争失败的则继续留在 EntryList 中
+4. 当调用 Object.wait() 会进入 _WaitSet 队列，只要被唤醒时，才会重新进入 EntryList 中
+
+在重量级锁中没有竞争到锁的对象会 park 被挂起，退出同步块时 unpark 唤醒后续线程。唤醒操作涉及到操作系统调度会有额外的开销。
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/21760570/1712586399263-8c1f8e16-612f-452f-8e63-bdb6ab5c83a0.png#averageHue=%23f7f7f7&clientId=u2789fbfa-0073-4&from=paste&height=113&id=ue7dbb7b8&originHeight=226&originWidth=537&originalType=binary&ratio=2&rotation=0&showTitle=false&size=21489&status=done&style=none&taskId=uec2467ae-05bd-4462-8682-a5b396733a9&title=&width=268.5)
+
+## 参考
+[https://xiaohuang.blog.csdn.net/article/details/129848342?spm=1001.2014.3001.5502](https://xiaohuang.blog.csdn.net/article/details/129848342?spm=1001.2014.3001.5502)
+[https://xiaomi-info.github.io/2020/03/24/synchronized/](https://xiaomi-info.github.io/2020/03/24/synchronized/)
