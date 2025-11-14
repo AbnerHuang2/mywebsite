@@ -1,0 +1,102 @@
+''
+'' PlantUML 高对比度主题配置
+'' 用于改善浅色背景下的可读性
+'' 使用方法：在图表开头添加 !include plantuml-theme.puml
+''
+
+@startuml
+!theme plain
+
+'' 通用设置
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam handwritten false
+
+'' 字体设置 - 更粗更清晰
+skinparam defaultFontSize 14
+skinparam defaultFontStyle bold
+
+'' 线条设置 - 更粗更明显
+skinparam ArrowThickness 3
+skinparam sequenceArrowThickness 3
+skinparam linetype ortho
+
+'' 边框和线条颜色 - 深色，高对比度
+skinparam ArrowColor #000000
+skinparam BorderColor #000000
+skinparam sequenceArrowColor #000000
+
+'' 参与者样式（时序图）
+skinparam participant {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+    BorderThickness 2
+    FontColor #000000
+    FontStyle bold
+}
+
+'' 类图样式
+skinparam class {
+    BackgroundColor #FFF9C4
+    BorderColor #F57F17
+    BorderThickness 2
+    FontColor #000000
+    FontStyle bold
+    ArrowColor #000000
+}
+
+'' 组件样式
+skinparam component {
+    BackgroundColor #E8F5E9
+    BorderColor #388E3C
+    BorderThickness 2
+    FontColor #000000
+    FontStyle bold
+}
+
+'' 活动图样式
+skinparam activity {
+    BackgroundColor #FFE0B2
+    BorderColor #E65100
+    BorderThickness 2
+    FontColor #000000
+    FontStyle bold
+    BarColor #E65100
+    StartColor #4CAF50
+    EndColor #F44336
+}
+
+'' 状态图样式
+skinparam state {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+    BorderThickness 2
+    FontColor #000000
+    FontStyle bold
+}
+
+'' 注释样式 - 更明显的颜色
+skinparam note {
+    BackgroundColor #FFFDE7
+    BorderColor #F57F17
+    BorderThickness 2
+    FontColor #000000
+}
+
+'' 包/分组样式
+skinparam package {
+    BackgroundColor #E0F7FA
+    BorderColor #00838F
+    BorderThickness 2
+    FontColor #000000
+    FontStyle bold
+}
+
+'' 圆角设置
+skinparam roundcorner 10
+
+'' 消息文本样式
+skinparam sequenceMessageAlign center
+
+@enduml
+

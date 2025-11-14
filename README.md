@@ -125,8 +125,15 @@ layouts/
 **实现原理**：
 - Hugo shortcode读取PlantUML代码
 - 浏览器端JavaScript使用`plantuml-encoder`库编码
-- 构造URL请求PlantUML官方服务器渲染SVG
+- 构造URL请求PlantUML服务器渲染SVG
 - 动态加载并显示图表
+
+**可靠性机制**：
+- ✅ CDN库加载检测与超时处理（10秒）
+- ✅ 双服务器自动切换（PlantUML官方 + Kroki备用）
+- ✅ 图片加载超时自动重试
+- ✅ 详细错误提示（CDN失败/服务器超时/编码错误）
+- ✅ 全局加载一次encoder库，避免重复加载
 
 **使用方法**：
 ```markdown
@@ -145,9 +152,25 @@ Alice -> Bob: Hello
 
 # 移除背景色：backgroundColor #XXX → transparent
 ./remove-plantuml-bg.sh content/posts/your-article.md
+
+# 增强对比度：优化浅色背景下的显示效果
+./enhance-plantuml-contrast.sh content/posts/your-article.md
 ```
 
-**注意**：需要网络访问 `www.plantuml.com` 和 `plantuml-encoder` CDN
+**显示优化**：
+- ✅ CSS滤镜自动增强对比度（`contrast(1.15) brightness(0.95)`）
+- ✅ 浅灰色背景 + 边框，图表更突出
+- ✅ 深色模式自动反转颜色
+- ✅ 支持高对比度偏好设置（辅助功能）
+- 💡 如需更强对比度，运行 `enhance-plantuml-contrast.sh` 优化图表源码
+
+**常见问题**：
+- "图表加载失败" → 检查网络连接，系统会自动重试备用服务器
+- "CDN加载超时" → 刷新页面或检查网络
+- "线条不清晰" → CSS已自动增强，如需更强效果运行对比度增强脚本
+- 打开浏览器控制台查看详细错误信息
+
+**注意**：需要网络访问 PlantUML 服务器和 CDN
 
 ---
 

@@ -91,7 +91,7 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 
-<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1763104471" />
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1763117071" />
 
 
   
@@ -148,7 +148,7 @@
     "keywords": ["Go","并发编程","GMP","调度器"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "8783"
+    "wordCount": "8771"
   }
   </script>
     
@@ -210,12 +210,22 @@
   text-align: center;
   margin: 2rem 0;
   overflow-x: auto;
+   
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+   
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .plantuml-diagram img {
   max-width: 100%;
   height: auto;
   display: inline-block;
+   
+  filter: contrast(1.15) brightness(0.95);
+   
 }
 
 .plantuml-loading {
@@ -224,10 +234,45 @@
   text-align: center;
 }
 
+.plantuml-error {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
  
 @media (prefers-color-scheme: dark) {
+  .plantuml-diagram {
+     
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
   .plantuml-diagram img {
-    filter: invert(0.9) hue-rotate(180deg);
+     
+    filter: invert(0.88) contrast(1.05) brightness(1.1);
+     
+  }
+}
+
+ 
+@media (prefers-contrast: high) {
+  .plantuml-diagram img {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+ 
+@media print {
+  .plantuml-diagram {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .plantuml-diagram img {
+    filter: none;
+    max-width: 100%;
   }
 }
 </style>
@@ -636,7 +681,7 @@ html {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2024-11-14 00:00:00 &#43;0000 UTC">14 November 2024</time><span class="px-2 text-primary-500">&middot;</span><span>8783 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">18 mins</span>
+      <time datetime="2024-11-14 00:00:00 &#43;0000 UTC">14 November 2024</time><span class="px-2 text-primary-500">&middot;</span><span>8771 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">18 mins</span>
     
 
     
@@ -781,7 +826,7 @@ html {
       <div class="min-h-0 min-w-0 max-w-prose grow">
         <meta name="referrer" content="no-referrer" />
 <!-- more -->
-<h1 id="go语言gmp调度器详解" class="relative group">Go语言GMP调度器详解 </h1><h2 id="1-gmp是什么" class="relative group">1. GMP是什么？ </h2><p>GMP是Go语言运行时（runtime）的核心调度模型，由三个关键组件组成：</p>
+<h2 id="1-gmp是什么" class="relative group">1. GMP是什么？ </h2><p>GMP是Go语言运行时（runtime）的核心调度模型，由三个关键组件组成：</p>
 <ul>
 <li><strong>G (Goroutine)</strong>：Go协程，是Go语言并发执行的基本单位。每个Goroutine包含执行栈、程序计数器（PC）、寄存器等执行上下文信息。</li>
 <li><strong>M (Machine/Thread)</strong>：操作系统线程，是真正执行代码的实体。M与操作系统的线程一一对应，负责执行Goroutine的代码。</li>
@@ -847,7 +892,7 @@ html {
 <li><strong>全局队列（Global Queue）</strong>：所有P共享一个全局队列，当本地队列满时，新创建的G会被放入全局队列。</li>
 </ul>
 <h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-gmp调度器全局视图" class="relative group">4.0 GMP调度器全局视图 </h3><p>在深入了解各个组件和流程之前，我们先从全局视角看一下GMP调度器的完整工作流程：</p>
-<div class="plantuml-diagram" id="plantuml-1763404571000">
+<div class="plantuml-diagram" id="plantuml-1763167585000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -988,37 +1033,110 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763404571000');
+  const container = document.getElementById('plantuml-1763167585000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -1040,7 +1158,7 @@ end note
 </ol>
 <p>这个全局视图展示了GMP调度器如何通过<strong>M:P:G = 线程:处理器:协程</strong>的三层模型，实现了高效的并发调度。</p>
 <hr>
-<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="gmp-结构及其关系" class="relative group">G、M、P 结构及其关系 </h4><div class="plantuml-diagram" id="plantuml-1763404773000">
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="gmp-结构及其关系" class="relative group">G、M、P 结构及其关系 </h4><div class="plantuml-diagram" id="plantuml-1763167711000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam classAttributeIconSize 0
 skinparam class {
@@ -1143,43 +1261,116 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763404773000');
+  const container = document.getElementById('plantuml-1763167711000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
 
 <h3 id="42-goroutine是如何添加的" class="relative group">4.2 Goroutine是如何添加的？ </h3><p>当使用<code>go</code>关键字创建Goroutine时，各组件之间的交互流程如下：</p>
-<div class="plantuml-diagram" id="plantuml-1763404830000">
+<div class="plantuml-diagram" id="plantuml-1763167777000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1251,37 +1442,110 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763404830000');
+  const container = document.getElementById('plantuml-1763167777000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -1306,7 +1570,7 @@ end note
 <li><strong>唤醒M</strong>：如果当前有空闲的M，或者需要创建新的M来执行G，会触发调度。</li>
 </ol>
 <h3 id="43-goroutine是怎么被调度的" class="relative group">4.3 Goroutine是怎么被调度的？ </h3><p>调度器各组件之间的交互时序如下：</p>
-<div class="plantuml-diagram" id="plantuml-1763404877000">
+<div class="plantuml-diagram" id="plantuml-1763168685000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1421,43 +1685,116 @@ end
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763404877000');
+  const container = document.getElementById('plantuml-1763168685000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
 
 <h4 id="工作窃取流程详解" class="relative group">工作窃取流程详解 </h4><p>当P的本地队列和全局队列都为空时，会触发工作窃取机制：</p>
-<div class="plantuml-diagram" id="plantuml-1763404973000">
+<div class="plantuml-diagram" id="plantuml-1763169035000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1554,37 +1891,110 @@ end
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763404973000');
+  const container = document.getElementById('plantuml-1763169035000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -1636,7 +2046,7 @@ end
 <li>某些P的本地队列经常满载</li>
 </ul>
 <p><strong>可视化展示</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1763405015000">
+<div class="plantuml-diagram" id="plantuml-1763169119000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1705,37 +2115,110 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763405015000');
+  const container = document.getElementById('plantuml-1763169119000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -1758,7 +2241,7 @@ end note
 <li>负载不均衡，部分P经常空闲</li>
 </ul>
 <p><strong>问题示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1763405046000">
+<div class="plantuml-diagram" id="plantuml-1763169187000">
   <pre class="plantuml-code" style="display:none;">@startuml
 start
 
@@ -1786,37 +2269,110 @@ stop
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763405046000');
+  const container = document.getElementById('plantuml-1763169187000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -1834,7 +2390,7 @@ stop
 <li>可能导致其他G饥饿，影响调度公平性</li>
 </ul>
 <p><strong>问题场景示例</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1763405076000">
+<div class="plantuml-diagram" id="plantuml-1763169230000">
   <pre class="plantuml-code" style="display:none;">@startuml
 participant &#34;M0&#34; as M0
 participant &#34;P0&#34; as P0
@@ -1875,37 +2431,110 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763405076000');
+  const container = document.getElementById('plantuml-1763169230000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -1923,7 +2552,7 @@ end note
 <li>M和P的频繁绑定/解绑有一定开销</li>
 </ul>
 <p><strong>流程示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1763405112000">
+<div class="plantuml-diagram" id="plantuml-1763169287000">
   <pre class="plantuml-code" style="display:none;">@startuml
 participant &#34;M0&#34; as M0
 participant &#34;P0&#34; as P0
@@ -1966,37 +2595,110 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763405112000');
+  const container = document.getElementById('plantuml-1763169287000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
@@ -2020,7 +2722,7 @@ end note
 <li>M结构体本身的内存开销</li>
 </ul>
 <p><strong>内存使用示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1763405142000">
+<div class="plantuml-diagram" id="plantuml-1763169332000">
   <pre class="plantuml-code" style="display:none;">@startuml
 
 component &#34;100万个Goroutine (G)&#34; as G #LightBlue
@@ -2057,37 +2759,110 @@ end note
 @enduml</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1763405142000');
+  const container = document.getElementById('plantuml-1763169332000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 

@@ -4,12 +4,22 @@
   text-align: center;
   margin: 2rem 0;
   overflow-x: auto;
+  /* 强制白色背景，确保所有图表统一且可见 */
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* 添加轻微阴影，让图表更突出 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .plantuml-diagram img {
   max-width: 100%;
   height: auto;
   display: inline-block;
+  /* 浅色模式：增加对比度，让线条更清晰 */
+  filter: contrast(1.15) brightness(0.95);
+  /* 不给图片设置背景，让 PlantUML 的颜色正常显示 */
 }
 
 .plantuml-loading {
@@ -18,10 +28,45 @@
   text-align: center;
 }
 
+.plantuml-error {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
 /* 深色模式适配 */
 @media (prefers-color-scheme: dark) {
+  .plantuml-diagram {
+    /* 深色模式：使用深色背景 */
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
   .plantuml-diagram img {
-    filter: invert(0.9) hue-rotate(180deg);
+    /* 深色模式：只反转明暗，保留原始颜色 */
+    filter: invert(0.88) contrast(1.05) brightness(1.1);
+    /* 不给图片设置背景，让反转滤镜处理所有颜色 */
+  }
+}
+
+/* 高对比度偏好（辅助功能） */
+@media (prefers-contrast: high) {
+  .plantuml-diagram img {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+/* 打印样式优化 */
+@media print {
+  .plantuml-diagram {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .plantuml-diagram img {
+    filter: none;
+    max-width: 100%;
   }
 }
 </style>

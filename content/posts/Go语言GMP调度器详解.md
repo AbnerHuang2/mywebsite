@@ -14,8 +14,6 @@ categories:
 <meta name="referrer" content="no-referrer" />
 <!-- more -->
 
-# Go语言GMP调度器详解
-
 ## 1. GMP是什么？
 
 GMP是Go语言运行时（runtime）的核心调度模型，由三个关键组件组成：

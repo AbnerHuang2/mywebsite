@@ -7,37 +7,110 @@
   <pre class="plantuml-code" style="display:none;">{{ $content }}</pre>
   <div class="plantuml-loading">正在加载图表...</div>
   <img class="plantuml-image" style="display:none;" alt="{{ $alt }}" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<!-- 全局加载一次 plantuml-encoder 库 -->
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    // 10秒超时
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
 <script>
 (function() {
   const container = document.getElementById('{{ $id }}');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
   
-  try {
-    // 使用 plantuml-encoder 库进行正确的编码
-    const encoded = plantumlEncoder.encode(code);
-    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+  // 备用服务器列表
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); // 10秒超时
     
     img.onload = function() {
+      clearTimeout(timeout);
       loading.style.display = 'none';
       img.style.display = 'block';
+      errorDiv.style.display = 'none';
     };
     
     img.onerror = function() {
-      loading.textContent = '图表加载失败';
-      loading.style.color = '#dc3545';
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
     };
     
     img.src = url;
-  } catch (e) {
-    loading.textContent = '图表编码失败: ' + e.message;
-    loading.style.color = '#dc3545';
-    console.error('PlantUML encoding error:', e);
   }
+  
+  // 等待 encoder 库加载完成
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        // 编码 PlantUML 代码
+        const encoded = plantumlEncoder.encode(code);
+        
+        // 检查编码后的长度
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        // 尝试加载图片
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
 })();
 </script>
 
