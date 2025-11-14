@@ -1,0 +1,53 @@
+<!-- fancybox 图片放大 -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<!-- Live2D 看板娘 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+<!-- Chatra 聊天系统 -->
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+
+<!-- Live2D 配置 -->
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+        },
+        display: {
+            superSample: 1,
+            width: 120,
+            height: 300,
+            position: 'right',
+            hOffset: 20,
+            vOffset: 0,
+        },
+        mobile: {
+            show: true,
+            scale: 1,
+            motion: true,
+        },
+        react: {
+            opacityDefault: 0.8,
+            opacityOnHover: 1,
+        },
+     });
+</script>
+
+
