@@ -1,0 +1,43 @@
+{{- $content := .Inner | strings.TrimSpace -}}
+{{- $id := printf "plantuml-%d" (add 1000 (mul (now.Unix) 1000) (now.Nanosecond)) -}}
+{{- $alt := .Get "alt" | default "PlantUML Diagram" -}}
+{{- $class := .Get "class" | default "plantuml-diagram" -}}
+
+<div class="{{ $class }}" id="{{ $id }}">
+  <pre class="plantuml-code" style="display:none;">{{ $content }}</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="{{ $alt }}" />
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script>
+(function() {
+  const container = document.getElementById('{{ $id }}');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  
+  try {
+    // 使用 plantuml-encoder 库进行正确的编码
+    const encoded = plantumlEncoder.encode(code);
+    const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+    
+    img.onload = function() {
+      loading.style.display = 'none';
+      img.style.display = 'block';
+    };
+    
+    img.onerror = function() {
+      loading.textContent = '图表加载失败';
+      loading.style.color = '#dc3545';
+    };
+    
+    img.src = url;
+  } catch (e) {
+    loading.textContent = '图表编码失败: ' + e.message;
+    loading.style.color = '#dc3545';
+    console.error('PlantUML encoding error:', e);
+  }
+})();
+</script>
+

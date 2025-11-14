@@ -16,6 +16,8 @@
 1. git push到master之后，会触发github actions构建部署静态页面到gh-pages分支
 2. gh-pages分支被更新后，会触发vercel的hook，重新构建部署到vercel上。
 
+注意⚠️
+    如果升级了hugo版本，需要修改gh-pages.yml中的hugo版本
 
 # 自定义功能扩展说明
 
@@ -33,9 +35,12 @@ layouts/
 │       └── render-image.html    # 自定义图片渲染（支持Fancybox放大）
 ├── partials/
 │   ├── comments.html            # 评论系统扩展点
-│   └── extend-footer.html       # Footer扩展点（Live2D、Chatra、Fancybox）
+│   ├── extend-head.html         # Head扩展点（PlantUML样式）
+│   ├── extend-footer.html       # Footer扩展点（Live2D、Chatra、Fancybox）
+│   └── plantuml-style.html      # PlantUML样式定义
 └── shortcodes/
-    └── figure.html              # 自定义figure shortcode
+    ├── figure.html              # 自定义figure shortcode
+    └── plantuml.html            # PlantUML图表shortcode
 ```
 
 **⚠️ 重要原则**：
@@ -110,6 +115,37 @@ layouts/
 **文件位置**：`config/_default/config.toml`
 
 **配置**：`hasCJKLanguage = true`
+
+---
+
+### 6. PlantUML 图表渲染
+
+**实现原理**：
+- Hugo shortcode读取PlantUML代码
+- 浏览器端JavaScript使用`plantuml-encoder`库编码
+- 构造URL请求PlantUML官方服务器渲染SVG
+- 动态加载并显示图表
+
+**使用方法**：
+```markdown
+{{</* plantuml */>}}
+@startuml
+skinparam backgroundColor transparent
+Alice -> Bob: Hello
+@enduml
+{{</* /plantuml */>}}
+```
+
+**批量转换脚本**：
+```bash
+# 转换代码块格式：```plantuml → {{< plantuml >}}
+./convert-plantuml.sh content/posts/your-article.md
+
+# 移除背景色：backgroundColor #XXX → transparent
+./remove-plantuml-bg.sh content/posts/your-article.md
+```
+
+**注意**：需要网络访问 `www.plantuml.com` 和 `plantuml-encoder` CDN
 
 ---
 
