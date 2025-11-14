@@ -1,0 +1,13 @@
+请将你的favicon图片文件放在这个目录下：
+
+1. 将图片重命名为 favicon.png
+2. 保存到 static/ 目录（与本文件同级）
+3. 删除本说明文件
+
+支持的格式：
+- favicon.png (推荐)
+- favicon.ico
+- favicon.svg
+
+Hugo会自动识别这些文件并作为网站图标。
+

@@ -35,9 +35,11 @@ layouts/
 │       └── render-image.html    # 自定义图片渲染（支持Fancybox放大）
 ├── partials/
 │   ├── comments.html            # 评论系统扩展点
-│   ├── extend-head.html         # Head扩展点（PlantUML样式）
+│   ├── extend-head.html         # Head扩展点（PlantUML、TOC样式）
 │   ├── extend-footer.html       # Footer扩展点（Live2D、Chatra、Fancybox）
-│   └── plantuml-style.html      # PlantUML样式定义
+│   ├── plantuml-style.html      # PlantUML样式定义
+│   ├── toc.html                 # 目录模板（覆盖主题）
+│   └── toc-style.html           # 目录样式美化
 └── shortcodes/
     ├── figure.html              # 自定义figure shortcode
     └── plantuml.html            # PlantUML图表shortcode
@@ -146,6 +148,47 @@ Alice -> Bob: Hello
 ```
 
 **注意**：需要网络访问 `www.plantuml.com` 和 `plantuml-encoder` CDN
+
+---
+
+### 7. 目录样式美化
+
+**文件位置**：
+- `layouts/partials/toc.html` - 目录模板
+- `layouts/partials/toc-style.html` - 样式和交互脚本
+
+**美化效果**：
+- 优化滚动条样式（超细、半透明）
+- 链接悬停平滑动画和背景色
+- 自动高亮当前阅读位置
+- 支持深色模式自适应
+- 移动端折叠优化
+
+**注意**：样式已自动应用，无需额外配置
+
+---
+
+### 8. 自定义 Favicon
+
+**设置步骤**：
+1. 将图片保存为 `static/favicon-original.png`
+2. 运行生成脚本：`./generate-favicons.sh`
+3. 访问 https://favicon.io/favicon-converter/ 生成 `favicon.ico`
+4. 将 `favicon.ico` 放到 `static/` 目录
+
+**需要的文件**：
+```
+static/
+├── android-chrome-192x192.png  (脚本自动生成)
+├── android-chrome-512x512.png  (脚本自动生成)
+├── apple-touch-icon.png        (脚本自动生成)
+├── favicon-16x16.png           (脚本自动生成)
+├── favicon-32x32.png           (脚本自动生成)
+├── favicon.ico                 (手动转换)
+└── site.webmanifest            (已创建)
+```
+
+**注意**：macOS 使用 `sips` 命令自动生成多个尺寸
 
 ---
 
