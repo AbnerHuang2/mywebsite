@@ -15,5 +15,19 @@
       <guid>http://localhost:1313/posts/go%E5%B8%B8%E8%A7%81gc%E5%92%8C%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/</guid>
       <description></description>
     </item>
+    <item>
+      <title>第1章：微处理器性能的过去、现在与未来</title>
+      <link>http://localhost:1313/series/go-performance/01-microprocessor-performance/</link>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/series/go-performance/01-microprocessor-performance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>第2章：基准测试（Benchmarking）</title>
+      <link>http://localhost:1313/series/go-performance/02-benchmarking/</link>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/series/go-performance/02-benchmarking/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>
