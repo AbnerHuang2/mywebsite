@@ -1,0 +1,1221 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  
+  <title>Guaua Cache原理分析 &middot; Skitii</title>
+    <meta name="title" content="Guaua Cache原理分析 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="http://localhost:1313/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js"
+    integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="http://localhost:1313/css/main.bundle.min.a645f3fa02b2ca20e7ef61b236048d95cc9bc2e5b2faf1f0ac0aa85431187c1c.css"
+    integrity="sha256-pkXz&#43;gKyyiDn72GyNgSNlcybwuWy&#43;vHwrAqoVDEYfBw="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="http://localhost:1313/js/main.bundle.min.0b250a079f6c2f7d0e03d1f0aa1308acb88137e3caebe1268f7478f0c87c5bf8.js"
+      integrity="sha256-CyUKB59sL30OA9HwqhMIrLiBN&#43;PK6&#43;Emj3R48Mh8W/g="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      Guaua Cache原理分析
+    "
+  />
+  
+  
+  
+  
+    <link rel="canonical" href="http://localhost:1313/posts/guaua-cache%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" />
+  
+  
+  
+    
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1763609379" />
+
+
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="http://localhost:1313/posts/guaua-cache%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">
+  <meta property="og:site_name" content="Skitii">
+  <meta property="og:title" content="Guaua Cache原理分析">
+  <meta property="og:description" content="Guaua Cache原理分析">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-02-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2022-02-25T00:00:00+00:00">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Guaua Cache原理分析">
+  <meta name="twitter:description" content="Guaua Cache原理分析">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "Guaua Cache原理分析",
+    "headline": "Guaua Cache原理分析",
+    "description": "Guaua Cache原理分析",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/guaua-cache%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Skitii"
+    },
+    "copyrightYear": "2022",
+    "dateCreated": "2022-02-25T00:00:00\u002b00:00",
+    "datePublished": "2022-02-25T00:00:00\u002b00:00",
+    
+    "dateModified": "2022-02-25T00:00:00\u002b00:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "794"
+  }
+  </script>
+    
+    <script type="application/ld+json">
+    {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/posts/",
+       "name": "",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/categories/cache/",
+       "name": "Cache",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Guaua Cache原理分析",
+       "position": 4
+     }
+   ]
+ }
+  </script>
+
+  
+  
+    <meta name="author" content="Skitii" />
+  
+  
+  
+  
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    
+
+<style>
+.plantuml-diagram {
+  text-align: center;
+  margin: 2rem 0;
+  overflow-x: auto;
+   
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+   
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.plantuml-diagram img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+   
+  filter: contrast(1.15) brightness(0.95);
+   
+}
+
+.plantuml-loading {
+  color: #6c757d;
+  padding: 2rem;
+  text-align: center;
+}
+
+.plantuml-error {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .plantuml-diagram {
+     
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .plantuml-diagram img {
+     
+    filter: invert(0.88) contrast(1.05) brightness(1.1);
+     
+  }
+}
+
+ 
+@media (prefers-contrast: high) {
+  .plantuml-diagram img {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+ 
+@media print {
+  .plantuml-diagram {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .plantuml-diagram img {
+    filter: none;
+    max-width: 100%;
+  }
+}
+</style>
+
+
+
+
+
+<style>
+ 
+.toc {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+ 
+.toc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.toc::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+ 
+.toc ul,
+.toc li {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+ 
+.toc a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #4b5563;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  position: relative;
+  line-height: 1.4;
+}
+
+ 
+.toc a:hover {
+  color: #1f2937;
+  background: rgba(139, 92, 246, 0.08);
+  padding-left: 0.75rem;
+}
+
+ 
+.toc a.active,
+.toc a:active {
+  color: rgb(124, 58, 237);
+  background: rgba(139, 92, 246, 0.12);
+  font-weight: 500;
+  padding-left: 0.75rem;
+}
+
+.toc a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: rgb(124, 58, 237);
+  border-radius: 2px;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .toc a {
+    color: #9ca3af;
+  }
+  
+  .toc a:hover {
+    color: #e5e7eb;
+    background: rgba(167, 139, 250, 0.15);
+  }
+  
+  .toc a.active,
+  .toc a:active {
+    color: rgb(167, 139, 250);
+    background: rgba(167, 139, 250, 0.2);
+  }
+  
+  .toc a.active::before {
+    background: rgb(167, 139, 250);
+  }
+  
+  .toc::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.2);
+  }
+  
+  .toc::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.4);
+  }
+}
+
+ 
+.toc-wrapper summary {
+  transition: background 0.2s;
+}
+
+.toc-wrapper summary:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.toc-content {
+  border-left-width: 2px !important;
+  border-style: solid !important;
+}
+
+ 
+html {
+  scroll-behavior: smooth;
+}
+</style>
+
+
+<script>
+(function() {
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+  
+  function initTOC() {
+    const toc = document.querySelector('.toc');
+    if (!toc) return;
+    
+    const tocLinks = toc.querySelectorAll('a');
+    if (tocLinks.length === 0) return;
+    
+    
+    const headings = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'))
+      .filter(h => h.id); 
+    
+    if (headings.length === 0) return;
+    
+    
+    const observerOptions = {
+      rootMargin: '-80px 0px -80% 0px',
+      threshold: 0
+    };
+    
+    let activeHeading = null;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          activeHeading = entry.target;
+          updateActiveTocLink(entry.target.id);
+        }
+      });
+    }, observerOptions);
+    
+    
+    headings.forEach(heading => observer.observe(heading));
+    
+    
+    function updateActiveTocLink(activeId) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === '#' + activeId) {
+          link.classList.add('active');
+          
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      });
+    }
+    
+    
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        
+        tocLinks.forEach(l => l.classList.remove('active'));
+        
+        link.classList.add('active');
+      });
+    });
+  }
+})();
+</script>
+
+
+
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="http://localhost:1313/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        dark:hidden flex"
+        alt="Skitii"
+      />
+        <img
+          src="http://localhost:1313/img/octopus.png"
+          width="64"
+          height="64"
+          class="hidden max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:flex"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/series/"
+                  title="专题系列"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Topic</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title="Categories"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title="Tags"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/guaua-cache%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/"
+      >Guaua Cache原理分析</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Guaua Cache原理分析
+      </h1>
+      
+        <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2022-02-25 00:00:00 &#43;0000 UTC">25 February 2022</time><span class="px-2 text-primary-500">&middot;</span><span>794 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="http://localhost:1313/categories/cache/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Cache</a
+            >
+          
+        
+      
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
+            <details open class="toc-wrapper -ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是localcache">什么是LocalCache</a></li>
+    <li><a href="#特性">特性</a></li>
+    <li><a href="#使用场景">使用场景</a>
+      <ul>
+        <li><a href="#基本使用">基本使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#底层原理分析">底层原理分析</a>
+      <ul>
+        <li><a href="#整体流程">整体流程</a></li>
+        <li><a href="#localcache">LocalCache</a></li>
+        <li><a href="#segment">Segment</a></li>
+        <li><a href="#存储结构">存储结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#localcache-和-concurrentmap的区别">LocalCache 和 ConcurrentMap的区别</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<h2 id="什么是localcache" class="relative group">什么是LocalCache </h2><p>LocalCache见名知意，就是本地缓存，通过本地缓存一些数据，提升应用程序的访问性能。其中Java中一个比较好的实现框架就是guaua的LocalCache，底层是借用了jvm的堆内存来存放数据的</p>
+<h2 id="特性" class="relative group">特性 </h2><p>本地缓存的实现，其实用concurrentMap也能实现，那guaua有什么优点呢？</p>
+<ol>
+<li>过期处理</li>
+<li>自动加载</li>
+<li>并发控制，最多只会有一个线程去加载数据</li>
+<li>配置回收策略</li>
+<li>统计命中率</li>
+</ol>
+<h2 id="使用场景" class="relative group">使用场景 </h2><ol>
+<li>热点数据访问，通过多级数据缓存提升访问性能</li>
+<li>本地热点数据，或者重复耗时计算的逻辑产生的数据</li>
+</ol>
+<h3 id="基本使用" class="relative group">基本使用 </h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">//定义一个本地缓存
+</span></span><span class="line"><span class="cl">LoadingCache&lt;String, Optional&lt;String&gt;&gt; <span class="nv">cache</span> <span class="o">=</span> CacheBuilder.newBuilder<span class="o">()</span>
+</span></span><span class="line"><span class="cl">                        .maximumSize<span class="o">(</span>1000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">                        .expireAfterWrite<span class="o">(</span>10L, java.util.concurrent.TimeUnit.SECONDS<span class="o">)</span>
+</span></span><span class="line"><span class="cl">                        .concurrencyLevel<span class="o">(</span>Runtime.getRuntime<span class="o">()</span>.availableProcessors<span class="o">())</span>
+</span></span><span class="line"><span class="cl">                        .weakKeys<span class="o">()</span>
+</span></span><span class="line"><span class="cl">                        .weakValues<span class="o">()</span>
+</span></span><span class="line"><span class="cl">                        .build<span class="o">(</span>new CacheLoader&lt;String, Optional&lt;String&gt;&gt;<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                            //重写一个CacheLoader来实现加载方法
+</span></span><span class="line"><span class="cl">                            @Override
+</span></span><span class="line"><span class="cl">                            public Optional&lt;String&gt; load<span class="o">(</span>String key<span class="o">)</span> throws Exception <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                                System.out.println<span class="o">(</span>key+<span class="s2">&#34; load success&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                <span class="k">return</span> Optional.of<span class="o">(</span><span class="s2">&#34;key - &#34;</span>+ key +<span class="s2">&#34; - value&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">                        <span class="o">})</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">//从缓存中获取数据
+</span></span><span class="line"><span class="cl"> try <span class="o">{</span>
+</span></span><span class="line"><span class="cl">      //get方法需要处理为null的异常
+</span></span><span class="line"><span class="cl">      System.out.println<span class="o">(</span>cache.get<span class="o">(</span><span class="s2">&#34;key99999&#34;</span><span class="o">)</span>.orElseGet<span class="o">(()</span>-&gt;<span class="s2">&#34;null&#34;</span><span class="o">))</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span> catch <span class="o">(</span>ExecutionException e<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">      e.printStackTrace<span class="o">()</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl">  //不用处理异常，但是如果cache中不存在数据，不会触发加载逻辑
+</span></span><span class="line"><span class="cl">  cache.getIfPresent<span class="o">(</span><span class="s2">&#34;key99999&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span></code></pre></div><h2 id="底层原理分析" class="relative group">底层原理分析 </h2><h3 id="整体流程" class="relative group">整体流程 </h3><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/__puml/ec26d7b591c84d7575087b48bc11a4f8.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcblxuc3RhcnRcblxuOuiOt-WPluWIhuautemUgTtcbjrpgJrov4fliIbmrrXplIHojrflj5bliLDlr7nlupTnmoTlvJXnlKjlrp7kvZNSZWZlcmVuY2VFbnRyeTtcbjrojrflj5blrZjmtLvlr7nosaHvvIzlpITnkIbov4fmnJ_kuYvnsbvnmoQ7XG5pZiAo5Yik5pat5byV55So5YC85piv5ZCm5aSE5LqO5Yqg6L295LitKSB0aGVuICh0cnVlKVxuICA6562J5b6F5Yqg6L295a6M5oiQ77yM5YaN6YeN5paw6I635Y-WO1xuZWxzZSAoZmFsc2UpXG4gIDrliqDplIHliqDovb3mlbDmja47XG5ub3RlIHJpZ2h0OuS4gOasoeWPquiDveacieS4gOS4que6v-eoi-WKoOi9veaVsOaNrlxuZW5kaWZcblxuc3RvcFxuQGVuZHVtbCIsInVybCI6Imh0dHBzOi8vY2RuLm5sYXJrLmNvbS95dXF1ZS9fX3B1bWwvZWMyNmQ3YjU5MWM4NGQ3NTc1MDg3YjQ4YmMxMWE0Zjguc3ZnIiwiaWQiOiJkbHdBRSIsIm1hcmdpbiI6eyJ0b3AiOnRydWUsImJvdHRvbSI6dHJ1ZX0sImNhcmQiOiJkaWFncmFtIn0=">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/__puml/ec26d7b591c84d7575087b48bc11a4f8.svg#lake_card_v2=eyJ0eXBlIjoicHVtbCIsImNvZGUiOiJAc3RhcnR1bWxcblxuc3RhcnRcblxuOuiOt-WPluWIhuautemUgTtcbjrpgJrov4fliIbmrrXplIHojrflj5bliLDlr7nlupTnmoTlvJXnlKjlrp7kvZNSZWZlcmVuY2VFbnRyeTtcbjrojrflj5blrZjmtLvlr7nosaHvvIzlpITnkIbov4fmnJ_kuYvnsbvnmoQ7XG5pZiAo5Yik5pat5byV55So5YC85piv5ZCm5aSE5LqO5Yqg6L295LitKSB0aGVuICh0cnVlKVxuICA6562J5b6F5Yqg6L295a6M5oiQ77yM5YaN6YeN5paw6I635Y-WO1xuZWxzZSAoZmFsc2UpXG4gIDrliqDplIHliqDovb3mlbDmja47XG5ub3RlIHJpZ2h0OuS4gOasoeWPquiDveacieS4gOS4que6v-eoi-WKoOi9veaVsOaNrlxuZW5kaWZcblxuc3RvcFxuQGVuZHVtbCIsInVybCI6Imh0dHBzOi8vY2RuLm5sYXJrLmNvbS95dXF1ZS9fX3B1bWwvZWMyNmQ3YjU5MWM4NGQ3NTc1MDg3YjQ4YmMxMWE0Zjguc3ZnIiwiaWQiOiJkbHdBRSIsIm1hcmdpbiI6eyJ0b3AiOnRydWUsImJvdHRvbSI6dHJ1ZX0sImNhcmQiOiJkaWFncmFtIn0=" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h3 id="localcache" class="relative group">LocalCache </h3><p>LoadingCache的核心在于get，追踪get源码，会发现大部分逻辑都在LocalCache类中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">V</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">K</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">CacheLoader</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="n">loader</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">ExecutionException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hash</span><span class="p">(</span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">key</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//找到对应的segment，然后从segment中获取数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">segmentFor</span><span class="p">(</span><span class="n">hash</span><span class="p">).</span><span class="na">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="n">loader</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="nf">getIfPresent</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kt">int</span><span class="w"> </span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hash</span><span class="p">(</span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">key</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">V</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">segmentFor</span><span class="p">(</span><span class="n">hash</span><span class="p">).</span><span class="na">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">globalStatsCounter</span><span class="p">.</span><span class="na">recordMisses</span><span class="p">(</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">globalStatsCounter</span><span class="p">.</span><span class="na">recordHits</span><span class="p">(</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="segment" class="relative group">Segment </h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@CanIgnoreReturnValue</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">V</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">K</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="n">CacheLoader</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">super</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="n">loader</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">ExecutionException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">loader</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// read-volatile</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c1">// don&#39;t call getLiveEntry, which would ignore loading values</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">ReferenceEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getEntry</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="na">ticker</span><span class="p">.</span><span class="na">read</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">V</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getLiveValue</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">now</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">recordRead</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">now</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">statsCounter</span><span class="p">.</span><span class="na">recordHits</span><span class="p">(</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">scheduleRefresh</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">now</span><span class="p">,</span><span class="w"> </span><span class="n">loader</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ValueReference</span><span class="o">&lt;</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="n">valueReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getValueReference</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//如果引用对象正在加载中，等待加载完成再获取</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">valueReference</span><span class="p">.</span><span class="na">isLoading</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">waitForLoadingValue</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">valueReference</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//加锁获取数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// at this point e is either null or expired;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">lockedGetOrLoad</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="n">loader</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ExecutionException</span><span class="w"> </span><span class="n">ee</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Throwable</span><span class="w"> </span><span class="n">cause</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ee</span><span class="p">.</span><span class="na">getCause</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cause</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">Error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ExecutionError</span><span class="p">((</span><span class="n">Error</span><span class="p">)</span><span class="w"> </span><span class="n">cause</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cause</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">UncheckedExecutionException</span><span class="p">(</span><span class="n">cause</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">ee</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">postReadCleanup</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="存储结构" class="relative group">存储结构 </h3><p>
+
+
+
+  <figure>
+    <div class="post-img-view">
+        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2024/jpeg/21760570/1713234531453-08ff34bd-f86c-4501-9b03-dcad528c7f6f.jpeg">
+            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2024/jpeg/21760570/1713234531453-08ff34bd-f86c-4501-9b03-dcad528c7f6f.jpeg" alt="" />
+        </a>
+    </div>
+    
+  </figure>
+
+</p>
+<h2 id="localcache-和-concurrentmap的区别" class="relative group">LocalCache 和 ConcurrentMap的区别 </h2><table>
+  <thead>
+      <tr>
+          <th></th>
+          <th>功能</th>
+          <th>特性</th>
+          <th>底层实现</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>LocalCache</td>
+          <td>缓存</td>
+          <td>1. 缓存过期 2. 自动加载 3. 并发控制 4. 命中率统计</td>
+          <td>显式Segment分段锁机制加锁</td>
+      </tr>
+      <tr>
+          <td>ConcurrentMap</td>
+          <td>并发k-v存储</td>
+          <td>1. 并发控制</td>
+          <td>CAS+ synchronized 对node节点加锁</td>
+      </tr>
+  </tbody>
+</table>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+      
+  <div class="flex">
+    
+    
+    
+      
+      
+        
+        
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+      
+    >
+      
+      
+      
+      
+      <img
+        width="512"
+        height="512"
+        class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+        alt="Skitii"
+        loading="lazy" decoding="async"
+        
+          src="http://localhost:1313/img/donatello.png"
+        
+      />
+    </picture>
+  
+
+
+      
+    
+    <div class="place-self-center">
+      
+        <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+          Author
+        </div>
+        <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+          Skitii
+        </div>
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >ES核心原理</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-03-02 09:53:49 &#43;0000 UTC">2 March 2022</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="http://localhost:1313/posts/java%E5%A0%86%E5%A4%96%E5%86%85%E5%AD%98%E6%8E%92%E6%9F%A5/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Java堆外内存排查</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2022-02-19 19:52:32 &#43;0000 UTC">19 February 2022</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+      </main>
+      
+        <div
+          class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12"
+          id="to-top"
+          hidden="true"
+        >
+          <a
+            href="#the-top"
+            class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            &uarr;
+          </a>
+        </div>
+      <footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2025
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+
+
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+        },
+        display: {
+            superSample: 1,
+            width: 120,
+            height: 300,
+            position: 'right',
+            hOffset: 20,
+            vOffset: 0,
+        },
+        mobile: {
+            show: true,
+            scale: 1,
+            motion: true,
+        },
+        react: {
+            opacityDefault: 0.8,
+            opacityOnHover: 1,
+        },
+     });
+</script>
+
+
+
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
+

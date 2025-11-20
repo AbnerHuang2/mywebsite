@@ -1,0 +1,3250 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  
+  <title>Go语言GMP调度器详解 &middot; Skitii</title>
+    <meta name="title" content="Go语言GMP调度器详解 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="http://localhost:1313/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js"
+    integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="http://localhost:1313/css/main.bundle.min.a645f3fa02b2ca20e7ef61b236048d95cc9bc2e5b2faf1f0ac0aa85431187c1c.css"
+    integrity="sha256-pkXz&#43;gKyyiDn72GyNgSNlcybwuWy&#43;vHwrAqoVDEYfBw="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="http://localhost:1313/js/main.bundle.min.0b250a079f6c2f7d0e03d1f0aa1308acb88137e3caebe1268f7478f0c87c5bf8.js"
+      integrity="sha256-CyUKB59sL30OA9HwqhMIrLiBN&#43;PK6&#43;Emj3R48Mh8W/g="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      深入剖析Go语言的GMP调度器原理、工作流程和核心机制
+    "
+  />
+  
+  
+  
+  
+    <link rel="canonical" href="http://localhost:1313/posts/go%E8%AF%AD%E8%A8%80gmp%E8%B0%83%E5%BA%A6%E5%99%A8%E8%AF%A6%E8%A7%A3/" />
+  
+  
+  
+    
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1763609379" />
+
+
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="http://localhost:1313/posts/go%E8%AF%AD%E8%A8%80gmp%E8%B0%83%E5%BA%A6%E5%99%A8%E8%AF%A6%E8%A7%A3/">
+  <meta property="og:site_name" content="Skitii">
+  <meta property="og:title" content="Go语言GMP调度器详解">
+  <meta property="og:description" content="深入剖析Go语言的GMP调度器原理、工作流程和核心机制">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-14T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-11-14T00:00:00+00:00">
+    <meta property="article:tag" content="Go">
+    <meta property="article:tag" content="并发编程">
+    <meta property="article:tag" content="GMP">
+    <meta property="article:tag" content="调度器">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go语言GMP调度器详解">
+  <meta name="twitter:description" content="深入剖析Go语言的GMP调度器原理、工作流程和核心机制">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "Go语言GMP调度器详解",
+    "headline": "Go语言GMP调度器详解",
+    "description": "深入剖析Go语言的GMP调度器原理、工作流程和核心机制",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/go%E8%AF%AD%E8%A8%80gmp%E8%B0%83%E5%BA%A6%E5%99%A8%E8%AF%A6%E8%A7%A3\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Skitii"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-11-14T00:00:00\u002b00:00",
+    "datePublished": "2024-11-14T00:00:00\u002b00:00",
+    
+    "dateModified": "2024-11-14T00:00:00\u002b00:00",
+    
+    "keywords": ["Go","并发编程","GMP","调度器"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "8771"
+  }
+  </script>
+    
+    <script type="application/ld+json">
+    {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/posts/",
+       "name": "",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/categories/go/",
+       "name": "Go",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Go语言 Gmp调度器详解",
+       "position": 4
+     }
+   ]
+ }
+  </script>
+
+  
+  
+    <meta name="author" content="Skitii" />
+  
+  
+  
+  
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    
+
+<style>
+.plantuml-diagram {
+  text-align: center;
+  margin: 2rem 0;
+  overflow-x: auto;
+   
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+   
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.plantuml-diagram img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+   
+  filter: contrast(1.15) brightness(0.95);
+   
+}
+
+.plantuml-loading {
+  color: #6c757d;
+  padding: 2rem;
+  text-align: center;
+}
+
+.plantuml-error {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .plantuml-diagram {
+     
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .plantuml-diagram img {
+     
+    filter: invert(0.88) contrast(1.05) brightness(1.1);
+     
+  }
+}
+
+ 
+@media (prefers-contrast: high) {
+  .plantuml-diagram img {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+ 
+@media print {
+  .plantuml-diagram {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .plantuml-diagram img {
+    filter: none;
+    max-width: 100%;
+  }
+}
+</style>
+
+
+
+
+
+<style>
+ 
+.toc {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+ 
+.toc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.toc::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+ 
+.toc ul,
+.toc li {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+ 
+.toc a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #4b5563;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  position: relative;
+  line-height: 1.4;
+}
+
+ 
+.toc a:hover {
+  color: #1f2937;
+  background: rgba(139, 92, 246, 0.08);
+  padding-left: 0.75rem;
+}
+
+ 
+.toc a.active,
+.toc a:active {
+  color: rgb(124, 58, 237);
+  background: rgba(139, 92, 246, 0.12);
+  font-weight: 500;
+  padding-left: 0.75rem;
+}
+
+.toc a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: rgb(124, 58, 237);
+  border-radius: 2px;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .toc a {
+    color: #9ca3af;
+  }
+  
+  .toc a:hover {
+    color: #e5e7eb;
+    background: rgba(167, 139, 250, 0.15);
+  }
+  
+  .toc a.active,
+  .toc a:active {
+    color: rgb(167, 139, 250);
+    background: rgba(167, 139, 250, 0.2);
+  }
+  
+  .toc a.active::before {
+    background: rgb(167, 139, 250);
+  }
+  
+  .toc::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.2);
+  }
+  
+  .toc::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.4);
+  }
+}
+
+ 
+.toc-wrapper summary {
+  transition: background 0.2s;
+}
+
+.toc-wrapper summary:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.toc-content {
+  border-left-width: 2px !important;
+  border-style: solid !important;
+}
+
+ 
+html {
+  scroll-behavior: smooth;
+}
+</style>
+
+
+<script>
+(function() {
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+  
+  function initTOC() {
+    const toc = document.querySelector('.toc');
+    if (!toc) return;
+    
+    const tocLinks = toc.querySelectorAll('a');
+    if (tocLinks.length === 0) return;
+    
+    
+    const headings = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'))
+      .filter(h => h.id); 
+    
+    if (headings.length === 0) return;
+    
+    
+    const observerOptions = {
+      rootMargin: '-80px 0px -80% 0px',
+      threshold: 0
+    };
+    
+    let activeHeading = null;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          activeHeading = entry.target;
+          updateActiveTocLink(entry.target.id);
+        }
+      });
+    }, observerOptions);
+    
+    
+    headings.forEach(heading => observer.observe(heading));
+    
+    
+    function updateActiveTocLink(activeId) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === '#' + activeId) {
+          link.classList.add('active');
+          
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      });
+    }
+    
+    
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        
+        tocLinks.forEach(l => l.classList.remove('active'));
+        
+        link.classList.add('active');
+      });
+    });
+  }
+})();
+</script>
+
+
+
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="http://localhost:1313/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        dark:hidden flex"
+        alt="Skitii"
+      />
+        <img
+          src="http://localhost:1313/img/octopus.png"
+          width="64"
+          height="64"
+          class="hidden max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:flex"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/series/"
+                  title="专题系列"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Topic</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title="Categories"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title="Tags"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/go%E8%AF%AD%E8%A8%80gmp%E8%B0%83%E5%BA%A6%E5%99%A8%E8%AF%A6%E8%A7%A3/"
+      >Go语言GMP调度器详解</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Go语言GMP调度器详解
+      </h1>
+      
+        <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2024-11-14 00:00:00 &#43;0000 UTC">14 November 2024</time><span class="px-2 text-primary-500">&middot;</span><span>8771 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">18 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="http://localhost:1313/categories/go/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Go</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="http://localhost:1313/tags/go/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Go</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >并发编程</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/gmp/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >GMP</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E8%B0%83%E5%BA%A6%E5%99%A8/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >调度器</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
+            <details open class="toc-wrapper -ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-gmp是什么">1. GMP是什么？</a>
+      <ul>
+        <li><a href="#三者之间的关系">三者之间的关系</a></li>
+        <li><a href="#gmp模型的作用">GMP模型的作用</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-gmp解决什么问题">2. GMP解决什么问题？</a>
+      <ul>
+        <li><a href="#21-传统线程模型的局限性">2.1 传统线程模型的局限性</a></li>
+        <li><a href="#22-go语言并发编程的需求">2.2 Go语言并发编程的需求</a></li>
+        <li><a href="#23-需要解决的核心问题">2.3 需要解决的核心问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-怎么解决的">3. 怎么解决的？</a>
+      <ul>
+        <li><a href="#31-gmp模型的设计思路">3.1 GMP模型的设计思路</a></li>
+        <li><a href="#32-工作窃取work-stealing机制">3.2 工作窃取（Work Stealing）机制</a></li>
+        <li><a href="#33-抢占式调度">3.3 抢占式调度</a></li>
+        <li><a href="#34-本地队列和全局队列的设计">3.4 本地队列和全局队列的设计</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-核心流程">4. 核心流程</a>
+      <ul>
+        <li><a href="#40-gmp调度器全局视图">4.0 GMP调度器全局视图</a>
+          <ul>
+            <li><a href="#全局流程说明">全局流程说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#41-底层存储结构">4.1 底层存储结构</a>
+          <ul>
+            <li><a href="#gmp-结构及其关系">G、M、P 结构及其关系</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-goroutine是如何添加的">4.2 Goroutine是如何添加的？</a>
+          <ul>
+            <li><a href="#详细流程说明">详细流程说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-goroutine是怎么被调度的">4.3 Goroutine是怎么被调度的？</a>
+          <ul>
+            <li><a href="#工作窃取流程详解">工作窃取流程详解</a></li>
+            <li><a href="#详细调度流程说明">详细调度流程说明</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-gmp模式存在的问题与挑战">5. GMP模式存在的问题与挑战</a>
+      <ul>
+        <li><a href="#51-全局队列的竞争问题">5.1 全局队列的竞争问题</a></li>
+        <li><a href="#52-工作窃取的开销">5.2 工作窃取的开销</a></li>
+        <li><a href="#53-抢占延迟问题">5.3 抢占延迟问题</a></li>
+        <li><a href="#54-系统调用的处理开销">5.4 系统调用的处理开销</a></li>
+        <li><a href="#55-内存开销">5.5 内存开销</a></li>
+        <li><a href="#56-调试和可观测性问题">5.6 调试和可观测性问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结">6. 总结</a>
+      <ul>
+        <li><a href="#61-gmp调度器的优势">6.1 GMP调度器的优势</a></li>
+        <li><a href="#62-需要注意的问题">6.2 需要注意的问题</a></li>
+        <li><a href="#63-最佳实践建议">6.3 最佳实践建议</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<h2 id="1-gmp是什么" class="relative group">1. GMP是什么？ </h2><p>GMP是Go语言运行时（runtime）的核心调度模型，由三个关键组件组成：</p>
+<ul>
+<li><strong>G (Goroutine)</strong>：Go协程，是Go语言并发执行的基本单位。每个Goroutine包含执行栈、程序计数器（PC）、寄存器等执行上下文信息。</li>
+<li><strong>M (Machine/Thread)</strong>：操作系统线程，是真正执行代码的实体。M与操作系统的线程一一对应，负责执行Goroutine的代码。</li>
+<li><strong>P (Processor)</strong>：逻辑处理器，是Goroutine调度的重要组件。P维护一个本地Goroutine队列，并管理M与G之间的调度关系。</li>
+</ul>
+<h3 id="三者之间的关系" class="relative group">三者之间的关系 </h3><pre tabindex="0"><code>P (Processor) ←→ M (Machine/Thread) ←→ G (Goroutine)
+</code></pre><ul>
+<li><strong>P与M的关系</strong>：一个P可以绑定一个M，也可以不绑定（空闲状态）。P的数量通常等于CPU核心数（可通过<code>GOMAXPROCS</code>设置）。</li>
+<li><strong>M与G的关系</strong>：M负责执行G的代码。一个M在同一时刻只能执行一个G。</li>
+<li><strong>P与G的关系</strong>：P维护一个本地队列（local queue），存储等待执行的G。P还持有指向当前正在执行的G的指针。</li>
+</ul>
+<h3 id="gmp模型的作用" class="relative group">GMP模型的作用 </h3><p>GMP模型实现了高效的协程调度，使得Go程序可以：</p>
+<ul>
+<li>创建数百万个Goroutine而不会导致系统资源耗尽</li>
+<li>在少量操作系统线程上高效执行大量Goroutine</li>
+<li>实现自动的负载均衡和任务窃取</li>
+</ul>
+<h2 id="2-gmp解决什么问题" class="relative group">2. GMP解决什么问题？ </h2><h3 id="21-传统线程模型的局限性" class="relative group">2.1 传统线程模型的局限性 </h3><p>在传统的线程模型中，每个线程对应一个操作系统线程，存在以下问题：</p>
+<ol>
+<li><strong>线程创建开销大</strong>：创建线程需要系统调用，涉及内核态和用户态切换，开销较大。</li>
+<li><strong>线程上下文切换成本高</strong>：线程切换需要保存和恢复完整的CPU上下文（寄存器、栈等），成本较高。</li>
+<li><strong>内存占用大</strong>：每个线程需要独立的栈空间（通常1-2MB），大量线程会消耗大量内存。</li>
+<li><strong>线程数量限制</strong>：受操作系统限制，无法创建大量线程（通常几千到几万个）。</li>
+</ol>
+<h3 id="22-go语言并发编程的需求" class="relative group">2.2 Go语言并发编程的需求 </h3><p>Go语言的设计目标是简化并发编程，让开发者能够：</p>
+<ul>
+<li>轻松创建大量轻量级并发任务</li>
+<li>高效利用多核CPU</li>
+<li>避免传统线程模型的各种问题</li>
+</ul>
+<h3 id="23-需要解决的核心问题" class="relative group">2.3 需要解决的核心问题 </h3><ol>
+<li><strong>如何高效创建和管理大量协程</strong>：需要轻量级的协程实现，避免线程创建的开销。</li>
+<li><strong>如何实现协程调度</strong>：需要在少量线程上调度大量协程，实现协程的并发执行。</li>
+<li><strong>如何实现负载均衡</strong>：需要将任务均匀分配到各个CPU核心，避免某些核心空闲而其他核心过载。</li>
+<li><strong>如何避免协程阻塞整个线程</strong>：需要实现抢占式调度，避免一个协程长时间占用线程。</li>
+</ol>
+<h2 id="3-怎么解决的" class="relative group">3. 怎么解决的？ </h2><h3 id="31-gmp模型的设计思路" class="relative group">3.1 GMP模型的设计思路 </h3><p>GMP模型通过以下设计解决了上述问题：</p>
+<ol>
+<li><strong>协程与线程分离</strong>：Goroutine是用户态的协程，不直接对应操作系统线程，创建和切换成本低。</li>
+<li><strong>两级队列设计</strong>：每个P维护一个本地队列（local queue），还有一个全局队列（global queue），实现高效的任务分配。</li>
+<li><strong>工作窃取机制</strong>：当某个P的本地队列为空时，可以从其他P的本地队列&quot;窃取&quot;Goroutine，实现负载均衡。</li>
+<li><strong>抢占式调度</strong>：通过系统监控（sysmon）实现抢占式调度，避免Goroutine长时间占用线程。</li>
+</ol>
+<h3 id="32-工作窃取work-stealing机制" class="relative group">3.2 工作窃取（Work Stealing）机制 </h3><p>工作窃取是GMP调度器的核心机制之一：</p>
+<ul>
+<li><strong>本地队列优先</strong>：M优先从绑定的P的本地队列获取G执行。</li>
+<li><strong>全局队列补充</strong>：当本地队列为空时，从全局队列获取G。</li>
+<li><strong>窃取其他P的任务</strong>：当全局队列也为空时，随机选择一个P，从其本地队列尾部窃取一半的G。</li>
+</ul>
+<p>这种机制确保了：</p>
+<ul>
+<li>大部分情况下，G在创建它的P上执行（局部性原理）</li>
+<li>当某个P空闲时，可以分担其他P的工作（负载均衡）</li>
+</ul>
+<h3 id="33-抢占式调度" class="relative group">3.3 抢占式调度 </h3><p>Go运行时通过以下方式实现抢占式调度：</p>
+<ol>
+<li><strong>协作式抢占</strong>：在函数调用、通道操作等安全点检查是否需要抢占。</li>
+<li><strong>基于信号的抢占</strong>：Go 1.14+引入了基于信号的抢占，可以在任意位置抢占Goroutine。</li>
+<li><strong>系统监控</strong>：sysmon协程定期检查长时间运行的Goroutine，并触发抢占。</li>
+</ol>
+<h3 id="34-本地队列和全局队列的设计" class="relative group">3.4 本地队列和全局队列的设计 </h3><ul>
+<li><strong>本地队列（Local Queue）</strong>：每个P维护一个固定大小的本地队列（通常256个G），使用无锁环形队列实现，访问速度快。</li>
+<li><strong>全局队列（Global Queue）</strong>：所有P共享一个全局队列，当本地队列满时，新创建的G会被放入全局队列。</li>
+</ul>
+<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-gmp调度器全局视图" class="relative group">4.0 GMP调度器全局视图 </h3><p>在深入了解各个组件和流程之前，我们先从全局视角看一下GMP调度器的完整工作流程：</p>
+<div class="plantuml-diagram" id="plantuml-1764210064000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 250
+
+actor &#34;用户程序&#34; as User
+box &#34;Go运行时调度器&#34; #LightBlue
+    participant &#34;全局调度器\n(sched)&#34; as Sched
+    participant &#34;P0\n(Processor 0)&#34; as P0
+    participant &#34;M0\n(Thread 0)&#34; as M0
+    participant &#34;P1\n(Processor 1)&#34; as P1
+    participant &#34;M1\n(Thread 1)&#34; as M1
+end box
+participant &#34;Goroutine池&#34; as GPool
+
+== 初始化阶段 ==
+User -&gt; Sched: 程序启动
+activate Sched
+Sched -&gt; P0: 创建P (数量=CPU核心数)
+activate P0
+Sched -&gt; P1: 创建P
+activate P1
+Sched -&gt; M0: 创建初始M
+activate M0
+M0 -&gt; P0: 绑定P0
+Sched -&gt; M1: 创建初始M
+activate M1
+M1 -&gt; P1: 绑定P1
+deactivate Sched
+
+== Goroutine创建阶段 ==
+User -&gt; User: 执行 go func()
+User -&gt; GPool: 创建新Goroutine (G1, G2, G3...)
+activate GPool
+GPool -&gt; GPool: 初始化G1 (_Grunnable)
+GPool -&gt; P0: G1加入P0本地队列
+GPool -&gt; GPool: 初始化G2 (_Grunnable)
+GPool -&gt; P0: G2加入P0本地队列
+GPool -&gt; GPool: 初始化G3 (_Grunnable)
+GPool -&gt; P1: G3加入P1本地队列
+deactivate GPool
+
+note over P0,P1
+  各个P的本地队列中
+  已有待执行的Goroutine
+end note
+
+== 调度执行阶段 (P0视角) ==
+M0 -&gt; M0: 调用 schedule()
+M0 -&gt; P0: 从本地队列获取G1
+P0 --&gt; M0: 返回G1
+M0 -&gt; M0: execute(G1)
+activate M0 #DarkGreen
+M0 -&gt; M0: G1状态: _Grunning
+M0 -&gt; M0: 执行G1的代码...
+
+alt G1执行完成
+    M0 -&gt; M0: G1状态: _Gdead
+    M0 -&gt; GPool: 将G1放回对象池
+    M0 -&gt; M0: 调用 schedule()
+    deactivate M0
+    M0 -&gt; P0: 从本地队列获取G2
+    P0 --&gt; M0: 返回G2
+    
+else G1阻塞 (channel/锁)
+    M0 -&gt; M0: G1状态: _Gwaiting
+    deactivate M0
+    M0 -&gt; M0: 保存G1上下文
+    note right of M0
+      G1被挂起，等待条件满足
+      会在ready()时重新入队
+    end note
+    M0 -&gt; M0: 调用 schedule()
+    M0 -&gt; P0: 从本地队列获取G2
+    
+else G1系统调用
+    M0 -&gt; M0: G1状态: _Gsyscall
+    M0 -&gt; P0: M0与P0解绑
+    note right of M0
+      M0进入系统调用
+      P0可以绑定新的M继续工作
+    end note
+    deactivate M0
+end
+
+== 调度执行阶段 (P1视角) ==
+M1 -&gt; M1: 调用 schedule()
+M1 -&gt; P1: 从本地队列获取G3
+P1 --&gt; M1: 返回G3
+M1 -&gt; M1: execute(G3)
+M1 -&gt; M1: 执行G3的代码...
+
+== 工作窃取阶段 ==
+M0 -&gt; P0: P0本地队列为空
+M0 -&gt; Sched: 检查全局队列
+Sched --&gt; M0: 全局队列也为空
+M0 -&gt; P1: 尝试从P1窃取Goroutine
+alt P1队列有G
+    P1 --&gt; M0: 窃取一半的G
+    M0 -&gt; P0: 将窃取的G放入P0队列
+    note right of M0
+      负载均衡：
+      将P1的部分工作
+      转移到P0
+    end note
+else P1队列也为空
+    M0 -&gt; M0: 所有队列都为空
+    M0 -&gt; Sched: M0进入休眠
+    deactivate M0
+    note right of M0
+      M0休眠，等待新的G创建
+      或其他G变为可运行状态
+    end note
+end
+
+== 唤醒阶段 ==
+User -&gt; User: 创建新的Goroutine
+User -&gt; GPool: 创建G4
+activate GPool
+GPool -&gt; Sched: 检测到有休眠的M
+Sched -&gt; M0: 唤醒M0
+activate M0
+GPool -&gt; P0: G4加入P0队列
+deactivate GPool
+M0 -&gt; M0: 继续调度循环...
+
+note over User,GPool
+  **GMP调度器核心特点**
+  1. M:P = 1:1 绑定（动态）
+  2. P的数量 = CPU核心数（可配置）
+  3. M的数量动态调整（最多10000个）
+  4. G的数量可达百万级
+  5. 多级队列：本地队列 → 全局队列 → 工作窃取
+  6. 抢占式调度：避免G长时间占用
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764210064000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="全局流程说明" class="relative group">全局流程说明 </h4><p>上图展示了GMP调度器的完整工作周期，包括：</p>
+<ol>
+<li><strong>初始化阶段</strong>：创建P（逻辑处理器）和M（线程），数量基于CPU核心数。</li>
+<li><strong>Goroutine创建</strong>：用户代码通过<code>go</code>关键字创建G，分配到各个P的本地队列。</li>
+<li><strong>并发调度执行</strong>：多个M并发从各自绑定的P获取G并执行。</li>
+<li><strong>状态转换处理</strong>：
+<ul>
+<li>G执行完成 → 回收到对象池</li>
+<li>G阻塞 → 挂起等待</li>
+<li>G系统调用 → M与P解绑</li>
+</ul>
+</li>
+<li><strong>工作窃取</strong>：当某个P的队列为空时，从其他P窃取任务，实现负载均衡。</li>
+<li><strong>休眠与唤醒</strong>：M在无任务时休眠，有新任务时被唤醒。</li>
+</ol>
+<p>这个全局视图展示了GMP调度器如何通过<strong>M:P:G = 线程:处理器:协程</strong>的三层模型，实现了高效的并发调度。</p>
+<hr>
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="gmp-结构及其关系" class="relative group">G、M、P 结构及其关系 </h4><div class="plantuml-diagram" id="plantuml-1764210151000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor LightYellow
+    BorderColor Black
+    ArrowColor Black
+}
+
+class G {
+    &#43; stack: stack
+    &#43; stackguard0: uintptr
+    &#43; m: *m
+    &#43; sched: gobuf
+    &#43; goid: int64
+    &#43; status: uint32
+    --
+    状态说明:
+    _Gidle: 刚创建
+    _Grunnable: 可运行
+    _Grunning: 正在运行
+    _Gsyscall: 系统调用中
+    _Gwaiting: 等待中
+    _Gdead: 已死亡
+}
+
+class M {
+    &#43; g0: *g
+    &#43; curg: *g
+    &#43; p: puintptr
+    &#43; nextp: puintptr
+    &#43; id: int64
+    --
+    g0: 调度用的Goroutine
+    curg: 当前正在执行的G
+    p: 当前绑定的P
+    nextp: 下一个要绑定的P
+}
+
+class P {
+    &#43; id: int32
+    &#43; status: uint32
+    &#43; m: muintptr
+    &#43; runq: [256]guintptr
+    &#43; runqhead: uint32
+    &#43; runqtail: uint32
+    &#43; runnext: guintptr
+    --
+    runq: 本地队列(环形队列)
+    runnext: 下一个要运行的G
+    (优先级高)
+}
+
+class GlobalScheduler {
+    &#43; allp: []*p
+    &#43; allm: *m
+    &#43; allgs: []*g
+    &#43; globalQueue: []*g
+    --
+    allp: 所有P的列表
+    allm: 所有M的列表
+    allgs: 所有G的列表
+}
+
+&#39; 关联关系
+G &#34;0..*&#34; -- &#34;0..1&#34; M : 绑定
+M &#34;0..1&#34; -- &#34;0..1&#34; P : 绑定
+P &#34;1&#34; o-- &#34;0..*&#34; G : 本地队列
+GlobalScheduler &#34;1&#34; o-- &#34;0..*&#34; P : 管理
+GlobalScheduler &#34;1&#34; o-- &#34;0..*&#34; M : 管理
+GlobalScheduler &#34;1&#34; o-- &#34;0..*&#34; G : 管理
+
+note right of G
+  **Goroutine (G)**
+  - Go协程，轻量级执行单元
+  - 包含执行栈和调度信息
+  - 通过status字段表示状态
+end note
+
+note right of M
+  **Machine (M)**
+  - 操作系统线程
+  - 负责执行G的代码
+  - 通过P获取要执行的G
+end note
+
+note right of P
+  **Processor (P)**
+  - 逻辑处理器
+  - 维护本地Goroutine队列
+  - 数量通常等于CPU核心数
+end note
+
+note bottom of GlobalScheduler
+  **全局调度器**
+  - 管理所有的G、M、P
+  - 维护全局队列
+  - 负责整体调度协调
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764210151000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h3 id="42-goroutine是如何添加的" class="relative group">4.2 Goroutine是如何添加的？ </h3><p>当使用<code>go</code>关键字创建Goroutine时，各组件之间的交互流程如下：</p>
+<div class="plantuml-diagram" id="plantuml-1764210231000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 200
+
+actor &#34;用户代码&#34; as User
+participant &#34;编译器&#34; as Compiler
+participant &#34;runtime.newproc()&#34; as Runtime
+participant &#34;G对象池&#34; as GPool
+participant &#34;新Goroutine (G)&#34; as NewG
+participant &#34;当前P&#34; as P
+participant &#34;全局队列&#34; as GlobalQ
+participant &#34;空闲M池&#34; as MPool
+
+User -&gt; Compiler: 执行 go func()
+activate Compiler
+Compiler -&gt; Runtime: 转换为 newproc() 调用
+deactivate Compiler
+
+activate Runtime
+Runtime -&gt; GPool: 获取G结构
+activate GPool
+GPool --&gt; Runtime: 返回G (复用或新建)
+deactivate GPool
+
+Runtime -&gt; NewG: 初始化G
+activate NewG
+Runtime -&gt; NewG: 计算并分配栈空间 (默认2KB)
+Runtime -&gt; NewG: 设置函数入口地址和参数
+Runtime -&gt; NewG: 初始化sched调度信息
+Runtime -&gt; NewG: 设置状态为 _Grunnable
+deactivate NewG
+
+Runtime -&gt; P: 检查本地队列是否已满
+activate P
+
+alt 本地队列未满
+    Runtime -&gt; P: 将G添加到本地队列尾部 (runq)
+    P --&gt; Runtime: 添加成功
+else 本地队列已满 (256个)
+    Runtime -&gt; GlobalQ: 将G添加到全局队列
+    activate GlobalQ
+    GlobalQ --&gt; Runtime: 添加成功
+    deactivate GlobalQ
+end
+
+deactivate P
+
+alt 需要唤醒或创建M
+    Runtime -&gt; MPool: 检查是否有空闲M
+    activate MPool
+    alt 有空闲M
+        MPool -&gt; MPool: 唤醒空闲的M
+    else 无空闲M且未达上限
+        MPool -&gt; MPool: 创建新的M
+    end
+    deactivate MPool
+end
+
+Runtime --&gt; User: newproc() 返回
+deactivate Runtime
+
+note right of NewG
+  G状态: _Grunnable
+  等待被M调度执行
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764210231000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="详细流程说明" class="relative group">详细流程说明 </h4><ol>
+<li><strong><code>go</code>关键字编译</strong>：<code>go func()</code>会被编译器转换为对<code>runtime.newproc()</code>的调用。</li>
+<li><strong>创建G结构</strong>：<code>newproc()</code>从G对象池（gFree）中获取或创建新的G结构。</li>
+<li><strong>初始化G</strong>：
+<ul>
+<li>分配栈空间（通常2KB，可动态增长）</li>
+<li>设置函数入口地址和参数</li>
+<li>初始化调度上下文（sched字段）</li>
+</ul>
+</li>
+<li><strong>加入队列</strong>：
+<ul>
+<li>优先加入当前P的本地队列（<code>runq</code>）</li>
+<li>如果本地队列满（256个），则加入全局队列</li>
+<li>如果本地队列未满但<code>runnext</code>为空，可能直接设置<code>runnext</code>（优先级更高）</li>
+</ul>
+</li>
+<li><strong>唤醒M</strong>：如果当前有空闲的M，或者需要创建新的M来执行G，会触发调度。</li>
+</ol>
+<h3 id="43-goroutine是怎么被调度的" class="relative group">4.3 Goroutine是怎么被调度的？ </h3><p>调度器各组件之间的交互时序如下：</p>
+<div class="plantuml-diagram" id="plantuml-1764213333000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 200
+
+participant &#34;M (线程)&#34; as M
+participant &#34;runtime.schedule()&#34; as Scheduler
+participant &#34;当前P&#34; as P
+participant &#34;P.runnext&#34; as Runnext
+participant &#34;P.本地队列&#34; as LocalQ
+participant &#34;全局队列&#34; as GlobalQ
+participant &#34;其他P&#34; as OtherP
+participant &#34;Goroutine (G)&#34; as G
+
+M -&gt; Scheduler: M启动或空闲，调用schedule()
+activate Scheduler
+
+Scheduler -&gt; P: 获取当前绑定的P
+activate P
+
+&#39; 第一优先级：runnext
+Scheduler -&gt; Runnext: 检查runnext是否有G
+activate Runnext
+alt runnext有G
+    Runnext --&gt; Scheduler: 返回G
+    Scheduler -&gt; Runnext: 清空runnext
+    deactivate Runnext
+else runnext为空
+    deactivate Runnext
+    
+    &#39; 第二优先级：本地队列
+    Scheduler -&gt; LocalQ: 检查本地队列
+    activate LocalQ
+    alt 本地队列有G
+        LocalQ --&gt; Scheduler: 从队列头部获取G
+        deactivate LocalQ
+    else 本地队列为空
+        deactivate LocalQ
+        
+        &#39; 第三优先级：全局队列
+        Scheduler -&gt; GlobalQ: 检查全局队列
+        activate GlobalQ
+        alt 全局队列有G
+            GlobalQ --&gt; Scheduler: 获取一批G (最多n/2&#43;1个)
+            Scheduler -&gt; LocalQ: 将其余G放入本地队列
+            note right
+              只返回第一个G执行，
+              其余G放入本地队列
+            end note
+            deactivate GlobalQ
+        else 全局队列为空
+            deactivate GlobalQ
+            
+            &#39; 第四优先级：工作窃取
+            Scheduler -&gt; OtherP: 尝试从其他P窃取G
+            activate OtherP
+            alt 窃取成功
+                OtherP --&gt; Scheduler: 返回窃取的G
+                note right
+                  从其他P的队列尾部
+                  窃取一半的G
+                end note
+                deactivate OtherP
+            else 所有P都为空
+                deactivate OtherP
+                Scheduler -&gt; M: M进入休眠状态
+                note right of M
+                  M休眠，等待被唤醒
+                  当有新G创建时会唤醒
+                end note
+                deactivate P
+                deactivate Scheduler
+            end
+        end
+    end
+end
+
+&#39; 执行G
+Scheduler -&gt; M: 返回要执行的G
+deactivate P
+deactivate Scheduler
+
+M -&gt; G: 调用 runtime.execute(G)
+activate G
+M -&gt; G: 切换到G的栈
+M -&gt; G: 执行G的代码
+note right of G
+  G状态: _Grunning
+  M与G绑定执行
+end note
+
+alt G执行完毕
+    G -&gt; M: G执行完成
+    deactivate G
+    M -&gt; G: 设置G状态为 _Gdead
+    M -&gt; G: 将G放回对象池
+    M -&gt; Scheduler: 重新调用schedule()获取下一个G
+else G发生阻塞 (channel/锁/syscall)
+    G -&gt; M: G阻塞
+    deactivate G
+    M -&gt; G: 保存G的上下文
+    M -&gt; G: 设置G状态为 _Gwaiting
+    M -&gt; P: 将G从P移除
+    M -&gt; Scheduler: 重新调用schedule()获取下一个G
+    note right of G
+      阻塞的G会在条件满足后
+      被重新放入队列，状态改为_Grunnable
+    end note
+end
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213333000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="工作窃取流程详解" class="relative group">工作窃取流程详解 </h4><p>当P的本地队列和全局队列都为空时，会触发工作窃取机制：</p>
+<div class="plantuml-diagram" id="plantuml-1764213415000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant &#34;当前M&#34; as M
+participant &#34;当前P&#34; as P1
+participant &#34;P2&#34; as P2
+participant &#34;P2.本地队列&#34; as P2Q
+participant &#34;P3&#34; as P3
+participant &#34;P3.本地队列&#34; as P3Q
+
+M -&gt; P1: 本地队列和全局队列都为空
+activate P1
+P1 -&gt; P1: 需要进行工作窃取
+deactivate P1
+
+M -&gt; P2: 随机选择P2作为窃取目标
+activate P2
+M -&gt; P2Q: 检查P2的本地队列
+activate P2Q
+
+alt P2队列为空
+    P2Q --&gt; M: 队列为空
+    deactivate P2Q
+    deactivate P2
+    
+    M -&gt; P3: 尝试下一个P (P3)
+    activate P3
+    M -&gt; P3Q: 检查P3的本地队列
+    activate P3Q
+    
+    alt P3队列有G
+        P3Q --&gt; M: 返回队列长度
+        M -&gt; P3Q: 计算窃取数量 (队列长度/2)
+        P3Q -&gt; P3Q: 从队列尾部取出一半的G
+        P3Q --&gt; M: 返回窃取的G列表
+        deactivate P3Q
+        deactivate P3
+        
+        M -&gt; P1: 将窃取的G放入当前P的本地队列
+        activate P1
+        P1 --&gt; M: 保存成功
+        deactivate P1
+        
+        M -&gt; M: 返回第一个G用于执行
+        
+        note right of M
+          窃取成功！
+          从P3窃取了一半的G
+          保证负载均衡
+        end note
+        
+    else P3队列也为空
+        P3Q --&gt; M: 队列为空
+        deactivate P3Q
+        deactivate P3
+        
+        M -&gt; M: 继续尝试其他P...
+        
+        alt 所有P都已遍历完
+            M -&gt; M: 所有P都为空
+            M -&gt; M: 返回nil，M准备休眠
+            
+            note right of M
+              窃取失败
+              所有P都没有可执行的G
+              M将进入休眠状态
+            end note
+        end
+    end
+    
+else P2队列有G
+    P2Q --&gt; M: 返回队列长度
+    M -&gt; P2Q: 计算窃取数量 (队列长度/2)
+    P2Q -&gt; P2Q: 从队列尾部取出一半的G
+    P2Q --&gt; M: 返回窃取的G列表
+    deactivate P2Q
+    deactivate P2
+    
+    M -&gt; P1: 将窃取的G放入当前P的本地队列
+    activate P1
+    P1 --&gt; M: 保存成功
+    deactivate P1
+    
+    M -&gt; M: 返回第一个G用于执行
+    
+    note right of M
+      窃取成功！
+      从P2窃取了一半的G
+    end note
+end
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213415000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="详细调度流程说明" class="relative group">详细调度流程说明 </h4><ol>
+<li>
+<p><strong>调度入口</strong>：<code>runtime.schedule()</code>是调度器的核心函数，负责为M选择下一个要执行的G。</p>
+</li>
+<li>
+<p><strong>优先级顺序</strong>：</p>
+<ul>
+<li><strong>最高优先级</strong>：<code>runnext</code>中的G（如果有）</li>
+<li><strong>高优先级</strong>：本地队列头部的G</li>
+<li><strong>中优先级</strong>：全局队列中的G</li>
+<li><strong>低优先级</strong>：从其他P窃取的G</li>
+</ul>
+</li>
+<li>
+<p><strong>执行G</strong>：</p>
+<ul>
+<li>调用<code>runtime.execute()</code>切换到G的栈</li>
+<li>G开始执行用户代码</li>
+<li>M与G绑定，<code>m.curg = g</code></li>
+</ul>
+</li>
+<li>
+<p><strong>G的切换</strong>：</p>
+<ul>
+<li><strong>主动让出</strong>：G调用<code>runtime.Gosched()</code>主动让出CPU</li>
+<li><strong>系统调用</strong>：G进行系统调用时，M会与P解绑，执行系统调用</li>
+<li><strong>阻塞操作</strong>：G等待channel、锁等时，会进入<code>_Gwaiting</code>状态</li>
+<li><strong>抢占</strong>：sysmon检测到G运行时间过长，触发抢占</li>
+</ul>
+</li>
+<li>
+<p><strong>重新调度</strong>：当G执行完毕或阻塞时，M会重新调用<code>schedule()</code>获取下一个G。</p>
+</li>
+</ol>
+<h2 id="5-gmp模式存在的问题与挑战" class="relative group">5. GMP模式存在的问题与挑战 </h2><p>虽然GMP调度器在大多数场景下表现优异，但这种模式仍然存在一些问题和局限性：</p>
+<h3 id="51-全局队列的竞争问题" class="relative group">5.1 全局队列的竞争问题 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>当本地队列满时，G会被放入全局队列</li>
+<li>从全局队列获取G时需要加锁，存在竞争</li>
+<li>高并发场景下，全局队列可能成为性能瓶颈</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>大量短生命周期的Goroutine快速创建和销毁</li>
+<li>某些P的本地队列经常满载</li>
+</ul>
+<p><strong>可视化展示</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1764213508000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+
+participant &#34;P0&#34; as P0
+participant &#34;P1&#34; as P1
+participant &#34;P2&#34; as P2
+participant &#34;全局队列&#34; as GQ
+
+note over GQ #Pink
+  竞争点：多个P同时
+  访问全局队列需要加锁
+end note
+
+== 场景1: P0持有锁，P1等待 ==
+
+P0 -&gt; GQ: 本地队列满，请求加锁
+GQ -&gt; P0: 获得锁
+activate GQ
+
+P1 -&gt; GQ: 本地队列空，请求加锁
+note right of P1 #Yellow
+  P1被阻塞
+  等待P0释放锁
+end note
+
+P0 -&gt; GQ: 添加G到全局队列
+P0 -&gt; GQ: 释放锁
+deactivate GQ
+
+GQ -&gt; P1: P1获得锁
+activate GQ
+P1 -&gt; GQ: 从全局队列获取G
+P1 -&gt; GQ: 释放锁
+deactivate GQ
+
+== 场景2: P1持有锁，P2等待 ==
+
+P1 -&gt; GQ: 请求加锁
+GQ -&gt; P1: 获得锁
+activate GQ
+P1 -&gt; GQ: 操作全局队列
+
+P2 -&gt; GQ: 本地队列空，请求加锁
+note right of P2 #Yellow
+  P2被阻塞
+  等待P1释放锁
+end note
+
+P1 -&gt; GQ: 释放锁
+deactivate GQ
+
+GQ -&gt; P2: P2获得锁
+activate GQ
+P2 -&gt; GQ: 获取G
+P2 -&gt; GQ: 释放锁
+deactivate GQ
+
+note over P0,P2 #LightYellow
+  **性能问题**
+  串行访问全局队列
+  多个P竞争同一个锁
+  降低并发性能
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213508000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>优化本地队列大小（256个G通常足够）</li>
+<li>批量从全局队列取G（每次取多个），减少加锁次数</li>
+<li>优先使用本地队列和工作窃取</li>
+</ul>
+<h3 id="52-工作窃取的开销" class="relative group">5.2 工作窃取的开销 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>工作窃取需要遍历其他P的本地队列</li>
+<li>随机选择目标P，可能多次尝试才能窃取成功</li>
+<li>窃取操作本身有一定的CPU开销</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>P数量很多（GOMAXPROCS设置很大）</li>
+<li>负载不均衡，部分P经常空闲</li>
+</ul>
+<p><strong>问题示意</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1764213547000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+start
+
+:P0本地队列为空;
+:随机选择P1尝试窃取;
+
+if (P1队列为空?) then (是)
+  :随机选择P2尝试窃取;
+  if (P2队列为空?) then (是)
+    :随机选择P3尝试窃取;
+    if (P3队列为空?) then (是)
+      :继续尝试P4, P5, P6...;
+      note right
+        **开销问题**
+        1. 多次随机选择
+        2. 多次队列检查
+        3. 可能遍历所有P
+        4. CPU时间浪费
+      end note
+    endif
+  endif
+endif
+
+stop
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213547000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用随机算法减少冲突</li>
+<li>限制窃取尝试次数</li>
+<li>优先从全局队列获取（定期检查）</li>
+</ul>
+<h3 id="53-抢占延迟问题" class="relative group">5.3 抢占延迟问题 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>Go 1.14之前只有协作式抢占，依赖函数调用时的检查点</li>
+<li>如果G执行密集计算且不调用函数，无法被抢占</li>
+<li>可能导致其他G饥饿，影响调度公平性</li>
+</ul>
+<p><strong>问题场景示例</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1764213578000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+participant &#34;M0&#34; as M0
+participant &#34;P0&#34; as P0
+participant &#34;G1\n(长时间运行)&#34; as G1
+participant &#34;G2\n(等待中)&#34; as G2
+
+M0 -&gt; P0: 获取G1
+P0 --&gt; M0: 返回G1
+M0 -&gt; G1: 开始执行
+activate G1 #Red
+
+note right of G1 #Pink
+  G1执行密集计算
+  for i := 0; i &lt; 1e10; i&#43;&#43; {
+    result &#43;= i * i
+  }
+  没有函数调用，无法被抢占！
+end note
+
+G1 -&gt; G1: 执行10秒...
+G2 -&gt; G2: 在队列中等待...
+note right of G2 #Yellow
+  G2饥饿
+  无法获得执行机会
+end note
+
+G1 -&gt; G1: 继续执行...
+G2 -&gt; G2: 继续等待...
+
+G1 -&gt; M0: 执行完成
+deactivate G1
+M0 -&gt; P0: 获取G2
+note right of G2
+  G2终于得到执行
+  但已经等待很久
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213578000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>Go 1.14+ 引入基于信号的异步抢占</li>
+<li>sysmon线程定期检查长时间运行的G并发送抢占信号</li>
+<li>建议在密集计算中主动调用<code>runtime.Gosched()</code></li>
+</ul>
+<h3 id="54-系统调用的处理开销" class="relative group">5.4 系统调用的处理开销 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>当G进行系统调用时，M会与P解绑</li>
+<li>需要创建或唤醒新的M来接管P</li>
+<li>M和P的频繁绑定/解绑有一定开销</li>
+</ul>
+<p><strong>流程示意</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1764213610000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+participant &#34;M0&#34; as M0
+participant &#34;P0&#34; as P0
+participant &#34;G1&#34; as G1
+participant &#34;M1\n(备用)&#34; as M1
+
+M0 -&gt; G1: 执行G1
+activate G1
+G1 -&gt; G1: 执行到系统调用\n(如: 网络IO、文件读取)
+G1 -&gt; M0: 进入系统调用状态
+M0 -&gt; P0: M0与P0解绑
+note right of M0 #Pink
+  **开销1**: 解绑操作
+  保存状态、更新指针
+end note
+
+P0 -&gt; M1: 唤醒或创建新的M1
+note right of M1 #Pink
+  **开销2**: M的创建/唤醒
+  线程创建/上下文切换
+end note
+
+M1 -&gt; P0: M1绑定P0
+note right of M1 #Pink
+  **开销3**: 绑定操作
+  更新M和P的指针关系
+end note
+
+M0 -&gt; M0: 执行系统调用...
+M1 -&gt; P0: 继续从P0获取其他G执行
+
+M0 -&gt; M0: 系统调用返回
+M0 -&gt; P0: 尝试重新绑定P0
+note right of M0
+  如果P0已被占用，
+  M0会尝试获取其他P
+  或进入休眠
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213610000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>影响</strong>：</p>
+<ul>
+<li>频繁的系统调用会导致M和P的频繁切换</li>
+<li>可能创建过多的M（虽然有上限10000）</li>
+<li>线程创建和上下文切换的开销</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用Go的网络库（netpoller），避免阻塞式系统调用</li>
+<li>使用buffer IO减少系统调用次数</li>
+<li>异步IO模式</li>
+</ul>
+<h3 id="55-内存开销" class="relative group">5.5 内存开销 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>每个G都有自己的栈空间（最小2KB，可增长到1GB）</li>
+<li>P的本地队列和全局队列占用内存</li>
+<li>M结构体本身的内存开销</li>
+</ul>
+<p><strong>内存使用示意</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1764213641000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+
+component &#34;100万个Goroutine (G)&#34; as G #LightBlue
+component &#34;8个P (CPU核心数)&#34; as P #LightGreen  
+component &#34;100个M (线程)&#34; as M #LightCoral
+
+note right of G
+  栈空间: 2KB × 1,000,000 = 2GB
+  G结构体: ~320B × 1,000,000 = 305MB
+  ------------------------
+  总计: ~2.3GB
+end note
+
+note right of P
+  本地队列: 256 × 8 × 8B = ~16KB
+  P结构体: ~5KB × 8 = 40KB
+  ------------------------
+  总计: ~56KB
+end note
+
+note right of M
+  M结构体: ~6KB × 100 = 600KB
+  系统线程栈: 8MB × 100 = 800MB
+  ------------------------
+  总计: ~800MB
+end note
+
+note bottom
+  **内存占用问题**
+  大量Goroutine会占用大量内存
+  即使栈空间可以动态增长和收缩
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1764213641000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>需要创建百万级别的Goroutine</li>
+<li>内存受限的环境（如嵌入式系统、容器环境）</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用Goroutine池限制并发数</li>
+<li>及时回收不用的Goroutine</li>
+<li>监控和限制栈增长</li>
+</ul>
+<h3 id="56-调试和可观测性问题" class="relative group">5.6 调试和可观测性问题 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>大量Goroutine使得调试变得困难</li>
+<li>难以追踪特定Goroutine的执行路径</li>
+<li>性能分析时难以定位瓶颈</li>
+</ul>
+<p><strong>挑战</strong>：</p>
+<ul>
+<li>传统的调试工具（如gdb）对Goroutine支持有限</li>
+<li>Goroutine ID不对外暴露，难以追踪</li>
+<li>竞态条件难以复现</li>
+</ul>
+<p><strong>工具支持</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 虽然有一些工具，但仍存在挑战</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">runtime</span><span class="p">.</span><span class="nf">NumGoroutine</span><span class="p">()</span><span class="w">     </span><span class="c1">// 只能获取数量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">runtime</span><span class="p">.</span><span class="nf">Stack</span><span class="p">()</span><span class="w">            </span><span class="c1">// 获取所有Goroutine的栈信息（可能很大）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">pprof</span><span class="w">                      </span><span class="c1">// 性能分析，但信息量大</span><span class="w">
+</span></span></span></code></pre></div><h2 id="6-总结" class="relative group">6. 总结 </h2><h3 id="61-gmp调度器的优势" class="relative group">6.1 GMP调度器的优势 </h3><p>GMP调度器通过以下设计实现了高效的协程调度：</p>
+<ol>
+<li><strong>轻量级协程</strong>：Goroutine是用户态协程，创建和切换成本低。</li>
+<li><strong>两级队列</strong>：本地队列提供快速访问，全局队列实现负载均衡。</li>
+<li><strong>工作窃取</strong>：确保所有CPU核心都能得到充分利用。</li>
+<li><strong>抢占式调度</strong>：避免单个Goroutine长时间占用线程。</li>
+<li><strong>M:P分离</strong>：将线程和逻辑处理器分离，提高灵活性。</li>
+</ol>
+<p>这些机制使得Go程序能够高效地运行数百万个Goroutine，同时保持良好的性能和响应性。</p>
+<h3 id="62-需要注意的问题" class="relative group">6.2 需要注意的问题 </h3><p>尽管GMP模型设计优秀，但在使用时仍需注意：</p>
+<ol>
+<li><strong>全局队列竞争</strong>：避免本地队列频繁溢出到全局队列</li>
+<li><strong>工作窃取开销</strong>：合理设置GOMAXPROCS，避免过多的P</li>
+<li><strong>抢占延迟</strong>：避免长时间运行的密集计算，适时调用<code>runtime.Gosched()</code></li>
+<li><strong>系统调用开销</strong>：优先使用Go的异步IO库（如net包）</li>
+<li><strong>内存占用</strong>：大规模并发时使用Goroutine池控制数量</li>
+<li><strong>调试困难</strong>：使用pprof等工具进行性能分析和调试</li>
+</ol>
+<h3 id="63-最佳实践建议" class="relative group">6.3 最佳实践建议 </h3><ul>
+<li>根据实际CPU核心数设置<code>GOMAXPROCS</code></li>
+<li>合理控制Goroutine数量，避免创建过多</li>
+<li>使用channel和sync包进行同步，而非共享内存</li>
+<li>在密集计算中适当添加调度点</li>
+<li>使用context进行超时和取消控制</li>
+<li>定期进行性能分析和优化</li>
+</ul>
+<p>GMP调度器是Go语言并发编程的基石，理解其工作原理有助于我们写出更高效、更可靠的并发程序。</p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+      
+  <div class="flex">
+    
+    
+    
+      
+      
+        
+        
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+      
+    >
+      
+      
+      
+      
+      <img
+        width="512"
+        height="512"
+        class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+        alt="Skitii"
+        loading="lazy" decoding="async"
+        
+          src="http://localhost:1313/img/donatello.png"
+        
+      />
+    </picture>
+  
+
+
+      
+    
+    <div class="place-self-center">
+      
+        <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+          Author
+        </div>
+        <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+          Skitii
+        </div>
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="http://localhost:1313/posts/go%E5%B8%B8%E8%A7%81gc%E5%92%8C%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Go常见GC和内存泄漏问题分析</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-11-17 00:00:00 &#43;0000 UTC">17 November 2024</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="http://localhost:1313/posts/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%9F%A5%E8%AF%86%E5%88%86%E4%BA%AB/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >领域驱动设计知识分享</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-10-02 00:00:00 &#43;0000 UTC">2 October 2023</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+      </main>
+      
+        <div
+          class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12"
+          id="to-top"
+          hidden="true"
+        >
+          <a
+            href="#the-top"
+            class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            &uarr;
+          </a>
+        </div>
+      <footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2025
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+
+
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+        },
+        display: {
+            superSample: 1,
+            width: 120,
+            height: 300,
+            position: 'right',
+            hOffset: 20,
+            vOffset: 0,
+        },
+        mobile: {
+            show: true,
+            scale: 1,
+            motion: true,
+        },
+        react: {
+            opacityDefault: 0.8,
+            opacityOnHover: 1,
+        },
+     });
+</script>
+
+
+
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
+
