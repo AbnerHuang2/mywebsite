@@ -91,7 +91,7 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 
-<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764570729" />
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764577091" />
 
 
   
@@ -1019,7 +1019,7 @@ html {
 <li><strong>小对象（Small）</strong>：16B ≤ size ≤ 32KB，使用mcache的对应size class</li>
 <li><strong>大对象（Large）</strong>：size &gt; 32KB，直接从mheap分配</li>
 </ul>
-<div class="plantuml-diagram" id="plantuml-1764987290000">
+<div class="plantuml-diagram" id="plantuml-1764842993000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam classAttributeIconSize 0
@@ -1121,7 +1121,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764987290000');
+  const container = document.getElementById('plantuml-1764842993000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1205,7 +1205,7 @@ if (!window.plantumlEncoderLoaded) {
 
 
 <h3 id="12-内存分配完整流程" class="relative group">1.2 内存分配完整流程 </h3><p>当程序需要分配内存时，Go运行时会根据对象大小选择不同的分配路径：</p>
-<div class="plantuml-diagram" id="plantuml-1764987620000">
+<div class="plantuml-diagram" id="plantuml-1764843438000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1357,7 +1357,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764987620000');
+  const container = document.getElementById('plantuml-1764843438000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1540,7 +1540,7 @@ if (!window.plantumlEncoderLoaded) {
       </tr>
   </tbody>
 </table>
-<div class="plantuml-diagram" id="plantuml-1764988279000">
+<div class="plantuml-diagram" id="plantuml-1764844098000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -1599,7 +1599,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764988279000');
+  const container = document.getElementById('plantuml-1764844098000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1738,7 +1738,7 @@ if (!window.plantumlEncoderLoaded) {
 <li><strong>灰色（Gray）</strong>：已被扫描但其引用的对象还未全部扫描</li>
 <li><strong>黑色（Black）</strong>：已被扫描且其引用的对象也都已扫描</li>
 </ul>
-<h4 id="三色标记的完整过程" class="relative group">三色标记的完整过程 </h4><div class="plantuml-diagram" id="plantuml-1764989533000">
+<h4 id="三色标记的完整过程" class="relative group">三色标记的完整过程 </h4><div class="plantuml-diagram" id="plantuml-1764844705000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1888,7 +1888,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764989533000');
+  const container = document.getElementById('plantuml-1764844705000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1986,7 +1986,7 @@ if (!window.plantumlEncoderLoaded) {
 </ol>
 </li>
 </ul>
-<div class="plantuml-diagram" id="plantuml-1764990610000">
+<div class="plantuml-diagram" id="plantuml-1764845320000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2056,7 +2056,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764990610000');
+  const container = document.getElementById('plantuml-1764845320000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2168,7 +2168,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>堆上的对象混合使用两种屏障</li>
 <li>大幅降低STW时间（&lt;1ms）</li>
 </ol>
-<div class="plantuml-diagram" id="plantuml-1764991157000">
+<div class="plantuml-diagram" id="plantuml-1764845729000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2226,7 +2226,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764991157000');
+  const container = document.getElementById('plantuml-1764845729000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2338,7 +2338,7 @@ if (!window.plantumlEncoderLoaded) {
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// - 测试代码</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// - 在空闲时主动GC</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// - 特殊业务逻辑（不推荐）</span><span class="w">
-</span></span></span></code></pre></div><h4 id="gc触发决策流程" class="relative group">GC触发决策流程 </h4><div class="plantuml-diagram" id="plantuml-1764992025000">
+</span></span></span></code></pre></div><h4 id="gc触发决策流程" class="relative group">GC触发决策流程 </h4><div class="plantuml-diagram" id="plantuml-1764846325000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2413,7 +2413,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764992025000');
+  const container = document.getElementById('plantuml-1764846325000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2503,7 +2503,7 @@ if (!window.plantumlEncoderLoaded) {
 <li><strong>Mark Termination（标记终止）</strong>：短暂STW，完成标记</li>
 <li><strong>Sweep（清扫）</strong>：并发清扫，回收内存</li>
 </ol>
-<div class="plantuml-diagram" id="plantuml-1764993337000">
+<div class="plantuml-diagram" id="plantuml-1764846942000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2635,7 +2635,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764993337000');
+  const container = document.getElementById('plantuml-1764846942000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -3217,7 +3217,7 @@ GC总暂停时间: 260.875µs
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p><strong>问题分析</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1764995066000">
+<div class="plantuml-diagram" id="plantuml-1764847548000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -3285,7 +3285,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764995066000');
+  const container = document.getElementById('plantuml-1764847548000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -3790,7 +3790,7 @@ if (!window.plantumlEncoderLoaded) {
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 输出：2 10485760 (cap仍然是10MB)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p><strong>问题分析</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1764995492000">
+<div class="plantuml-diagram" id="plantuml-1764847927000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -3840,7 +3840,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764995492000');
+  const container = document.getElementById('plantuml-1764847927000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -4274,7 +4274,7 @@ if (!window.plantumlEncoderLoaded) {
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;CGO内存泄漏示例&#34;</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p><strong>现象对比</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1764995734000">
+<div class="plantuml-diagram" id="plantuml-1764848240000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -4324,7 +4324,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764995734000');
+  const container = document.getElementById('plantuml-1764848240000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -4864,7 +4864,7 @@ if (!window.plantumlEncoderLoaded) {
 </span></span><span class="line"><span class="cl"><span class="c1"># 输出：</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># TCP:   10003 (estab 10000, closed 1000, orphaned 0, synrecv 0, timewait 0/0)</span>
 </span></span></code></pre></div><p><strong>CLOSE_WAIT问题图示</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1764998115000">
+<div class="plantuml-diagram" id="plantuml-1764848550000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -4929,7 +4929,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1764998115000');
+  const container = document.getElementById('plantuml-1764848550000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -5139,7 +5139,7 @@ if (!window.plantumlEncoderLoaded) {
 </span></span><span class="line"><span class="cl"><span class="c1"># 查看OOM统计</span>
 </span></span><span class="line"><span class="cl">cat /sys/fs/cgroup/memory/memory.oom_control
 </span></span></code></pre></div><p><strong>问题图示</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765002639000">
+<div class="plantuml-diagram" id="plantuml-1764848792000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -5191,7 +5191,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765002639000');
+  const container = document.getElementById('plantuml-1764848792000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -5371,7 +5371,7 @@ if (!window.plantumlEncoderLoaded) {
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// docker run --tmpfs /tmp:rw,size=100m myimage</span><span class="w">
 </span></span></span></code></pre></div><hr>
 <h2 id="6-linux层面的内存分析实战" class="relative group">6. Linux层面的内存分析实战 </h2><p>当Go层面的工具无法定位问题时，需要深入Linux系统层面进行分析。</p>
-<h3 id="61-内存指标深度解析" class="relative group">6.1 内存指标深度解析 </h3><h4 id="rss-vs-vss-vs-pss-vs-uss-对比" class="relative group">RSS vs VSS vs PSS vs USS 对比 </h4><div class="plantuml-diagram" id="plantuml-1765002964000">
+<h3 id="61-内存指标深度解析" class="relative group">6.1 内存指标深度解析 </h3><h4 id="rss-vs-vss-vs-pss-vs-uss-对比" class="relative group">RSS vs VSS vs PSS vs USS 对比 </h4><div class="plantuml-diagram" id="plantuml-1764849009000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -5427,7 +5427,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765002964000');
+  const container = document.getElementById('plantuml-1764849009000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -6965,7 +6965,7 @@ if (!window.plantumlEncoderLoaded) {
 <li><strong>Go层面</strong>：pprof、trace、GODEBUG</li>
 <li><strong>Linux层面</strong>：/proc、pmap、valgrind、strace、perf、BPF</li>
 </ol>
-<h3 id="82-内存泄漏排查决策树" class="relative group">8.2 内存泄漏排查决策树 </h3><div class="plantuml-diagram" id="plantuml-1765003197000">
+<h3 id="82-内存泄漏排查决策树" class="relative group">8.2 内存泄漏排查决策树 </h3><div class="plantuml-diagram" id="plantuml-1764849164000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -7053,7 +7053,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765003197000');
+  const container = document.getElementById('plantuml-1764849164000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -7484,7 +7484,8 @@ if (!window.plantumlEncoderLoaded) {
             scale: 1,
             hHeadPos: 0.5,
             vHeadPos: 0.618,
-            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+            jsonPath: 'https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/hijiki/hijiki.model.json',
+            
         },
         display: {
             superSample: 1,

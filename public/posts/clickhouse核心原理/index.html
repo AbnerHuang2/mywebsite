@@ -91,7 +91,7 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 
-<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764570819" />
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764577091" />
 
 
   
@@ -858,7 +858,7 @@ html {
 <li><strong>实时写入</strong>：支持高吞吐的实时数据写入</li>
 <li><strong>SQL 支持</strong>：使用标准 SQL 语法，学习成本低</li>
 </ul>
-<h3 id="12-核心组件" class="relative group">1.2 核心组件 </h3><div class="plantuml-diagram" id="plantuml-1765452240000">
+<h3 id="12-核心组件" class="relative group">1.2 核心组件 </h3><div class="plantuml-diagram" id="plantuml-1764785544000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam componentStyle rectangle
@@ -938,7 +938,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452240000');
+  const container = document.getElementById('plantuml-1764785544000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1144,7 +1144,7 @@ if (!window.plantumlEncoderLoaded) {
 </ol>
 <h2 id="3-怎么解决的" class="relative group">3. 怎么解决的？ </h2><p>ClickHouse 通过一系列精巧的设计解决了上述问题：</p>
 <h3 id="31-列式存储" class="relative group">3.1 列式存储 </h3><p><strong>核心思想</strong>：按列存储数据，而非按行。</p>
-<div class="plantuml-diagram" id="plantuml-1765452349000">
+<div class="plantuml-diagram" id="plantuml-1764785614000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam rectangleBackgroundColor LightYellow
@@ -1205,7 +1205,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452349000');
+  const container = document.getElementById('plantuml-1764785614000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1314,7 +1314,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>Merge 过程中进行排序、去重、聚合等操作</li>
 <li>保证写入性能的同时优化查询效率</li>
 </ul>
-<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-clickhouse-整体工作流程" class="relative group">4.0 ClickHouse 整体工作流程 </h3><div class="plantuml-diagram" id="plantuml-1765452416000">
+<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-clickhouse-整体工作流程" class="relative group">4.0 ClickHouse 整体工作流程 </h3><div class="plantuml-diagram" id="plantuml-1764785658000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1422,7 +1422,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452416000');
+  const container = document.getElementById('plantuml-1764785658000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1529,7 +1529,7 @@ if (!window.plantumlEncoderLoaded) {
 </li>
 </ol>
 <hr>
-<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="mergetree-引擎数据组织" class="relative group">MergeTree 引擎数据组织 </h4><div class="plantuml-diagram" id="plantuml-1765452542000">
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="mergetree-引擎数据组织" class="relative group">MergeTree 引擎数据组织 </h4><div class="plantuml-diagram" id="plantuml-1764785719000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam classAttributeIconSize 0
@@ -1623,7 +1623,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452542000');
+  const container = document.getElementById('plantuml-1764785719000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1718,7 +1718,7 @@ if (!window.plantumlEncoderLoaded) {
 ├── column2.bin         # 列2的数据文件
 ├── column2.mrk         # 列2的标记文件
 └── ...
-</code></pre><h3 id="42-数据写入流程" class="relative group">4.2 数据写入流程 </h3><div class="plantuml-diagram" id="plantuml-1765452614000">
+</code></pre><h3 id="42-数据写入流程" class="relative group">4.2 数据写入流程 </h3><div class="plantuml-diagram" id="plantuml-1764785763000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1799,7 +1799,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452614000');
+  const container = document.getElementById('plantuml-1764785763000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1930,7 +1930,7 @@ if (!window.plantumlEncoderLoaded) {
 </ul>
 </li>
 </ol>
-<h3 id="43-数据查询流程" class="relative group">4.3 数据查询流程 </h3><div class="plantuml-diagram" id="plantuml-1765452678000">
+<h3 id="43-数据查询流程" class="relative group">4.3 数据查询流程 </h3><div class="plantuml-diagram" id="plantuml-1764785807000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2017,7 +2017,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452678000');
+  const container = document.getElementById('plantuml-1764785807000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2149,7 +2149,7 @@ if (!window.plantumlEncoderLoaded) {
 </ul>
 </li>
 </ol>
-<h3 id="44-merge-合并流程" class="relative group">4.4 Merge 合并流程 </h3><div class="plantuml-diagram" id="plantuml-1765452780000">
+<h3 id="44-merge-合并流程" class="relative group">4.4 Merge 合并流程 </h3><div class="plantuml-diagram" id="plantuml-1764785861000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2249,7 +2249,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452780000');
+  const container = document.getElementById('plantuml-1764785861000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2394,7 +2394,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>GDPR 等合规场景需要立即删除用户数据</li>
 </ul>
 <p><strong>可视化展示</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765452838000">
+<div class="plantuml-diagram" id="plantuml-1764785903000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2475,7 +2475,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452838000');
+  const container = document.getElementById('plantuml-1764785903000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2578,7 +2578,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>实时 Join 场景</li>
 </ul>
 <p><strong>问题示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765452892000">
+<div class="plantuml-diagram" id="plantuml-1764785941000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2631,7 +2631,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765452892000');
+  const container = document.getElementById('plantuml-1764785941000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -3085,7 +3085,8 @@ if (!window.plantumlEncoderLoaded) {
             scale: 1,
             hHeadPos: 0.5,
             vHeadPos: 0.618,
-            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+            jsonPath: 'https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/hijiki/hijiki.model.json',
+            
         },
         display: {
             superSample: 1,
