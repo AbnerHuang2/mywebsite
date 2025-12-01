@@ -1,0 +1,3157 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  
+  <title>ClickHouse核心原理深度剖析 &middot; Skitii</title>
+    <meta name="title" content="ClickHouse核心原理深度剖析 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="http://localhost:1313/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js"
+    integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="http://localhost:1313/css/main.bundle.min.a645f3fa02b2ca20e7ef61b236048d95cc9bc2e5b2faf1f0ac0aa85431187c1c.css"
+    integrity="sha256-pkXz&#43;gKyyiDn72GyNgSNlcybwuWy&#43;vHwrAqoVDEYfBw="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="http://localhost:1313/js/main.bundle.min.0b250a079f6c2f7d0e03d1f0aa1308acb88137e3caebe1268f7478f0c87c5bf8.js"
+      integrity="sha256-CyUKB59sL30OA9HwqhMIrLiBN&#43;PK6&#43;Emj3R48Mh8W/g="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      深入剖析ClickHouse的存储引擎、列式存储、索引体系、Merge机制和分布式架构
+    "
+  />
+  
+  
+  
+  
+    <link rel="canonical" href="http://localhost:1313/posts/clickhouse%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/" />
+  
+  
+  
+    
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764570819" />
+
+
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="http://localhost:1313/posts/clickhouse%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/">
+  <meta property="og:site_name" content="Skitii">
+  <meta property="og:title" content="ClickHouse核心原理深度剖析">
+  <meta property="og:description" content="深入剖析ClickHouse的存储引擎、列式存储、索引体系、Merge机制和分布式架构">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-12-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-12-01T00:00:00+00:00">
+    <meta property="article:tag" content="ClickHouse">
+    <meta property="article:tag" content="OLAP">
+    <meta property="article:tag" content="数据库">
+    <meta property="article:tag" content="分布式系统">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ClickHouse核心原理深度剖析">
+  <meta name="twitter:description" content="深入剖析ClickHouse的存储引擎、列式存储、索引体系、Merge机制和分布式架构">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "ClickHouse核心原理深度剖析",
+    "headline": "ClickHouse核心原理深度剖析",
+    "description": "深入剖析ClickHouse的存储引擎、列式存储、索引体系、Merge机制和分布式架构",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/clickhouse%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Skitii"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-12-01T00:00:00\u002b00:00",
+    "datePublished": "2024-12-01T00:00:00\u002b00:00",
+    
+    "dateModified": "2024-12-01T00:00:00\u002b00:00",
+    
+    "keywords": ["ClickHouse","OLAP","数据库","分布式系统"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "7116"
+  }
+  </script>
+    
+    <script type="application/ld+json">
+    {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/posts/",
+       "name": "",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/",
+       "name": "数据库",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Click House核心原理深度剖析",
+       "position": 4
+     }
+   ]
+ }
+  </script>
+
+  
+  
+    <meta name="author" content="Skitii" />
+  
+  
+  
+  
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    
+
+<style>
+.plantuml-diagram {
+  text-align: center;
+  margin: 2rem 0;
+  overflow-x: auto;
+   
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+   
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.plantuml-diagram img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+   
+  filter: contrast(1.15) brightness(0.95);
+   
+}
+
+.plantuml-loading {
+  color: #6c757d;
+  padding: 2rem;
+  text-align: center;
+}
+
+.plantuml-error {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .plantuml-diagram {
+     
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .plantuml-diagram img {
+     
+    filter: invert(0.88) contrast(1.05) brightness(1.1);
+     
+  }
+}
+
+ 
+@media (prefers-contrast: high) {
+  .plantuml-diagram img {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+ 
+@media print {
+  .plantuml-diagram {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .plantuml-diagram img {
+    filter: none;
+    max-width: 100%;
+  }
+}
+</style>
+
+
+
+
+
+<style>
+ 
+.toc {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+ 
+.toc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.toc::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+ 
+.toc ul,
+.toc li {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+ 
+.toc a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #4b5563;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  position: relative;
+  line-height: 1.4;
+}
+
+ 
+.toc a:hover {
+  color: #1f2937;
+  background: rgba(139, 92, 246, 0.08);
+  padding-left: 0.75rem;
+}
+
+ 
+.toc a.active,
+.toc a:active {
+  color: rgb(124, 58, 237);
+  background: rgba(139, 92, 246, 0.12);
+  font-weight: 500;
+  padding-left: 0.75rem;
+}
+
+.toc a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: rgb(124, 58, 237);
+  border-radius: 2px;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .toc a {
+    color: #9ca3af;
+  }
+  
+  .toc a:hover {
+    color: #e5e7eb;
+    background: rgba(167, 139, 250, 0.15);
+  }
+  
+  .toc a.active,
+  .toc a:active {
+    color: rgb(167, 139, 250);
+    background: rgba(167, 139, 250, 0.2);
+  }
+  
+  .toc a.active::before {
+    background: rgb(167, 139, 250);
+  }
+  
+  .toc::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.2);
+  }
+  
+  .toc::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.4);
+  }
+}
+
+ 
+.toc-wrapper summary {
+  transition: background 0.2s;
+}
+
+.toc-wrapper summary:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.toc-content {
+  border-left-width: 2px !important;
+  border-style: solid !important;
+}
+
+ 
+html {
+  scroll-behavior: smooth;
+}
+</style>
+
+
+<script>
+(function() {
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+  
+  function initTOC() {
+    const toc = document.querySelector('.toc');
+    if (!toc) return;
+    
+    const tocLinks = toc.querySelectorAll('a');
+    if (tocLinks.length === 0) return;
+    
+    
+    const headings = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'))
+      .filter(h => h.id); 
+    
+    if (headings.length === 0) return;
+    
+    
+    const observerOptions = {
+      rootMargin: '-80px 0px -80% 0px',
+      threshold: 0
+    };
+    
+    let activeHeading = null;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          activeHeading = entry.target;
+          updateActiveTocLink(entry.target.id);
+        }
+      });
+    }, observerOptions);
+    
+    
+    headings.forEach(heading => observer.observe(heading));
+    
+    
+    function updateActiveTocLink(activeId) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === '#' + activeId) {
+          link.classList.add('active');
+          
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      });
+    }
+    
+    
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        
+        tocLinks.forEach(l => l.classList.remove('active'));
+        
+        link.classList.add('active');
+      });
+    });
+  }
+})();
+</script>
+
+
+
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="http://localhost:1313/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        dark:hidden flex"
+        alt="Skitii"
+      />
+        <img
+          src="http://localhost:1313/img/octopus.png"
+          width="64"
+          height="64"
+          class="hidden max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:flex"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/series/"
+                  title="专题系列"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Topic</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title="Categories"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title="Tags"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/clickhouse%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/"
+      >ClickHouse核心原理深度剖析</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        ClickHouse核心原理深度剖析
+      </h1>
+      
+        <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2024-12-01 00:00:00 &#43;0000 UTC">1 December 2024</time><span class="px-2 text-primary-500">&middot;</span><span>7116 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">15 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="http://localhost:1313/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >数据库</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="http://localhost:1313/tags/clickhouse/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >ClickHouse</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/olap/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >OLAP</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >数据库</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >分布式系统</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
+            <details open class="toc-wrapper -ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-clickhouse是什么">1. ClickHouse是什么？</a>
+      <ul>
+        <li><a href="#11-核心特点">1.1 核心特点</a></li>
+        <li><a href="#12-核心组件">1.2 核心组件</a></li>
+        <li><a href="#13-适用场景">1.3 适用场景</a></li>
+        <li><a href="#14-与其他数据库对比">1.4 与其他数据库对比</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-clickhouse解决什么问题">2. ClickHouse解决什么问题？</a>
+      <ul>
+        <li><a href="#21-传统数据库的局限性">2.1 传统数据库的局限性</a></li>
+        <li><a href="#22-olap-场景的特点">2.2 OLAP 场景的特点</a></li>
+        <li><a href="#23-核心需求">2.3 核心需求</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-怎么解决的">3. 怎么解决的？</a>
+      <ul>
+        <li><a href="#31-列式存储">3.1 列式存储</a></li>
+        <li><a href="#32-稀疏索引">3.2 稀疏索引</a></li>
+        <li><a href="#33-向量化执行">3.3 向量化执行</a></li>
+        <li><a href="#34-数据分片与副本">3.4 数据分片与副本</a></li>
+        <li><a href="#35-后台-merge-机制">3.5 后台 Merge 机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-核心流程">4. 核心流程</a>
+      <ul>
+        <li><a href="#40-clickhouse-整体工作流程">4.0 ClickHouse 整体工作流程</a>
+          <ul>
+            <li><a href="#全局流程说明">全局流程说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#41-底层存储结构">4.1 底层存储结构</a>
+          <ul>
+            <li><a href="#mergetree-引擎数据组织">MergeTree 引擎数据组织</a></li>
+            <li><a href="#数据文件结构">数据文件结构</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-数据写入流程">4.2 数据写入流程</a>
+          <ul>
+            <li><a href="#写入流程详解">写入流程详解</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-数据查询流程">4.3 数据查询流程</a>
+          <ul>
+            <li><a href="#查询流程详解">查询流程详解</a></li>
+          </ul>
+        </li>
+        <li><a href="#44-merge-合并流程">4.4 Merge 合并流程</a>
+          <ul>
+            <li><a href="#merge-机制详解">Merge 机制详解</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-clickhouse-存在的问题与挑战">5. ClickHouse 存在的问题与挑战</a>
+      <ul>
+        <li><a href="#51-更新和删除操作的代价">5.1 更新和删除操作的代价</a></li>
+        <li><a href="#52-join-性能问题">5.2 Join 性能问题</a></li>
+        <li><a href="#53-实时性与一致性权衡">5.3 实时性与一致性权衡</a></li>
+        <li><a href="#54-分布式查询的复杂性">5.4 分布式查询的复杂性</a></li>
+        <li><a href="#55-运维复杂度">5.5 运维复杂度</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结">6. 总结</a>
+      <ul>
+        <li><a href="#61-clickhouse-的优势">6.1 ClickHouse 的优势</a></li>
+        <li><a href="#62-需要注意的问题">6.2 需要注意的问题</a></li>
+        <li><a href="#63-最佳实践建议">6.3 最佳实践建议</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<h2 id="1-clickhouse是什么" class="relative group">1. ClickHouse是什么？ </h2><p>ClickHouse 是一个开源的列式存储数据库管理系统（DBMS），专为在线分析处理（OLAP）场景设计。由俄罗斯的 Yandex 公司于 2016 年开源，目前已成为最快的 OLAP 数据库之一。</p>
+<h3 id="11-核心特点" class="relative group">1.1 核心特点 </h3><ul>
+<li><strong>极致性能</strong>：单表查询可达每秒数十亿行，聚合查询速度是传统数据库的 100-1000 倍</li>
+<li><strong>列式存储</strong>：按列存储数据，大幅提高分析查询的效率和压缩率</li>
+<li><strong>向量化执行</strong>：利用 CPU SIMD 指令并行处理数据</li>
+<li><strong>分布式架构</strong>：支持数据分片和副本，可线性扩展</li>
+<li><strong>实时写入</strong>：支持高吞吐的实时数据写入</li>
+<li><strong>SQL 支持</strong>：使用标准 SQL 语法，学习成本低</li>
+</ul>
+<h3 id="12-核心组件" class="relative group">1.2 核心组件 </h3><div class="plantuml-diagram" id="plantuml-1765452240000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam componentStyle rectangle
+
+package &#34;ClickHouse 架构&#34; {
+    [SQL Parser\n解析器] as Parser
+    [Query Optimizer\n查询优化器] as Optimizer
+    [Query Executor\n执行引擎] as Executor
+    [Storage Engine\n存储引擎] as Storage
+    [Background Pool\n后台线程池] as Pool
+}
+
+package &#34;存储层&#34; {
+    [MergeTree\n家族引擎] as MergeTree
+    [Log 系列\n引擎] as Log
+    [Integration\n引擎] as Integration
+}
+
+package &#34;分布式层&#34; {
+    [Distributed\n表引擎] as Distributed
+    [Replicated\n副本机制] as Replicated
+    [ZooKeeper\n协调服务] as ZK
+}
+
+Parser --&gt; Optimizer
+Optimizer --&gt; Executor
+Executor --&gt; Storage
+Storage --&gt; MergeTree
+Storage --&gt; Log
+Storage --&gt; Integration
+Pool --&gt; Storage
+
+Distributed --&gt; Storage
+Replicated --&gt; ZK
+Replicated --&gt; MergeTree
+
+note right of Parser
+  解析SQL语句
+  生成AST
+end note
+
+note right of MergeTree
+  核心存储引擎
+  支持主键索引和Merge
+end note
+
+note right of Distributed
+  分布式查询
+  数据分片
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452240000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h3 id="13-适用场景" class="relative group">1.3 适用场景 </h3><p><strong>✅ 适用场景：</strong></p>
+<ul>
+<li>大规模数据分析和报表</li>
+<li>实时数据仪表盘</li>
+<li>日志分析系统</li>
+<li>用户行为分析</li>
+<li>时序数据存储</li>
+<li>监控指标存储</li>
+</ul>
+<p><strong>❌ 不适用场景：</strong></p>
+<ul>
+<li>高并发的点查询（Key-Value 查询）</li>
+<li>频繁的更新和删除操作</li>
+<li>事务性操作（OLTP）</li>
+<li>高度规范化的关系型数据</li>
+</ul>
+<h3 id="14-与其他数据库对比" class="relative group">1.4 与其他数据库对比 </h3><table>
+  <thead>
+      <tr>
+          <th>特性</th>
+          <th>ClickHouse</th>
+          <th>MySQL</th>
+          <th>Elasticsearch</th>
+          <th>Druid</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>存储方式</td>
+          <td>列式</td>
+          <td>行式</td>
+          <td>文档</td>
+          <td>列式</td>
+      </tr>
+      <tr>
+          <td>查询性能</td>
+          <td>极快</td>
+          <td>中等</td>
+          <td>快</td>
+          <td>快</td>
+      </tr>
+      <tr>
+          <td>写入性能</td>
+          <td>高</td>
+          <td>高</td>
+          <td>中等</td>
+          <td>中等</td>
+      </tr>
+      <tr>
+          <td>SQL支持</td>
+          <td>完整</td>
+          <td>完整</td>
+          <td>有限</td>
+          <td>有限</td>
+      </tr>
+      <tr>
+          <td>分布式</td>
+          <td>原生支持</td>
+          <td>需中间件</td>
+          <td>原生支持</td>
+          <td>原生支持</td>
+      </tr>
+      <tr>
+          <td>压缩率</td>
+          <td>10-40倍</td>
+          <td>2-3倍</td>
+          <td>3-5倍</td>
+          <td>10-20倍</td>
+      </tr>
+      <tr>
+          <td>事务支持</td>
+          <td>无</td>
+          <td>完整</td>
+          <td>无</td>
+          <td>无</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="2-clickhouse解决什么问题" class="relative group">2. ClickHouse解决什么问题？ </h2><h3 id="21-传统数据库的局限性" class="relative group">2.1 传统数据库的局限性 </h3><p>在大数据分析场景下，传统的行式数据库（如 MySQL、PostgreSQL）存在以下问题：</p>
+<ol>
+<li>
+<p><strong>查询性能瓶颈</strong>：</p>
+<ul>
+<li>分析查询通常只需要少数几列，但行式存储需要读取整行数据</li>
+<li>扫描大表时 I/O 开销巨大</li>
+<li>聚合计算效率低下</li>
+</ul>
+</li>
+<li>
+<p><strong>存储空间浪费</strong>：</p>
+<ul>
+<li>行式存储压缩率低</li>
+<li>相同类型数据分散存储，无法充分压缩</li>
+<li>存储成本高</li>
+</ul>
+</li>
+<li>
+<p><strong>扩展性限制</strong>：</p>
+<ul>
+<li>单机性能达到瓶颈后难以扩展</li>
+<li>分库分表复杂度高</li>
+<li>跨库查询困难</li>
+</ul>
+</li>
+</ol>
+<h3 id="22-olap-场景的特点" class="relative group">2.2 OLAP 场景的特点 </h3><p>OLAP（在线分析处理）场景具有以下特点：</p>
+<ul>
+<li><strong>读多写少</strong>：查询频率远高于写入频率</li>
+<li><strong>批量写入</strong>：数据通常批量导入，而非单条插入</li>
+<li><strong>宽表查询</strong>：表的列数多，但单次查询只涉及少数列</li>
+<li><strong>大范围扫描</strong>：经常需要扫描数百万甚至数十亿行数据</li>
+<li><strong>聚合计算</strong>：大量的 SUM、AVG、COUNT 等聚合操作</li>
+<li><strong>时序特性</strong>：数据通常按时间顺序写入，按时间范围查询</li>
+</ul>
+<h3 id="23-核心需求" class="relative group">2.3 核心需求 </h3><ol>
+<li><strong>极致的查询性能</strong>：秒级甚至毫秒级响应海量数据的分析查询</li>
+<li><strong>高效的数据压缩</strong>：降低存储成本，提高 I/O 效率</li>
+<li><strong>灵活的扩展能力</strong>：支持水平扩展，处理 PB 级数据</li>
+<li><strong>实时数据写入</strong>：支持高吞吐的实时数据导入</li>
+<li><strong>低维护成本</strong>：自动化的数据管理和优化</li>
+</ol>
+<h2 id="3-怎么解决的" class="relative group">3. 怎么解决的？ </h2><p>ClickHouse 通过一系列精巧的设计解决了上述问题：</p>
+<h3 id="31-列式存储" class="relative group">3.1 列式存储 </h3><p><strong>核心思想</strong>：按列存储数据，而非按行。</p>
+<div class="plantuml-diagram" id="plantuml-1765452349000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam rectangleBackgroundColor LightYellow
+skinparam rectangleBorderColor Black
+
+rectangle &#34;行式存储 (MySQL)&#34; as RowStore {
+    rectangle &#34;记录1: ID=1, Name=Alice, Age=25, City=Beijing&#34; as R1
+    rectangle &#34;记录2: ID=2, Name=Bob, Age=30, City=Shanghai&#34; as R2
+    rectangle &#34;记录3: ID=3, Name=Charlie, Age=35, City=Shenzhen&#34; as R3
+}
+
+note bottom of RowStore
+    **查询 SELECT Age 时**
+    需要读取所有字段
+    I/O 浪费严重
+end note
+
+rectangle &#34;列式存储 (ClickHouse)&#34; as ColStore {
+    rectangle &#34;ID列: [1, 2, 3]&#34; as C1
+    rectangle &#34;Name列: [Alice, Bob, Charlie]&#34; as C2
+    rectangle &#34;Age列: [25, 30, 35]&#34; as C3 #LightGreen
+    rectangle &#34;City列: [Beijing, Shanghai, Shenzhen]&#34; as C4
+}
+
+note bottom of ColStore
+    **查询 SELECT Age 时**
+    只读取 Age 列
+    I/O 效率高 ✓
+end note
+
+RowStore -down[hidden]-&gt; ColStore
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452349000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>优势</strong>：</p>
+<ul>
+<li>分析查询只读取需要的列，减少 I/O</li>
+<li>相同类型数据连续存储，压缩率高</li>
+<li>向量化处理效率高</li>
+</ul>
+<h3 id="32-稀疏索引" class="relative group">3.2 稀疏索引 </h3><p>传统数据库使用 B+ 树等密集索引，需要为每行数据建立索引项。ClickHouse 使用<strong>稀疏索引</strong>：</p>
+<ul>
+<li>只为部分数据块建立索引（默认每 8192 行一个索引）</li>
+<li>索引占用空间小，可完全加载到内存</li>
+<li>通过索引快速定位数据块，然后顺序扫描块内数据</li>
+</ul>
+<h3 id="33-向量化执行" class="relative group">3.3 向量化执行 </h3><p>利用 CPU 的 SIMD 指令，一次处理多个数据：</p>
+<pre tabindex="0"><code>传统方式：for (int i = 0; i &lt; n; i++) sum += data[i];
+向量化：  一次处理 16 个数据，速度提升 10-100 倍
+</code></pre><h3 id="34-数据分片与副本" class="relative group">3.4 数据分片与副本 </h3><ul>
+<li><strong>分片（Shard）</strong>：将数据水平切分到多个节点，提高并行处理能力</li>
+<li><strong>副本（Replica）</strong>：每个分片有多个副本，保证高可用</li>
+<li><strong>ZooKeeper 协调</strong>：通过 ZooKeeper 管理副本同步和一致性</li>
+</ul>
+<h3 id="35-后台-merge-机制" class="relative group">3.5 后台 Merge 机制 </h3><ul>
+<li>写入时数据先保存为小文件（Part）</li>
+<li>后台线程异步合并小文件为大文件</li>
+<li>Merge 过程中进行排序、去重、聚合等操作</li>
+<li>保证写入性能的同时优化查询效率</li>
+</ul>
+<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-clickhouse-整体工作流程" class="relative group">4.0 ClickHouse 整体工作流程 </h3><div class="plantuml-diagram" id="plantuml-1765452416000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 250
+
+actor &#34;客户端&#34; as Client
+participant &#34;SQL Parser\n解析器&#34; as Parser
+participant &#34;Query Optimizer\n优化器&#34; as Optimizer
+participant &#34;Query Pipeline\n执行引擎&#34; as Pipeline
+participant &#34;MergeTree\n存储引擎&#34; as Storage
+participant &#34;Background Merge\n后台合并&#34; as Merge
+database &#34;Data Parts\n数据分片&#34; as Parts
+
+== 查询流程 ==
+Client -&gt; Parser: 发送 SQL 查询
+activate Parser
+Parser -&gt; Parser: 解析 SQL\n生成 AST
+Parser -&gt; Optimizer: 传递 AST
+deactivate Parser
+
+activate Optimizer
+Optimizer -&gt; Optimizer: 优化查询计划\n- 谓词下推\n- 列裁剪\n- 分区裁剪
+Optimizer -&gt; Pipeline: 生成执行计划
+deactivate Optimizer
+
+activate Pipeline
+Pipeline -&gt; Pipeline: 构建 Pipeline\n- 向量化执行\n- 并行处理
+Pipeline -&gt; Storage: 读取数据
+activate Storage
+
+Storage -&gt; Storage: 1. 查询索引\n2. 定位数据块\n3. 读取列数据
+Storage -&gt; Parts: 读取相关 Parts
+activate Parts
+Parts --&gt; Storage: 返回列数据
+deactivate Parts
+
+Storage --&gt; Pipeline: 返回数据流
+deactivate Storage
+
+Pipeline -&gt; Pipeline: 聚合计算\n过滤排序
+Pipeline --&gt; Client: 返回结果
+deactivate Pipeline
+
+== 写入流程 ==
+Client -&gt; Parser: 发送 INSERT 语句
+activate Parser
+Parser -&gt; Storage: 批量写入数据
+deactivate Parser
+
+activate Storage
+Storage -&gt; Parts: 创建新 Part
+activate Parts
+Parts -&gt; Parts: 1. 按排序键排序\n2. 压缩数据\n3. 生成索引
+Parts --&gt; Storage: Part 创建完成
+deactivate Parts
+
+Storage -&gt; Merge: 触发 Merge 检查
+deactivate Storage
+
+activate Merge
+Merge -&gt; Merge: 检查是否需要合并
+alt 需要合并
+    Merge -&gt; Parts: 合并多个小 Parts
+    activate Parts
+    Parts -&gt; Parts: 1. 读取多个 Parts\n2. 归并排序\n3. 生成新 Part\n4. 删除旧 Parts
+    Parts --&gt; Merge: Merge 完成
+    deactivate Parts
+end
+deactivate Merge
+
+note right of Parts
+  **核心机制**
+  1. 写入时创建小 Part
+  2. 后台异步 Merge
+  3. 查询时读取所有 Parts
+  4. 逐步优化存储结构
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452416000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="全局流程说明" class="relative group">全局流程说明 </h4><p>ClickHouse 的工作流程分为两大核心流程：</p>
+<ol>
+<li>
+<p><strong>查询流程</strong>：</p>
+<ul>
+<li>SQL 解析生成抽象语法树（AST）</li>
+<li>查询优化器进行谓词下推、列裁剪、分区裁剪等优化</li>
+<li>执行引擎构建 Pipeline，采用向量化并行处理</li>
+<li>存储引擎通过稀疏索引快速定位数据块，只读取需要的列</li>
+<li>返回结果给客户端</li>
+</ul>
+</li>
+<li>
+<p><strong>写入流程</strong>：</p>
+<ul>
+<li>批量数据写入，按排序键排序</li>
+<li>创建新的 Data Part（数据分片）</li>
+<li>对数据进行压缩并生成索引</li>
+<li>后台 Merge 线程异步合并小 Parts 为大 Parts</li>
+<li>优化存储结构，提高查询效率</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="mergetree-引擎数据组织" class="relative group">MergeTree 引擎数据组织 </h4><div class="plantuml-diagram" id="plantuml-1765452542000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam classAttributeIconSize 0
+
+class &#34;MergeTree 表&#34; as Table {
+    &#43; table_name: String
+    &#43; partition_key: Expression
+    &#43; order_by: Expression[]
+    &#43; primary_key: Expression[]
+    &#43; sampling_key: Expression
+}
+
+class &#34;Partition\n分区&#34; as Partition {
+    &#43; partition_id: String
+    &#43; min_date: Date
+    &#43; max_date: Date
+    &#43; parts: Part[]
+}
+
+class &#34;Part\n数据分片&#34; as Part {
+    &#43; part_name: String
+    &#43; rows: int
+    &#43; size: int
+    &#43; level: int
+    &#43; columns: Column[]
+}
+
+class &#34;Column\n列文件&#34; as Column {
+    &#43; column_name: String
+    &#43; data_file: .bin
+    &#43; marks_file: .mrk
+    &#43; index_file: .idx
+}
+
+Table &#34;1&#34; o-- &#34;0..*&#34; Partition : 包含
+Partition &#34;1&#34; o-- &#34;1..*&#34; Part : 包含
+Part &#34;1&#34; o-- &#34;1..*&#34; Column : 包含
+
+note right of Table
+  **MergeTree 表**
+  - 定义表结构和键
+  - 管理多个分区
+end note
+
+note right of Partition
+  **分区**
+  - 按分区键划分
+  - 独立管理和查询
+  - 可快速删除历史数据
+end note
+
+note right of Part
+  **Data Part**
+  - 不可变的数据块
+  - 包含多个列文件
+  - 通过 Merge 合并
+end note
+
+note bottom of Column
+  **列存储**
+  - .bin: 压缩的列数据
+  - .mrk: 标记文件（索引偏移）
+  - .idx: 主键索引
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452542000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="数据文件结构" class="relative group">数据文件结构 </h4><p>一个 Part 包含以下文件：</p>
+<pre tabindex="0"><code>partition_date_min_max_level/
+├── columns.txt          # 列信息
+├── count.txt           # 行数
+├── primary.idx         # 主键索引（稀疏索引）
+├── partition.dat       # 分区键值
+├── checksums.txt       # 校验和
+├── column1.bin         # 列1的数据文件
+├── column1.mrk         # 列1的标记文件
+├── column2.bin         # 列2的数据文件
+├── column2.mrk         # 列2的标记文件
+└── ...
+</code></pre><h3 id="42-数据写入流程" class="relative group">4.2 数据写入流程 </h3><div class="plantuml-diagram" id="plantuml-1765452614000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant &#34;Client&#34; as Client
+participant &#34;INSERT 处理器&#34; as Insert
+participant &#34;Block 构建器&#34; as Block
+participant &#34;Part 写入器&#34; as Writer
+participant &#34;文件系统&#34; as FS
+participant &#34;Merge 调度器&#34; as Scheduler
+
+Client -&gt; Insert: INSERT INTO table VALUES ...
+activate Insert
+
+Insert -&gt; Insert: 1. 解析数据\n2. 计算分区键
+Insert -&gt; Block: 创建内存 Block
+activate Block
+
+Block -&gt; Block: 1. 按排序键排序\n2. 压缩数据\n3. 构建索引
+
+Block -&gt; Writer: 写入 Part
+deactivate Block
+activate Writer
+
+Writer -&gt; FS: 创建临时目录
+activate FS
+Writer -&gt; FS: 写入 .bin 文件 (列数据)
+Writer -&gt; FS: 写入 .mrk 文件 (标记)
+Writer -&gt; FS: 写入 .idx 文件 (索引)
+Writer -&gt; FS: 写入元数据文件
+Writer -&gt; FS: 原子性重命名为正式 Part
+FS --&gt; Writer: 写入完成
+deactivate FS
+
+Writer -&gt; Scheduler: 通知新 Part 创建
+deactivate Writer
+
+activate Scheduler
+Scheduler -&gt; Scheduler: 检查 Merge 条件\n- Part 数量\n- Part 大小\n- Level 层级
+alt 满足 Merge 条件
+    Scheduler -&gt; Scheduler: 调度 Merge 任务
+    note right
+      后台异步执行
+      不阻塞写入
+    end note
+end
+deactivate Scheduler
+
+Insert --&gt; Client: 写入成功
+deactivate Insert
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452614000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="写入流程详解" class="relative group">写入流程详解 </h4><ol>
+<li>
+<p><strong>数据接收与解析</strong>：</p>
+<ul>
+<li>客户端发送 INSERT 语句</li>
+<li>解析数据，计算分区键确定数据所属分区</li>
+</ul>
+</li>
+<li>
+<p><strong>Block 构建</strong>：</p>
+<ul>
+<li>在内存中构建 Block（批量数据块）</li>
+<li>按照 ORDER BY 键对数据排序</li>
+<li>计算主键索引（每 8192 行一个）</li>
+</ul>
+</li>
+<li>
+<p><strong>数据压缩</strong>：</p>
+<ul>
+<li>对每列数据应用压缩算法（LZ4、ZSTD 等）</li>
+<li>列式存储天然具有高压缩率</li>
+</ul>
+</li>
+<li>
+<p><strong>Part 写入</strong>：</p>
+<ul>
+<li>为每列创建 .bin 文件（压缩后的数据）</li>
+<li>创建 .mrk 文件（标记文件，记录数据块偏移）</li>
+<li>创建 .idx 文件（稀疏主键索引）</li>
+<li>写入元数据文件（列信息、行数、校验和等）</li>
+</ul>
+</li>
+<li>
+<p><strong>原子性提交</strong>：</p>
+<ul>
+<li>先写入临时目录</li>
+<li>所有文件写入完成后，原子性重命名为正式 Part</li>
+<li>保证数据一致性</li>
+</ul>
+</li>
+<li>
+<p><strong>触发 Merge</strong>：</p>
+<ul>
+<li>通知后台 Merge 调度器</li>
+<li>异步检查是否需要合并 Parts</li>
+</ul>
+</li>
+</ol>
+<h3 id="43-数据查询流程" class="relative group">4.3 数据查询流程 </h3><div class="plantuml-diagram" id="plantuml-1765452678000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant &#34;Client&#34; as Client
+participant &#34;Query Parser&#34; as Parser
+participant &#34;Query Optimizer&#34; as Optimizer
+participant &#34;Part Selector&#34; as Selector
+participant &#34;Index Reader&#34; as Index
+participant &#34;Column Reader&#34; as Reader
+participant &#34;Aggregator&#34; as Agg
+
+Client -&gt; Parser: SELECT age, COUNT(*)\nFROM users\nWHERE city=&#39;Beijing&#39;\nGROUP BY age
+activate Parser
+Parser -&gt; Parser: 解析 SQL\n生成 AST
+Parser -&gt; Optimizer: 传递查询计划
+deactivate Parser
+
+activate Optimizer
+Optimizer -&gt; Optimizer: 查询优化\n1. 列裁剪 (只读 age, city)\n2. 谓词下推 (city=&#39;Beijing&#39;)\n3. 分区裁剪
+Optimizer -&gt; Selector: 选择相关 Parts
+deactivate Optimizer
+
+activate Selector
+Selector -&gt; Selector: 1. 根据分区键过滤\n2. 列出所有相关 Parts
+Selector -&gt; Index: 传递 Parts 列表
+deactivate Selector
+
+activate Index
+loop 每个 Part
+    Index -&gt; Index: 1. 读取 primary.idx\n2. 二分查找定位范围\n3. 确定需要读取的 Granule
+end
+
+Index -&gt; Reader: 传递读取范围
+deactivate Index
+
+activate Reader
+Reader -&gt; Reader: 并行读取列数据
+note right
+  **向量化处理**
+  1. 只读取 city 和 age 列
+  2. 批量读取 Granule
+  3. SIMD 并行过滤
+end note
+
+loop 每个 Granule
+    Reader -&gt; Reader: 1. 读取 .mrk 定位偏移\n2. 读取 .bin 数据\n3. 解压缩\n4. 应用 WHERE 过滤
+end
+
+Reader -&gt; Agg: 传递过滤后的数据
+deactivate Reader
+
+activate Agg
+Agg -&gt; Agg: 聚合计算\nGROUP BY age\nCOUNT(*)
+Agg --&gt; Client: 返回结果
+deactivate Agg
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452678000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="查询流程详解" class="relative group">查询流程详解 </h4><ol>
+<li>
+<p><strong>SQL 解析</strong>：</p>
+<ul>
+<li>解析 SQL 语句生成抽象语法树（AST）</li>
+<li>语义分析，验证表、列是否存在</li>
+</ul>
+</li>
+<li>
+<p><strong>查询优化</strong>：</p>
+<ul>
+<li><strong>列裁剪</strong>：只读取 SELECT 和 WHERE 中涉及的列</li>
+<li><strong>谓词下推</strong>：将过滤条件下推到存储层</li>
+<li><strong>分区裁剪</strong>：根据分区键过滤不相关的分区</li>
+</ul>
+</li>
+<li>
+<p><strong>Part 选择</strong>：</p>
+<ul>
+<li>列出所有相关分区的 Parts</li>
+<li>过滤掉明显不包含目标数据的 Parts</li>
+</ul>
+</li>
+<li>
+<p><strong>索引查找</strong>：</p>
+<ul>
+<li>读取 primary.idx（稀疏索引）</li>
+<li>二分查找定位可能包含数据的 Granule（数据块）</li>
+<li>每个 Granule 默认 8192 行</li>
+</ul>
+</li>
+<li>
+<p><strong>列数据读取</strong>：</p>
+<ul>
+<li>通过 .mrk 文件定位 .bin 文件中的偏移位置</li>
+<li>只读取需要的列（city 和 age）</li>
+<li>读取、解压缩、应用 WHERE 条件过滤</li>
+<li>向量化处理，利用 SIMD 指令加速</li>
+</ul>
+</li>
+<li>
+<p><strong>聚合计算</strong>：</p>
+<ul>
+<li>GROUP BY 分组</li>
+<li>计算聚合函数（COUNT、SUM 等）</li>
+<li>返回结果给客户端</li>
+</ul>
+</li>
+</ol>
+<h3 id="44-merge-合并流程" class="relative group">4.4 Merge 合并流程 </h3><div class="plantuml-diagram" id="plantuml-1765452780000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant &#34;Merge Scheduler\n调度器&#34; as Scheduler
+participant &#34;Merge Task\n合并任务&#34; as Task
+participant &#34;Part Reader\n读取器&#34; as Reader
+participant &#34;Merge Algorithm\n合并算法&#34; as Merger
+participant &#34;Part Writer\n写入器&#34; as Writer
+participant &#34;File System\n文件系统&#34; as FS
+
+== Merge 触发 ==
+Scheduler -&gt; Scheduler: 定期检查 Merge 条件
+activate Scheduler
+
+Scheduler -&gt; Scheduler: 选择合并策略\n- Level 层级合并\n- 大小平衡合并
+Scheduler -&gt; Task: 创建 Merge 任务
+deactivate Scheduler
+
+== Merge 执行 ==
+activate Task
+Task -&gt; Task: 选择要合并的 Parts\n例如: Part1, Part2, Part3
+
+Task -&gt; Reader: 读取源 Parts
+activate Reader
+loop 每个 Part
+    Reader -&gt; FS: 读取 .bin 和 .mrk 文件
+    activate FS
+    FS --&gt; Reader: 返回列数据
+    deactivate FS
+end
+Reader --&gt; Task: 返回数据流
+deactivate Reader
+
+Task -&gt; Merger: 归并排序
+activate Merger
+Merger -&gt; Merger: N 路归并\n- 按排序键排序\n- 去重（ReplacingMergeTree）\n- 聚合（SummingMergeTree）
+
+note right of Merger
+  **Merge 操作**
+  1. 多路归并排序
+  2. 执行引擎特定逻辑
+  3. 生成更大的 Part
+  4. Level 层级加1
+end note
+
+Merger -&gt; Writer: 写入新 Part
+deactivate Merger
+
+activate Writer
+Writer -&gt; FS: 创建新 Part 目录
+activate FS
+Writer -&gt; FS: 写入合并后的列数据
+Writer -&gt; FS: 生成新的索引和标记
+Writer -&gt; FS: 原子性重命名
+FS --&gt; Writer: 写入完成
+deactivate FS
+deactivate Writer
+
+Task -&gt; Task: 更新元数据\n- 删除旧 Parts\n- 注册新 Part
+Task --&gt; Scheduler: Merge 完成
+deactivate Task
+
+note over Scheduler, FS
+  **Merge 后效果**
+  - Part 数量减少
+  - 查询效率提升
+  - 存储更紧凑
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452780000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="merge-机制详解" class="relative group">Merge 机制详解 </h4><ol>
+<li>
+<p><strong>触发条件</strong>：</p>
+<ul>
+<li>Part 数量过多（默认 &gt; 8 个）</li>
+<li>Part 大小不均衡</li>
+<li>Level 层级需要合并</li>
+<li>手动触发 <code>OPTIMIZE TABLE</code></li>
+</ul>
+</li>
+<li>
+<p><strong>选择策略</strong>：</p>
+<ul>
+<li><strong>Level 合并</strong>：同一层级的 Parts 合并</li>
+<li><strong>大小平衡</strong>：优先合并大小相近的 Parts</li>
+<li><strong>时间窗口</strong>：合并同一时间范围的数据</li>
+</ul>
+</li>
+<li>
+<p><strong>合并过程</strong>：</p>
+<ul>
+<li>并行读取多个源 Parts 的列数据</li>
+<li>N 路归并排序（类似归并排序算法）</li>
+<li>执行引擎特定的逻辑：
+<ul>
+<li><strong>ReplacingMergeTree</strong>：保留最新版本，去重</li>
+<li><strong>SummingMergeTree</strong>：对数值列求和</li>
+<li><strong>AggregatingMergeTree</strong>：合并聚合状态</li>
+</ul>
+</li>
+<li>写入新的 Part，Level 加 1</li>
+</ul>
+</li>
+<li>
+<p><strong>原子性提交</strong>：</p>
+<ul>
+<li>新 Part 写入完成后，原子性更新元数据</li>
+<li>删除旧 Parts（标记为删除，延迟物理删除）</li>
+<li>查询自动读取最新的 Parts</li>
+</ul>
+</li>
+<li>
+<p><strong>性能影响</strong>：</p>
+<ul>
+<li>Merge 在后台异步执行，不阻塞查询和写入</li>
+<li>合并大 Parts 时可能消耗较多 I/O 和 CPU</li>
+<li>可通过参数控制 Merge 的并发度和速度</li>
+</ul>
+</li>
+</ol>
+<h2 id="5-clickhouse-存在的问题与挑战" class="relative group">5. ClickHouse 存在的问题与挑战 </h2><h3 id="51-更新和删除操作的代价" class="relative group">5.1 更新和删除操作的代价 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>ClickHouse 不支持直接的 UPDATE 和 DELETE 操作</li>
+<li>需要通过 ALTER TABLE &hellip; DELETE 或 ALTER TABLE &hellip; UPDATE（Mutation）</li>
+<li>Mutation 会重写整个 Part，代价非常高</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>需要频繁更新或删除数据的场景</li>
+<li>GDPR 等合规场景需要立即删除用户数据</li>
+</ul>
+<p><strong>可视化展示</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1765452838000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+
+participant &#34;Client&#34; as Client
+participant &#34;Mutation 处理器&#34; as Mutation
+participant &#34;Part 1\n(100万行)&#34; as Part1
+participant &#34;Part 2\n(100万行)&#34; as Part2
+participant &#34;新 Part 1&#39;\n(99万行)&#34; as NewPart1
+participant &#34;新 Part 2&#39;\n(99万行)&#34; as NewPart2
+
+Client -&gt; Mutation: DELETE FROM table\nWHERE id = 123
+activate Mutation
+
+note over Mutation #Pink
+  **代价高昂**
+  即使只删除1行
+  也要重写整个 Part
+end note
+
+Mutation -&gt; Part1: 读取所有数据
+activate Part1
+Part1 --&gt; Mutation: 返回 100万行
+deactivate Part1
+
+Mutation -&gt; Mutation: 过滤掉 id=123 的行
+Mutation -&gt; NewPart1: 写入新 Part (99万行)
+activate NewPart1
+deactivate NewPart1
+
+Mutation -&gt; Part2: 读取所有数据
+activate Part2
+Part2 --&gt; Mutation: 返回 100万行
+deactivate Part2
+
+Mutation -&gt; Mutation: 过滤掉 id=123 的行
+Mutation -&gt; NewPart2: 写入新 Part (99万行)
+activate NewPart2
+deactivate NewPart2
+
+Mutation -&gt; Mutation: 删除旧 Parts
+Mutation --&gt; Client: 删除完成
+
+deactivate Mutation
+
+note over Part1, NewPart2 #LightYellow
+  **性能问题**
+  - 需要重写所有相关 Parts
+  - I/O 和 CPU 开销巨大
+  - 可能阻塞 Merge 操作
+  - 删除操作异步执行
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452838000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用 ReplacingMergeTree 实现逻辑删除（标记删除列）</li>
+<li>定期重建表，而非频繁删除</li>
+<li>设计表结构时避免需要更新的场景</li>
+<li>使用分区，删除整个分区而非单行</li>
+</ul>
+<h3 id="52-join-性能问题" class="relative group">5.2 Join 性能问题 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>ClickHouse 的 Join 性能相对较弱</li>
+<li>大表 Join 可能导致内存溢出</li>
+<li>右表会完全加载到内存</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>多表关联查询</li>
+<li>维度表关联</li>
+<li>实时 Join 场景</li>
+</ul>
+<p><strong>问题示意</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1765452892000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;左表 (事实表)\n10亿行\n100GB&#34; as Left #LightBlue
+rectangle &#34;右表 (维度表)\n1000万行\n5GB&#34; as Right #LightGreen
+rectangle &#34;Join 执行过程\n-----------------\n1. 右表全部加载到内存\n2. 构建 Hash Table\n3. 左表流式读取\n4. 逐行匹配&#34; as Process #LightYellow
+
+Left -right-&gt; Right : JOIN
+Left -down-&gt; Process
+Right -down-&gt; Process
+
+note right of Right #Pink
+    内存问题:
+    右表完全加载到内存
+    大表Join会OOM
+end note
+
+note bottom of Process #Yellow
+    性能瓶颈:
+    - 右表太大无法放入内存
+    - Hash Table 构建耗时
+    - 分布式Join需要数据Shuffle
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1765452892000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用字典（Dictionary）替代小维度表 Join</li>
+<li>预先将维度列嵌入事实表（宽表模式）</li>
+<li>使用 Global Join（分布式场景）</li>
+<li>控制右表大小，必要时分多次 Join</li>
+<li>使用 <code>join_use_nulls</code> 等参数优化</li>
+</ul>
+<h3 id="53-实时性与一致性权衡" class="relative group">5.3 实时性与一致性权衡 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>写入的数据不是立即可见（最终一致性）</li>
+<li>刚写入的 Part 需要时间才能被查询到</li>
+<li>副本之间存在同步延迟</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>需要强一致性的场景</li>
+<li>实时写入后立即查询</li>
+<li>高频写入 + 实时查询</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用 <code>SELECT ... FINAL</code> 查询最新数据（性能较差）</li>
+<li>合理设置 <code>min_insert_block_size_rows</code> 参数</li>
+<li>使用 ReplicatedMergeTree 保证副本一致性</li>
+<li>业务层容忍短暂的延迟</li>
+</ul>
+<h3 id="54-分布式查询的复杂性" class="relative group">5.4 分布式查询的复杂性 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>分布式查询需要两阶段聚合</li>
+<li>数据倾斜导致某些节点成为瓶颈</li>
+<li>节点故障影响整体查询</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>集群规模大</li>
+<li>数据分布不均</li>
+<li>复杂的分布式查询</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>合理选择分片键，避免数据倾斜</li>
+<li>使用 <code>distributed_aggregation_memory_efficient</code> 优化</li>
+<li>设置查询超时和重试机制</li>
+<li>监控节点负载，及时扩容</li>
+</ul>
+<h3 id="55-运维复杂度" class="relative group">5.5 运维复杂度 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>ZooKeeper 依赖（副本场景）</li>
+<li>集群配置复杂</li>
+<li>监控指标众多</li>
+<li>故障排查困难</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>中小团队运维能力有限</li>
+<li>缺乏专业 DBA</li>
+<li>集群规模大</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用 ClickHouse Keeper 替代 ZooKeeper</li>
+<li>采用容器化部署（K8s Operator）</li>
+<li>使用开源监控方案（Prometheus + Grafana）</li>
+<li>建立完善的告警和备份机制</li>
+<li>参考官方最佳实践</li>
+</ul>
+<h2 id="6-总结" class="relative group">6. 总结 </h2><h3 id="61-clickhouse-的优势" class="relative group">6.1 ClickHouse 的优势 </h3><p>ClickHouse 通过以下设计实现了极致的 OLAP 性能：</p>
+<ol>
+<li><strong>列式存储</strong>：只读取需要的列，大幅减少 I/O，提高压缩率</li>
+<li><strong>稀疏索引</strong>：索引占用空间小，可完全加载到内存，查询快速定位</li>
+<li><strong>向量化执行</strong>：利用 SIMD 指令并行处理，查询速度提升数十倍</li>
+<li><strong>后台 Merge</strong>：异步合并数据，保证写入性能的同时优化查询效率</li>
+<li><strong>分布式架构</strong>：支持数据分片和副本，可线性扩展到 PB 级</li>
+</ol>
+<p>这些机制使得 ClickHouse 成为最快的 OLAP 数据库之一，在大规模数据分析场景下具有显著优势。</p>
+<h3 id="62-需要注意的问题" class="relative group">6.2 需要注意的问题 </h3><p>尽管 ClickHouse 性能优异，但在使用时需要注意：</p>
+<ol>
+<li><strong>更新删除代价高</strong>：避免频繁的 UPDATE 和 DELETE 操作</li>
+<li><strong>Join 性能弱</strong>：大表 Join 谨慎使用，优先考虑宽表或字典</li>
+<li><strong>最终一致性</strong>：容忍短暂的数据延迟</li>
+<li><strong>分布式复杂</strong>：合理选择分片键，避免数据倾斜</li>
+<li><strong>运维成本</strong>：需要专业的运维能力和监控体系</li>
+</ol>
+<h3 id="63-最佳实践建议" class="relative group">6.3 最佳实践建议 </h3><ul>
+<li>
+<p><strong>表设计</strong>：</p>
+<ul>
+<li>合理设置分区键（通常按日期）</li>
+<li>排序键选择高频查询字段</li>
+<li>优先使用宽表，减少 Join</li>
+<li>选择合适的 MergeTree 引擎（Replacing、Summing 等）</li>
+</ul>
+</li>
+<li>
+<p><strong>写入优化</strong>：</p>
+<ul>
+<li>批量写入（每批至少 1000 行）</li>
+<li>避免频繁小批量写入</li>
+<li>合理设置 Merge 参数</li>
+</ul>
+</li>
+<li>
+<p><strong>查询优化</strong>：</p>
+<ul>
+<li>使用 PREWHERE 替代 WHERE</li>
+<li>充分利用分区裁剪</li>
+<li>避免 SELECT *</li>
+<li>大表 Join 使用字典或预先聚合</li>
+</ul>
+</li>
+<li>
+<p><strong>集群规划</strong>：</p>
+<ul>
+<li>根据数据量和查询并发度规划节点数</li>
+<li>每个分片设置 2-3 个副本</li>
+<li>监控磁盘、内存、网络使用情况</li>
+<li>定期清理历史分区</li>
+</ul>
+</li>
+<li>
+<p><strong>监控运维</strong>：</p>
+<ul>
+<li>监控关键指标：查询延迟、写入吞吐、Merge 速度</li>
+<li>设置告警规则：磁盘使用率、查询失败率</li>
+<li>定期备份元数据</li>
+<li>制定故障恢复预案</li>
+</ul>
+</li>
+</ul>
+<p>ClickHouse 在 OLAP 场景下具有无可比拟的性能优势，但需要深入理解其工作原理和限制，才能充分发挥其潜力。通过合理的表设计、查询优化和运维管理，可以构建高效、稳定的大数据分析平台。</p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+      
+  <div class="flex">
+    
+    
+    
+      
+      
+        
+        
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+      
+    >
+      
+      
+      
+      
+      <img
+        width="512"
+        height="512"
+        class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+        alt="Skitii"
+        loading="lazy" decoding="async"
+        
+          src="http://localhost:1313/img/donatello.png"
+        
+      />
+    </picture>
+  
+
+
+      
+    
+    <div class="place-self-center">
+      
+        <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+          Author
+        </div>
+        <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+          Skitii
+        </div>
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Cursor进阶使用</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2025-05-01 00:00:00 &#43;0000 UTC">1 May 2025</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="http://localhost:1313/posts/go%E5%B8%B8%E8%A7%81gc%E5%92%8C%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Go常见GC和内存泄漏问题分析</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-11-17 00:00:00 &#43;0000 UTC">17 November 2024</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+      </main>
+      
+        <div
+          class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12"
+          id="to-top"
+          hidden="true"
+        >
+          <a
+            href="#the-top"
+            class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            &uarr;
+          </a>
+        </div>
+      <footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2025
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+
+
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+        },
+        display: {
+            superSample: 1,
+            width: 120,
+            height: 300,
+            position: 'right',
+            hOffset: 20,
+            vOffset: 0,
+        },
+        mobile: {
+            show: true,
+            scale: 1,
+            motion: true,
+        },
+        react: {
+            opacityDefault: 0.8,
+            opacityOnHover: 1,
+        },
+     });
+</script>
+
+
+
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
+

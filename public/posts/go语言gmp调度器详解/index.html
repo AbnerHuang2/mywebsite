@@ -91,7 +91,7 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 
-<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764561215" />
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764570729" />
 
 
   
@@ -908,7 +908,7 @@ html {
 <li><strong>全局队列（Global Queue）</strong>：所有P共享一个全局队列，当本地队列满时，新创建的G会被放入全局队列。</li>
 </ul>
 <h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-gmp调度器全局视图" class="relative group">4.0 GMP调度器全局视图 </h3><p>在深入了解各个组件和流程之前，我们先从全局视角看一下GMP调度器的完整工作流程：</p>
-<div class="plantuml-diagram" id="plantuml-1765381077000">
+<div class="plantuml-diagram" id="plantuml-1765044951000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1074,7 +1074,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381077000');
+  const container = document.getElementById('plantuml-1765044951000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1174,7 +1174,7 @@ if (!window.plantumlEncoderLoaded) {
 </ol>
 <p>这个全局视图展示了GMP调度器如何通过<strong>M:P:G = 线程:处理器:协程</strong>的三层模型，实现了高效的并发调度。</p>
 <hr>
-<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="gmp-结构及其关系" class="relative group">G、M、P 结构及其关系 </h4><div class="plantuml-diagram" id="plantuml-1765381140000">
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="gmp-结构及其关系" class="relative group">G、M、P 结构及其关系 </h4><div class="plantuml-diagram" id="plantuml-1765045017000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam classAttributeIconSize 0
 skinparam class {
@@ -1302,7 +1302,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381140000');
+  const container = document.getElementById('plantuml-1765045017000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1386,7 +1386,7 @@ if (!window.plantumlEncoderLoaded) {
 
 
 <h3 id="42-goroutine是如何添加的" class="relative group">4.2 Goroutine是如何添加的？ </h3><p>当使用<code>go</code>关键字创建Goroutine时，各组件之间的交互流程如下：</p>
-<div class="plantuml-diagram" id="plantuml-1765381187000">
+<div class="plantuml-diagram" id="plantuml-1765045068000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1483,7 +1483,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381187000');
+  const container = document.getElementById('plantuml-1765045068000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1586,7 +1586,7 @@ if (!window.plantumlEncoderLoaded) {
 <li><strong>唤醒M</strong>：如果当前有空闲的M，或者需要创建新的M来执行G，会触发调度。</li>
 </ol>
 <h3 id="43-goroutine是怎么被调度的" class="relative group">4.3 Goroutine是怎么被调度的？ </h3><p>调度器各组件之间的交互时序如下：</p>
-<div class="plantuml-diagram" id="plantuml-1765381233000">
+<div class="plantuml-diagram" id="plantuml-1765045119000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1726,7 +1726,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381233000');
+  const container = document.getElementById('plantuml-1765045119000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1810,7 +1810,7 @@ if (!window.plantumlEncoderLoaded) {
 
 
 <h4 id="工作窃取流程详解" class="relative group">工作窃取流程详解 </h4><p>当P的本地队列和全局队列都为空时，会触发工作窃取机制：</p>
-<div class="plantuml-diagram" id="plantuml-1765381287000">
+<div class="plantuml-diagram" id="plantuml-1765045176000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1932,7 +1932,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381287000');
+  const container = document.getElementById('plantuml-1765045176000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2062,7 +2062,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>某些P的本地队列经常满载</li>
 </ul>
 <p><strong>可视化展示</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765381331000">
+<div class="plantuml-diagram" id="plantuml-1765045226000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2156,7 +2156,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381331000');
+  const container = document.getElementById('plantuml-1765045226000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2257,7 +2257,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>负载不均衡，部分P经常空闲</li>
 </ul>
 <p><strong>问题示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765381372000">
+<div class="plantuml-diagram" id="plantuml-1765045266000">
   <pre class="plantuml-code" style="display:none;">@startuml
 start
 
@@ -2310,7 +2310,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381372000');
+  const container = document.getElementById('plantuml-1765045266000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2406,7 +2406,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>可能导致其他G饥饿，影响调度公平性</li>
 </ul>
 <p><strong>问题场景示例</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765381402000">
+<div class="plantuml-diagram" id="plantuml-1765045307000">
   <pre class="plantuml-code" style="display:none;">@startuml
 participant &#34;M0&#34; as M0
 participant &#34;P0&#34; as P0
@@ -2472,7 +2472,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381402000');
+  const container = document.getElementById('plantuml-1765045307000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2568,7 +2568,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>M和P的频繁绑定/解绑有一定开销</li>
 </ul>
 <p><strong>流程示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765381434000">
+<div class="plantuml-diagram" id="plantuml-1765045343000">
   <pre class="plantuml-code" style="display:none;">@startuml
 participant &#34;M0&#34; as M0
 participant &#34;P0&#34; as P0
@@ -2636,7 +2636,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381434000');
+  const container = document.getElementById('plantuml-1765045343000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2738,7 +2738,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>M结构体本身的内存开销</li>
 </ul>
 <p><strong>内存使用示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1765381464000">
+<div class="plantuml-diagram" id="plantuml-1765045375000">
   <pre class="plantuml-code" style="display:none;">@startuml
 
 component &#34;100万个Goroutine (G)&#34; as G #LightBlue
@@ -2800,7 +2800,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1765381464000');
+  const container = document.getElementById('plantuml-1765045375000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
