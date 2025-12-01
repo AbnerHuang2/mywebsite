@@ -1,0 +1,1667 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  
+  <title>Cursor进阶使用 &middot; Skitii</title>
+    <meta name="title" content="Cursor进阶使用 &middot; Skitii" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="http://localhost:1313/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js"
+    integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="http://localhost:1313/css/main.bundle.min.a645f3fa02b2ca20e7ef61b236048d95cc9bc2e5b2faf1f0ac0aa85431187c1c.css"
+    integrity="sha256-pkXz&#43;gKyyiDn72GyNgSNlcybwuWy&#43;vHwrAqoVDEYfBw="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="http://localhost:1313/js/main.bundle.min.0b250a079f6c2f7d0e03d1f0aa1308acb88137e3caebe1268f7478f0c87c5bf8.js"
+      integrity="sha256-CyUKB59sL30OA9HwqhMIrLiBN&#43;PK6&#43;Emj3R48Mh8W/g="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      深入解析Cursor AI编程助手的高级使用技巧，包括Context管理、Composer vs Chat选择、Rules设计原则等实战经验，帮助开发者显著提升编程效率
+    "
+  />
+  
+  
+  
+  
+    <link rel="canonical" href="http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" />
+  
+  
+  
+    
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1764561634" />
+
+
+  
+  
+  
+    <meta name="google-site-verification" content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc" />
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">
+  <meta property="og:site_name" content="Skitii">
+  <meta property="og:title" content="Cursor进阶使用">
+  <meta property="og:description" content="深入解析Cursor AI编程助手的高级使用技巧，包括Context管理、Composer vs Chat选择、Rules设计原则等实战经验，帮助开发者显著提升编程效率">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-01T00:00:00+00:00">
+    <meta property="article:tag" content="Cursor">
+    <meta property="article:tag" content="AI编程">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="编程效率">
+    <meta property="article:tag" content="AI助手">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cursor进阶使用">
+  <meta name="twitter:description" content="深入解析Cursor AI编程助手的高级使用技巧，包括Context管理、Composer vs Chat选择、Rules设计原则等实战经验，帮助开发者显著提升编程效率">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "",
+    "name": "Cursor进阶使用",
+    "headline": "Cursor进阶使用",
+    "description": "深入解析Cursor AI编程助手的高级使用技巧，包括Context管理、Composer vs Chat选择、Rules设计原则等实战经验，帮助开发者显著提升编程效率",
+    
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Skitii"
+    },
+    "copyrightYear": "2025",
+    "dateCreated": "2025-05-01T00:00:00\u002b00:00",
+    "datePublished": "2025-05-01T00:00:00\u002b00:00",
+    
+    "dateModified": "2025-05-01T00:00:00\u002b00:00",
+    
+    "keywords": ["Cursor","AI编程","开发工具","编程效率","AI助手"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "5722"
+  }
+  </script>
+    
+    <script type="application/ld+json">
+    {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/posts/",
+       "name": "",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/",
+       "name": "软件工程",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Cursor进阶使用",
+       "position": 4
+     }
+   ]
+ }
+  </script>
+
+  
+  
+    <meta name="author" content="Skitii" />
+  
+  
+  
+  
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    
+
+<style>
+.plantuml-diagram {
+  text-align: center;
+  margin: 2rem 0;
+  overflow-x: auto;
+   
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+   
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.plantuml-diagram img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+   
+  filter: contrast(1.15) brightness(0.95);
+   
+}
+
+.plantuml-loading {
+  color: #6c757d;
+  padding: 2rem;
+  text-align: center;
+}
+
+.plantuml-error {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .plantuml-diagram {
+     
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .plantuml-diagram img {
+     
+    filter: invert(0.88) contrast(1.05) brightness(1.1);
+     
+  }
+}
+
+ 
+@media (prefers-contrast: high) {
+  .plantuml-diagram img {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+ 
+@media print {
+  .plantuml-diagram {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .plantuml-diagram img {
+    filter: none;
+    max-width: 100%;
+  }
+}
+</style>
+
+
+
+
+
+<style>
+ 
+.toc {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+ 
+.toc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.toc::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+ 
+.toc ul,
+.toc li {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+ 
+.toc a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #4b5563;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  position: relative;
+  line-height: 1.4;
+}
+
+ 
+.toc a:hover {
+  color: #1f2937;
+  background: rgba(139, 92, 246, 0.08);
+  padding-left: 0.75rem;
+}
+
+ 
+.toc a.active,
+.toc a:active {
+  color: rgb(124, 58, 237);
+  background: rgba(139, 92, 246, 0.12);
+  font-weight: 500;
+  padding-left: 0.75rem;
+}
+
+.toc a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: rgb(124, 58, 237);
+  border-radius: 2px;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+  .toc a {
+    color: #9ca3af;
+  }
+  
+  .toc a:hover {
+    color: #e5e7eb;
+    background: rgba(167, 139, 250, 0.15);
+  }
+  
+  .toc a.active,
+  .toc a:active {
+    color: rgb(167, 139, 250);
+    background: rgba(167, 139, 250, 0.2);
+  }
+  
+  .toc a.active::before {
+    background: rgb(167, 139, 250);
+  }
+  
+  .toc::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.2);
+  }
+  
+  .toc::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.4);
+  }
+}
+
+ 
+.toc-wrapper summary {
+  transition: background 0.2s;
+}
+
+.toc-wrapper summary:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.toc-content {
+  border-left-width: 2px !important;
+  border-style: solid !important;
+}
+
+ 
+html {
+  scroll-behavior: smooth;
+}
+</style>
+
+
+<script>
+(function() {
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+  
+  function initTOC() {
+    const toc = document.querySelector('.toc');
+    if (!toc) return;
+    
+    const tocLinks = toc.querySelectorAll('a');
+    if (tocLinks.length === 0) return;
+    
+    
+    const headings = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'))
+      .filter(h => h.id); 
+    
+    if (headings.length === 0) return;
+    
+    
+    const observerOptions = {
+      rootMargin: '-80px 0px -80% 0px',
+      threshold: 0
+    };
+    
+    let activeHeading = null;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          activeHeading = entry.target;
+          updateActiveTocLink(entry.target.id);
+        }
+      });
+    }, observerOptions);
+    
+    
+    headings.forEach(heading => observer.observe(heading));
+    
+    
+    function updateActiveTocLink(activeId) {
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === '#' + activeId) {
+          link.classList.add('active');
+          
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      });
+    }
+    
+    
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        
+        tocLinks.forEach(l => l.classList.remove('active'));
+        
+        link.classList.add('active');
+      });
+    });
+  }
+})();
+</script>
+
+
+
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+    <a href="/" class="mr-2">
+      
+      <img
+        src="http://localhost:1313/img/octopus.png"
+        width="64"
+        height="64"
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+        dark:hidden flex"
+        alt="Skitii"
+      />
+        <img
+          src="http://localhost:1313/img/octopus.png"
+          width="64"
+          height="64"
+          class="hidden max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:flex"
+          alt="Skitii"
+        />
+    </a>
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col text-end sm:flex-row">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/posts/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/series/"
+                  title="专题系列"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Topic</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/categories/"
+                  title="Categories"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5">
+              
+                <a
+                  href="/tags/"
+                  title="Tags"
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+          
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              <button id="search-button-m0" title="Search (/)">
+                <span
+                  class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                >
+                  <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+                </span>
+              </button>
+            </li>
+          
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/"
+      ></a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/"
+      >posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/"
+      >Cursor进阶使用</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Cursor进阶使用
+      </h1>
+      
+        <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2025-05-01 00:00:00 &#43;0000 UTC">1 May 2025</time><span class="px-2 text-primary-500">&middot;</span><span>5722 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">12 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="http://localhost:1313/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >软件工程</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="http://localhost:1313/tags/cursor/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Cursor</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/ai%E7%BC%96%E7%A8%8B/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >AI编程</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >开发工具</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E7%BC%96%E7%A8%8B%E6%95%88%E7%8E%87/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >编程效率</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/ai%E5%8A%A9%E6%89%8B/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >AI助手</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
+            <details open class="toc-wrapper -ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一context管理">一、Context管理</a>
+      <ul>
+        <li><a href="#11-主动构建context">1.1 主动构建Context</a></li>
+        <li><a href="#12-最小必要集原则">1.2 最小必要集原则</a></li>
+      </ul>
+    </li>
+    <li><a href="#二composer-vs-chat">二、Composer vs Chat</a>
+      <ul>
+        <li><a href="#21-核心差异">2.1 核心差异</a></li>
+        <li><a href="#22-场景选择">2.2 场景选择</a></li>
+        <li><a href="#23-composer任务分解">2.3 Composer任务分解</a></li>
+      </ul>
+    </li>
+    <li><a href="#三rules设计原则">三、Rules设计原则</a>
+      <ul>
+        <li><a href="#31-从文档思维到接口思维">3.1 从文档思维到接口思维</a></li>
+        <li><a href="#32-分级策略">3.2 分级策略</a></li>
+        <li><a href="#33-rules优化建议">3.3 Rules优化建议</a></li>
+      </ul>
+    </li>
+    <li><a href="#四cursor擅长的场景">四、Cursor擅长的场景</a>
+      <ul>
+        <li><a href="#41-代码考古快速理解遗留代码">4.1 代码考古：快速理解遗留代码</a></li>
+        <li><a href="#42-批量重构数据结构统一">4.2 批量重构：数据结构统一</a></li>
+        <li><a href="#43-测试补充智能生成边界测试">4.3 测试补充：智能生成边界测试</a></li>
+        <li><a href="#44-crud接口快速开发">4.4 CRUD接口快速开发</a></li>
+      </ul>
+    </li>
+    <li><a href="#五性能优化">五、性能优化</a>
+      <ul>
+        <li><a href="#51-减少无效context">5.1 减少无效Context</a></li>
+        <li><a href="#52-agent模式加速">5.2 Agent模式加速</a></li>
+      </ul>
+    </li>
+    <li><a href="#六常见问题与解决方案">六、常见问题与解决方案</a>
+      <ul>
+        <li><a href="#61-问题1ai遗忘了之前的约定">6.1 问题1：AI&quot;遗忘&quot;了之前的约定</a></li>
+        <li><a href="#62-问题2ai过度优化">6.2 问题2：AI过度优化</a></li>
+        <li><a href="#63-问题3代码能编译但逻辑错误">6.3 问题3：代码能编译，但逻辑错误</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <meta name="referrer" content="no-referrer" />
+<!-- more -->
+<blockquote>
+<p>本文深入分析Cursor AI编程助手的高级使用技巧，从Context管理到Rules设计，从场景选择到性能优化，帮助开发者充分发挥AI编程的潜力。适合有一定Cursor使用经验的开发者阅读。</p>
+</blockquote>
+<h2 id="一context管理" class="relative group">一、Context管理 </h2><h3 id="11-主动构建context" class="relative group">1.1 主动构建Context </h3><p>很多时候AI理解不准确，根本原因是<strong>看到的Context不对</strong>。</p>
+<p><strong>被动方式</strong>（低效）：</p>
+<pre tabindex="0"><code>用户：实现一个用户查询接口
+AI：好的（只能看到当前文件和Rules）
+结果：代码风格可能和项目不一致，需要多轮修改
+</code></pre><p><strong>主动方式</strong>（高效）：</p>
+<pre tabindex="0"><code>Step 1: 先让AI理解架构
+用户：分析app/fbs/inbound模块的架构设计，重点关注分层结构和数据流转
+
+Step 2: 提供参考实现
+用户：参考 @app/fbs/inbound/access/http/handler.go 中的 QueryOperationIRList 方法，
+      实现类似的用户查询接口
+
+Step 3: 明确复用点
+用户：检查 app/fbs/inbound/domain/defines/ 目录，复用已有的数据结构
+</code></pre><p><strong>效果对比</strong>：</p>
+<ul>
+<li>被动方式：3-5轮对话</li>
+<li>主动方式：1-2轮生成高质量代码</li>
+</ul>
+<hr>
+<h3 id="12-最小必要集原则" class="relative group">1.2 最小必要集原则 </h3><p><strong>反直觉的发现</strong>：Context不是越多越好。</p>
+<p>添加20个相关文件 vs 只添加3-5个最相关文件：</p>
+<ul>
+<li>前者：生成时间长，可能混淆不同文件的逻辑</li>
+<li>后者：生成速度快，质量更高</li>
+</ul>
+<p><strong>选择策略</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>是否添加</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>接口定义</td>
+          <td>✅ 必须</td>
+          <td>清楚输入输出</td>
+      </tr>
+      <tr>
+          <td>参考实现</td>
+          <td>✅ 必须</td>
+          <td>了解代码风格</td>
+      </tr>
+      <tr>
+          <td>数据模型</td>
+          <td>✅ 必须</td>
+          <td>知道用什么结构</td>
+      </tr>
+      <tr>
+          <td>依赖模块</td>
+          <td>⚠️ 可选</td>
+          <td>只在跨模块调用时添加</td>
+      </tr>
+      <tr>
+          <td>工具函数</td>
+          <td>⚠️ 可选</td>
+          <td>只在需要特定功能时添加</td>
+      </tr>
+      <tr>
+          <td>测试文件</td>
+          <td>❌ 不需要</td>
+          <td>除非在写测试</td>
+      </tr>
+      <tr>
+          <td>配置文件</td>
+          <td>❌ 不需要</td>
+          <td>除非涉及配置逻辑</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="二composer-vs-chat" class="relative group">二、Composer vs Chat </h2><h3 id="21-核心差异" class="relative group">2.1 核心差异 </h3><p><strong>Chat模式</strong>：</p>
+<ul>
+<li>快速对话，轻量级修改</li>
+<li>一次只能操作少量文件</li>
+<li>适合：单文件修改、代码解释、快速调试</li>
+</ul>
+<p><strong>Composer模式</strong>：</p>
+<ul>
+<li>多文件协同，任务规划</li>
+<li>有任务规划能力，能自动拆解步骤</li>
+<li>适合：新功能开发、跨文件重构、复杂逻辑实现</li>
+</ul>
+<hr>
+<h3 id="22-场景选择" class="relative group">2.2 场景选择 </h3><table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>推荐工具</th>
+          <th>理由</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>修改单个方法的逻辑</td>
+          <td>Chat</td>
+          <td>改动范围小，Chat响应更快</td>
+      </tr>
+      <tr>
+          <td>实现完整的CRUD接口</td>
+          <td>Composer</td>
+          <td>涉及Handler/Domain/Repo多层</td>
+      </tr>
+      <tr>
+          <td>跨模块数据结构统一</td>
+          <td>Composer</td>
+          <td>需要修改多个文件，保证一致性</td>
+      </tr>
+      <tr>
+          <td>理解一段复杂代码</td>
+          <td>Chat</td>
+          <td>只是理解，不需要生成代码</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>操作建议</strong>：</p>
+<ul>
+<li>Chat：选中代码 + <code>Cmd+K</code>，直接描述需求</li>
+<li>Composer：描述完整需求，让它规划步骤并执行</li>
+</ul>
+<hr>
+<h3 id="23-composer任务分解" class="relative group">2.3 Composer任务分解 </h3><p><strong>普通用法</strong>：</p>
+<pre tabindex="0"><code>用户：实现用户管理模块
+AI：（一次性生成所有代码，容易出错）
+</code></pre><p><strong>进阶用法</strong>：</p>
+<pre tabindex="0"><code>用户：实现用户管理模块，分3个阶段：
+     Phase 1: 数据模型和Repo层
+     Phase 2: Domain层业务逻辑
+     Phase 3: HTTP Handler接入层
+     每个阶段完成后等我确认再进行下一阶段
+
+AI：好的，现在开始Phase 1...
+（等你Review并确认后）
+AI：收到，开始Phase 2...
+</code></pre><p><strong>好处</strong>：</p>
+<ul>
+<li>每个阶段可以验证</li>
+<li>出问题容易定位</li>
+<li>可以随时调整后续计划</li>
+</ul>
+<hr>
+<h2 id="三rules设计原则" class="relative group">三、Rules设计原则 </h2><h3 id="31-从文档思维到接口思维" class="relative group">3.1 从文档思维到接口思维 </h3><p>很多人把<code>.cursorrules</code>当成文档来写，但应该当成**&ldquo;AI的编程接口&rdquo;**来设计。</p>
+<p><strong>文档式写法</strong>（描述性，AI可能理解不准确）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gu">## 错误处理
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span>我们项目使用errcode包处理错误。
+</span></span><span class="line"><span class="cl">错误应该用errcode.WithMessagef包装。
+</span></span><span class="line"><span class="cl">要提供上下文信息。
+</span></span><span class="line"><span class="cl">示例：
+</span></span><span class="line"><span class="cl">if err != nil {
+</span></span><span class="line"><span class="cl">    return errcode.WithMessagef(err, &#34;failed to process order %s&#34;, orderID)
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p><strong>接口式写法</strong>（指令性，明确告诉AI做什么）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gu">## 错误处理规范
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span>
+</span></span><span class="line"><span class="cl">【强制】所有错误必须用errcode包装
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 使用：errcode.WithMessagef(err, &#34;context: %v&#34;, param)
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 禁止：直接返回err
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">【检查点】
+</span></span><span class="line"><span class="cl"><span class="k">1.</span> 错误信息必须包含：操作+关键参数
+</span></span><span class="line"><span class="cl"><span class="k">2.</span> 敏感信息（密码、token）不能出现在错误信息中
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">【反例】
+</span></span><span class="line"><span class="cl">❌ return err  // 缺少上下文
+</span></span><span class="line"><span class="cl">❌ return errcode.WithMessagef(err, &#34;error&#34;)  // 信息不足
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">【正例】
+</span></span><span class="line"><span class="cl">✅ return errcode.WithMessagef(err, &#34;failed to query user, userID: %s&#34;, userID)
+</span></span></code></pre></div><p><strong>关键区别</strong>：</p>
+<ul>
+<li>文档式：描述&quot;是什么&quot;</li>
+<li>接口式：明确&quot;做什么&quot;和&quot;不做什么&quot;</li>
+</ul>
+<hr>
+<h3 id="32-分级策略" class="relative group">3.2 分级策略 </h3><p><strong>问题</strong>：一个<code>.cursorrules</code>文件太长（几千行），AI可能看不完，或者token限制导致截断。</p>
+<p><strong>解决</strong>：分级设计，让AI优先看到最重要的规则。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gh"># .cursorrules (核心规则)
+</span></span></span><span class="line"><span class="cl"><span class="gh"></span>
+</span></span><span class="line"><span class="cl"><span class="gu">## 🔴 L0: 强制规则（必须遵守，否则代码无法运行）
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span><span class="k">-</span> 所有方法参数必须被使用（会导致编译警告）
+</span></span><span class="line"><span class="cl"><span class="k">-</span> HTTP Response Body必须关闭
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 数据库操作必须使用ORM
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 🟡 L1: 重要规则（应该遵守，影响代码质量）
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span><span class="k">-</span> 错误必须用errcode包装，提供上下文信息
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 遵循DDD分层架构（Handler → Domain → Repo）
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 避免重复定义数据结构，优先复用已有定义
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 🟢 L2: 建议规则（最佳实践，提高可维护性）
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span><span class="k">-</span> 方法入参用结构体，出参用指针
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 复杂条件判断封装为函数
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 使用卫语句避免深层嵌套
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 📚 详细规范（需要时查阅）
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span>详细内容见：docs/coding-standards.md
+</span></span></code></pre></div><p><strong>效果</strong>：</p>
+<ul>
+<li>AI优先看到最重要的规则</li>
+<li>即使Rules被截断，核心部分也能保留</li>
+<li>分级清晰，容易理解优先级</li>
+</ul>
+<hr>
+<h3 id="33-rules优化建议" class="relative group">3.3 Rules优化建议 </h3><p><strong>1. 控制篇幅</strong></p>
+<ul>
+<li>核心规则控制在1000行以内</li>
+<li>详细文档放<code>docs/</code>目录，Rules中引用链接</li>
+</ul>
+<p><strong>2. 使用反例+正例</strong></p>
+<ul>
+<li>不只是描述规则，要给出具体示例</li>
+<li>反例让AI知道&quot;不能这样做&quot;</li>
+<li>正例让AI知道&quot;应该这样做&quot;</li>
+</ul>
+<p><strong>3. 定期优化</strong></p>
+<ul>
+<li>发现AI频繁违反某个规则 → 说明规则不够清晰，需要改写</li>
+<li>某个规则从未被违反 → 可能是废话，可以删除</li>
+<li>新的常见错误 → 添加到Rules中</li>
+</ul>
+<hr>
+<h2 id="四cursor擅长的场景" class="relative group">四、Cursor擅长的场景 </h2><h3 id="41-代码考古快速理解遗留代码" class="relative group">4.1 代码考古：快速理解遗留代码 </h3><p><strong>传统方式</strong>：</p>
+<ul>
+<li>自己读代码，一层层追踪调用链</li>
+<li>可能要花几个小时才能理解完整流程</li>
+</ul>
+<p><strong>Cursor方式</strong>：</p>
+<p><strong>Step 1: 生成时序图</strong></p>
+<pre tabindex="0"><code>提示词：分析这个接口的完整调用链路，用Mermaid时序图展示，
+       重点标注：
+       1. 跨领域调用（如 inbound → asn → common）
+       2. 外部系统交互（数据库、RPC、HTTP）
+       3. 异步任务节点
+       
+[粘贴Handler方法代码]
+</code></pre><p><strong>Step 2: 生成数据流图</strong></p>
+<pre tabindex="0"><code>提示词：展示这个功能的数据流转过程，从HTTP请求到数据库操作，
+       标注每一步的数据转换
+</code></pre><p><strong>Step 3: 提取核心逻辑</strong></p>
+<pre tabindex="0"><code>提示词：总结这个功能的：
+       1. 3个核心业务逻辑
+       2. 2个关键的边界条件处理
+       3. 1个需要注意的坑点
+</code></pre><p><strong>效果</strong>：</p>
+<ul>
+<li>时间：从几小时 → 15分钟</li>
+<li>理解更全面（可视化呈现）</li>
+<li>可以作为文档留存</li>
+</ul>
+<hr>
+<h3 id="42-批量重构数据结构统一" class="relative group">4.2 批量重构：数据结构统一 </h3><p><strong>典型场景</strong>：发现3个模块重复定义了相同的数据结构（如<code>OperationIRListReq</code>），需要统一。</p>
+<p><strong>传统方式</strong>（风险高）：</p>
+<pre tabindex="0"><code>1. 全局搜索所有定义
+2. 确定标准定义位置
+3. 手动修改每个引用
+4. 逐个编译验证
+风险：容易遗漏，可能引入bug
+</code></pre><p><strong>Cursor方式</strong>（更安全）：</p>
+<p><strong>Step 1: 分析现状</strong></p>
+<pre tabindex="0"><code>提示词：扫描项目中所有包含&#34;OperationIRListReq&#34;的文件，
+       列出：
+       1. 定义位置（哪些文件定义了这个结构体）
+       2. 引用关系（哪些地方在使用）
+       3. 字段差异（不同定义间有什么区别）
+</code></pre><p><strong>Step 2: 设计方案</strong></p>
+<pre tabindex="0"><code>提示词：设计统一方案：
+       1. 应该保留哪个定义？（考虑架构分层、依赖方向）
+       2. 如何迁移其他引用？
+       3. 影响范围和风险点
+</code></pre><p><strong>Step 3: 分模块迁移</strong></p>
+<pre tabindex="0"><code>提示词：先迁移main_page模块，将其对OperationIRListReq的引用
+       改为使用 inbound/domain/defines 中的定义
+       
+（迁移完后编译验证）
+
+提示词：继续迁移asn模块...
+</code></pre><p><strong>Step 4: 清理重复定义</strong></p>
+<pre tabindex="0"><code>提示词：删除所有重复的OperationIRListReq定义，只保留标准定义
+</code></pre><p><strong>效果</strong>：</p>
+<ul>
+<li>时间：从1-2天 → 2-3小时</li>
+<li>更安全：编译期验证，遗漏率接近0</li>
+<li>可追溯：有完整的重构记录</li>
+</ul>
+<hr>
+<h3 id="43-测试补充智能生成边界测试" class="relative group">4.3 测试补充：智能生成边界测试 </h3><p><strong>痛点</strong>：单测覆盖率不够，需要补充测试。</p>
+<p><strong>普通做法</strong>（覆盖不全）：</p>
+<pre tabindex="0"><code>提示词：为这个方法写单元测试
+结果：AI只生成一个基本的happy path测试
+</code></pre><p><strong>进阶做法</strong>（全面覆盖）：</p>
+<p><strong>Step 1: 分析代码路径</strong></p>
+<pre tabindex="0"><code>提示词：分析这个方法的所有代码分支，列出需要测试的场景，包括：
+       1. 正常流程
+       2. 边界条件（空输入、空列表、最大值、最小值）
+       3. 错误场景（数据库错误、依赖服务失败、参数校验失败）
+
+[粘贴方法代码]
+</code></pre><p>AI输出示例：</p>
+<pre tabindex="0"><code>需要测试的场景：
+1. 正常流程：有效输入 → 正确输出
+2. 边界条件：
+   - 空输入
+   - 空列表
+   - PageSize = 0
+   - PageSize &gt; 1000
+3. 错误场景：
+   - 数据库查询失败
+   - UserID不存在
+   - 权限不足
+</code></pre><p><strong>Step 2: 逐个生成测试</strong></p>
+<pre tabindex="0"><code>提示词：为&#34;空输入&#34;场景生成测试用例，要求：
+       1. 使用gomonkey mock依赖
+       2. 验证返回的错误类型
+       3. 测试方法命名：TestMethodName_EmptyInput
+</code></pre><p><strong>Step 3: 验证覆盖率</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">go <span class="nb">test</span> -cover ./path/to/package/
+</span></span><span class="line"><span class="cl"><span class="c1"># 检查是否覆盖到目标代码行</span>
+</span></span></code></pre></div><p><strong>效果</strong>：</p>
+<ul>
+<li>覆盖率从60% → 85%+</li>
+<li>测试质量更高（考虑了边界条件）</li>
+<li>过程中可能发现潜在bug</li>
+</ul>
+<hr>
+<h3 id="44-crud接口快速开发" class="relative group">4.4 CRUD接口快速开发 </h3><p>这是Cursor最擅长的场景，也是提效最明显的场景。</p>
+<p><strong>传统方式</strong>（费时费力）：</p>
+<pre tabindex="0"><code>1. 打开YApi，复制接口文档内容
+2. 打开Confluence，复制技术设计文档
+3. 找到类似的接口实现，手动对比理解
+4. 开始写代码：
+   - 定义Request/Response结构体
+   - 实现Repo层数据库查询
+   - 实现Domain层业务逻辑
+   - 实现Handler层HTTP接入
+5. 来回切换文档和IDE，确保实现符合要求
+6. 编译、调试、修改
+
+时间：4-6小时
+风险：可能遗漏文档细节，代码风格不一致
+</code></pre><p><strong>Cursor方式</strong>（文档驱动开发）：</p>
+<p><strong>提示词模板</strong>：</p>
+<pre tabindex="0"><code>根据以下资料实现SKU池列表查询接口：
+
+【YApi接口文档】
+- yapi url: https://apidoc.i.ssc.shopeemobile.com/project/xxx/interface/api/xxx
+（Cursor会通过MCP自动读取）
+
+【技术设计文档】
+- Confluence链接: https://confluence.shopee.io/pages/xxx
+（Cursor会通过MCP自动读取）
+
+【参考实现】
+- 文件：app/fbs/inbound/access/http/handler.go
+- 方法：QueryOperationIRList
+
+【开发要求】
+1. 检查并复用 inbound/domain/defines 中已有的数据结构（避免重复定义）
+2. Repo层使用scormv2操作数据库
+3. 错误使用errcode包装，提供上下文信息
+4. HTTP响应不要定义retcode/message（框架统一处理）
+
+【分步实现】
+第1步：定义数据结构（Request/Response）
+第2步：实现Repo层（数据库查询）
+第3步：实现Domain层（业务逻辑）
+第4步：实现Handler层（HTTP接入）
+第5步：编译验证
+</code></pre><p><strong>关键优势</strong>：</p>
+<ul>
+<li>✅ 利用MCP自动读取文档，无需手动复制粘贴</li>
+<li>✅ 提供参考实现，保持代码风格一致</li>
+<li>✅ 明确开发要求和注意事项</li>
+<li>✅ 分步实现，每步可验证</li>
+</ul>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>时间：从4-6小时 → 不到1小时</li>
+<li>质量：代码风格统一，符合项目规范</li>
+<li>准确性：基于真实文档，避免理解偏差</li>
+</ul>
+<hr>
+<h2 id="五性能优化" class="relative group">五、性能优化 </h2><h3 id="51-减少无效context" class="relative group">5.1 减少无效Context </h3><p><strong>问题症状</strong>：Cursor响应越来越慢</p>
+<p><strong>常见原因</strong>：</p>
+<ol>
+<li>Chat历史太长（几十轮对话）</li>
+<li>Context中包含大文件（几千行）</li>
+<li>Rules文件过大（几千行）</li>
+</ol>
+<p><strong>优化策略</strong>：</p>
+<p><strong>1. 定期清理Chat历史</strong></p>
+<pre tabindex="0"><code>❌ 在一个Chat里做10个不相关的任务
+✅ 新任务开新Chat，保持上下文清爽
+</code></pre><p><strong>2. 大文件只添加关键部分</strong></p>
+<pre tabindex="0"><code>❌ 添加整个3000行的文件
+✅ 只选择相关的方法（100-200行）
+✅ 或在Prompt中说明：&#34;只关注XX方法&#34;
+</code></pre><p><strong>3. Rules瘦身</strong></p>
+<pre tabindex="0"><code>❌ .cursorrules 5000行，全是细节
+✅ 核心规则&lt;1000行，详细文档放docs/
+✅ 需要时在Prompt中引用：&#34;参考docs/xxx.md&#34;
+</code></pre><hr>
+<h3 id="52-agent模式加速" class="relative group">5.2 Agent模式加速 </h3><p><strong>什么是Agent模式？</strong></p>
+<ul>
+<li>Composer的一种高级模式</li>
+<li>AI会自主规划和执行任务，不需要人工介入每一步</li>
+<li>适合任务明确、步骤清晰的场景</li>
+</ul>
+<p><strong>对比</strong>：</p>
+<p>普通Composer模式（需要多轮交互）：</p>
+<pre tabindex="0"><code>用户：实现用户查询接口
+AI：这是Handler代码
+用户：好的，继续写Domain层
+AI：这是Domain代码
+用户：好的，继续写Repo层
+（需要3-5轮交互）
+</code></pre><p>Agent模式（一次性完成）：</p>
+<pre tabindex="0"><code>用户：实现用户查询接口，分3层：Handler、Domain、Repo
+     参考 app/fbs/inbound 模块的结构
+     (勾选&#34;Agent模式&#34;)
+
+AI：我会分3步完成：
+    Step 1: 创建Repo层（数据库查询）
+    Step 2: 创建Domain层（业务逻辑）
+    Step 3: 创建Handler层（HTTP接入）
+    开始执行...
+    
+（AI自动完成所有步骤，中间不需要确认）
+</code></pre><p><strong>何时使用Agent模式</strong>：</p>
+<ul>
+<li>✅ 标准的CRUD接口</li>
+<li>✅ 重复性工作（如批量创建类似结构）</li>
+<li>✅ 步骤明确的任务</li>
+</ul>
+<p><strong>何时不用</strong>：</p>
+<ul>
+<li>❌ 复杂的架构设计</li>
+<li>❌ 需要中间确认的重构</li>
+<li>❌ 涉及业务判断的逻辑</li>
+</ul>
+<hr>
+<h2 id="六常见问题与解决方案" class="relative group">六、常见问题与解决方案 </h2><h3 id="61-问题1ai遗忘了之前的约定" class="relative group">6.1 问题1：AI&quot;遗忘&quot;了之前的约定 </h3><p><strong>现象</strong>：</p>
+<pre tabindex="0"><code>第1轮对话：
+用户：使用scormv2操作数据库
+AI：好的（生成了正确的代码）
+
+第5轮对话：
+用户：再实现一个类似的查询方法
+AI：（竟然用回了scorm v1）
+</code></pre><p><strong>原因</strong>：</p>
+<ul>
+<li>Chat历史太长，早期的约定被&quot;遗忘&quot;</li>
+<li>Context权重分配问题，远处的信息权重降低</li>
+</ul>
+<p><strong>解决方案</strong>：</p>
+<p><strong>方案1：重要约定放在Rules中</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">【强制】数据库操作
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 新代码必须使用scormv2
+</span></span><span class="line"><span class="cl"><span class="k">-</span> 禁止使用scorm v1
+</span></span></code></pre></div><p><strong>方案2：每次提示词中重申</strong></p>
+<pre tabindex="0"><code>实现XX查询方法，要求：
+1. 使用scormv2操作数据库（不要用scorm v1）
+2. ...
+</code></pre><p><strong>方案3：使用Composer代替Chat</strong></p>
+<ul>
+<li>Composer有更好的任务记忆能力</li>
+<li>适合多步骤的任务</li>
+</ul>
+<hr>
+<h3 id="62-问题2ai过度优化" class="relative group">6.2 问题2：AI过度优化 </h3><p><strong>现象</strong>：</p>
+<pre tabindex="0"><code>用户：优化这个方法的性能
+AI：（不仅优化了性能，还重构了整个模块的结构）
+</code></pre><p><strong>原因</strong>：</p>
+<ul>
+<li>提示词不够精确</li>
+<li>没有明确&quot;改动边界&quot;</li>
+</ul>
+<p><strong>解决方案</strong>：明确告诉AI改动范围</p>
+<p><strong>改进前</strong>：</p>
+<pre tabindex="0"><code>优化这个方法的性能
+</code></pre><p><strong>改进后</strong>：</p>
+<pre tabindex="0"><code>优化这个方法的性能，要求：
+1. 【只修改】这个方法内部的逻辑
+2. 【不要修改】方法签名、接口定义
+3. 【不要影响】其他调用方
+4. 【优化目标】减少数据库查询次数（从N+1改为批量查询）
+</code></pre><p><strong>关键</strong>：用【只修改】【不要修改】【不要影响】等明确的边界词。</p>
+<hr>
+<h3 id="63-问题3代码能编译但逻辑错误" class="relative group">6.3 问题3：代码能编译，但逻辑错误 </h3><p><strong>现象</strong>：</p>
+<ul>
+<li>代码看起来很规范</li>
+<li>编译、测试都通过</li>
+<li>但实际运行时逻辑不对</li>
+</ul>
+<p><strong>真实案例</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 需求：查询过去7天的数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// AI生成的代码：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">startTime</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">AddDate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">7</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">endTime</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 问题：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// AI理解的&#34;过去7天&#34; = 过去168小时</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 实际需求的&#34;过去7天&#34; = 过去7个自然日（11月24日00:00:00 到 12月1日23:59:59）</span><span class="w">
+</span></span></span></code></pre></div><p><strong>根本原因</strong>：</p>
+<ul>
+<li>业务需求没有说清楚</li>
+<li>AI按字面理解，缺少业务上下文</li>
+</ul>
+<p><strong>解决方案</strong>：业务需求要精确</p>
+<p><strong>改进前</strong>：</p>
+<pre tabindex="0"><code>查询过去7天的数据
+</code></pre><p><strong>改进后</strong>：</p>
+<pre tabindex="0"><code>查询过去7个自然日的数据（不是168小时）
+- 开始时间：7天前的00:00:00
+- 结束时间：今天的23:59:59
+- 示例：今天是12月1日，应查询11月24日00:00:00到12月1日23:59:59的数据
+
+要求：
+1. 使用timetools.GetDayStart()和timetools.GetDayEnd()方法
+2. 时区使用项目配置的时区（不要hardcode）
+</code></pre><p><strong>经验</strong>：涉及时间、金额、数量等业务概念时，一定要给出具体示例。</p>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+      
+  <div class="flex">
+    
+    
+    
+      
+      
+        
+        
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+      
+    >
+      
+      
+      
+      
+      <img
+        width="512"
+        height="512"
+        class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"
+        alt="Skitii"
+        loading="lazy" decoding="async"
+        
+          src="http://localhost:1313/img/donatello.png"
+        
+      />
+    </picture>
+  
+
+
+      
+    
+    <div class="place-self-center">
+      
+        <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+          Author
+        </div>
+        <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+          Skitii
+        </div>
+      
+      
+      <div class="text-2xl sm:text-lg">
+</div>
+    </div>
+  </div>
+
+
+      
+
+      
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="http://localhost:1313/posts/web3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Web3快速入门指南：从前后端开发者到区块链开发者</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2025-07-20 00:00:00 &#43;0000 UTC">20 July 2025</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="http://localhost:1313/posts/go%E5%B8%B8%E8%A7%81gc%E5%92%8C%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Go常见GC和内存泄漏问题分析</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-11-17 00:00:00 &#43;0000 UTC">17 November 2024</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              
+<script src="https://utteranc.es/client.js"
+        repo="AbnerHuang2/mywebsite"
+        issue-term="pathname"
+        theme="gruvbox-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+      </main>
+      
+        <div
+          class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12"
+          id="to-top"
+          hidden="true"
+        >
+          <a
+            href="#the-top"
+            class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            &uarr;
+          </a>
+        </div>
+      <footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2025
+            Skitii
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js"></script>
+
+
+<script>
+  (function(d, w, c) {
+      w.ChatraID = 'H8oixnws8SKYQkjBz';
+      var s = d.createElement('script');
+      w[c] = w[c] || function() {
+          (w[c].q = w[c].q || []).push(arguments);
+      };
+      s.async = true;
+      s.src = 'https://call.chatra.io/chatra.js';
+      if (d.head) d.head.appendChild(s);
+  })(document, window, 'Chatra');
+</script>
+
+
+<script type="text/javascript">
+    L2Dwidget.init({
+        model: {
+            scale: 1,
+            hHeadPos: 0.5,
+            vHeadPos: 0.618,
+            jsonPath: 'https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json'
+        },
+        display: {
+            superSample: 1,
+            width: 120,
+            height: 300,
+            position: 'right',
+            hOffset: 20,
+            vOffset: 0,
+        },
+        mobile: {
+            show: true,
+            scale: 1,
+            motion: true,
+        },
+        react: {
+            opacityDefault: 0.8,
+            opacityOnHover: 1,
+        },
+     });
+</script>
+
+
+
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="http://localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
+
