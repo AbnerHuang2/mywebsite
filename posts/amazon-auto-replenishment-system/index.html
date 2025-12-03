@@ -1,0 +1,773 @@
+<!doctype html><html lang=en dir=ltr class=scroll-smooth data-default-appearance=dark data-auto-appearance=true><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#FFFFFF"><title>亚马逊自动补货系统技术解析 &#183; Skitii</title><meta name=title content="亚马逊自动补货系统技术解析 &#183; Skitii"><script type=text/javascript src=https://skitii.vercel.app/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="></script><link type=text/css rel=stylesheet href=https://skitii.vercel.app/css/main.bundle.min.a645f3fa02b2ca20e7ef61b236048d95cc9bc2e5b2faf1f0ac0aa85431187c1c.css integrity="sha256-pkXz+gKyyiDn72GyNgSNlcybwuWy+vHwrAqoVDEYfBw="><script defer type=text/javascript id=script-bundle src=https://skitii.vercel.app/js/main.bundle.min.0b250a079f6c2f7d0e03d1f0aa1308acb88137e3caebe1268f7478f0c87c5bf8.js integrity="sha256-CyUKB59sL30OA9HwqhMIrLiBN+PK6+Emj3R48Mh8W/g=" data-copy=Copy data-copied=Copied></script><meta name=description content="
+      面向后端工程师的系统架构与核心流程深度剖析
+    "><link rel=canonical href=https://skitii.vercel.app/posts/amazon-auto-replenishment-system/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=icon type=image/png sizes=192x192 href=/android-chrome-192x192.png><link rel=icon type=image/png sizes=512x512 href=/android-chrome-512x512.png><link rel=manifest href=/site.webmanifest><link rel=icon type=image/png href="/favicon-32x32.png?v=1764730789"><meta name=google-site-verification content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc"><meta property="og:url" content="https://skitii.vercel.app/posts/amazon-auto-replenishment-system/"><meta property="og:site_name" content="Skitii"><meta property="og:title" content="亚马逊自动补货系统技术解析"><meta property="og:description" content="面向后端工程师的系统架构与核心流程深度剖析"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-05-03T00:00:00+00:00"><meta property="article:modified_time" content="2025-05-03T00:00:00+00:00"><meta property="article:tag" content="系统架构"><meta property="article:tag" content="后端开发"><meta property="article:tag" content="供应链"><meta property="article:tag" content="机器学习"><meta name=twitter:card content="summary"><meta name=twitter:title content="亚马逊自动补货系统技术解析"><meta name=twitter:description content="面向后端工程师的系统架构与核心流程深度剖析"><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","articleSection":"","name":"亚马逊自动补货系统技术解析","headline":"亚马逊自动补货系统技术解析","description":"面向后端工程师的系统架构与核心流程深度剖析","inLanguage":"en","url":"https:\/\/skitii.vercel.app\/posts\/amazon-auto-replenishment-system\/","author":{"@type":"Person","name":"Skitii"},"copyrightYear":"2025","dateCreated":"2025-05-03T00:00:00\u002b00:00","datePublished":"2025-05-03T00:00:00\u002b00:00","dateModified":"2025-05-03T00:00:00\u002b00:00","keywords":["系统架构","后端开发","供应链","机器学习"],"mainEntityOfPage":"true","wordCount":"5448"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://skitii.vercel.app/","name":"","position":1},{"@type":"ListItem","item":"https://skitii.vercel.app/posts/","name":"","position":2},{"@type":"ListItem","item":"https://skitii.vercel.app/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/","name":"技术分析","position":3},{"@type":"ListItem","name":"亚马逊自动补货系统技术解析","position":4}]}</script><meta name=author content="Skitii"><style>.plantuml-diagram{text-align:center;margin:2rem 0;overflow-x:auto;background:#fff;padding:1.5rem;border-radius:8px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 3px rgba(0,0,0,5%)}.plantuml-diagram img{max-width:100%;height:auto;display:inline-block;filter:contrast(1.15)brightness(.95)}.plantuml-loading{color:#6c757d;padding:2rem;text-align:center}.plantuml-error{font-size:.9rem;line-height:1.6}@media(prefers-color-scheme:dark){.plantuml-diagram{background:#1e1e1e;border-color:rgba(255,255,255,.15);box-shadow:0 1px 3px rgba(0,0,0,.3)}.plantuml-diagram img{filter:invert(.88)contrast(1.05)brightness(1.1)}}@media(prefers-contrast:high){.plantuml-diagram img{filter:contrast(1.3)brightness(.9)}}@media print{.plantuml-diagram{background:#fff;border:1px solid #ccc;page-break-inside:avoid}.plantuml-diagram img{filter:none;max-width:100%}}</style><style>.toc{max-height:85vh;overflow-y:auto;padding-bottom:2rem;scrollbar-width:thin;scrollbar-color:rgba(156,163,175,.3)transparent}.toc::-webkit-scrollbar{width:4px}.toc::-webkit-scrollbar-track{background:0 0}.toc::-webkit-scrollbar-thumb{background:rgba(156,163,175,.3);border-radius:2px;transition:background .3s}.toc::-webkit-scrollbar-thumb:hover{background:rgba(156,163,175,.5)}.toc ul,.toc li{list-style:none;padding-left:0;margin:0}.toc ul ul{padding-left:1rem;margin-top:.25rem}.toc a{display:block;padding:.35rem .5rem;margin:.15rem 0;font-size:.9rem;font-weight:400;color:#4b5563;text-decoration:none;border-radius:.375rem;transition:all .2s ease;position:relative;line-height:1.4}.toc a:hover{color:#1f2937;background:rgba(139,92,246,8%);padding-left:.75rem}.toc a.active,.toc a:active{color:#7c3aed;background:rgba(139,92,246,.12);font-weight:500;padding-left:.75rem}.toc a.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:#7c3aed;border-radius:2px}@media(prefers-color-scheme:dark){.toc a{color:#9ca3af}.toc a:hover{color:#e5e7eb;background:rgba(167,139,250,.15)}.toc a.active,.toc a:active{color:#a78bfa;background:rgba(167,139,250,.2)}.toc a.active::before{background:#a78bfa}.toc::-webkit-scrollbar-thumb{background:rgba(156,163,175,.2)}.toc::-webkit-scrollbar-thumb:hover{background:rgba(156,163,175,.4)}}.toc-wrapper summary{transition:background .2s}.toc-wrapper summary:hover{background:rgba(139,92,246,.1)!important}.toc-content{border-left-width:2px!important;border-style:solid!important}html{scroll-behavior:smooth}</style><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const t=document.querySelector(".toc");if(!t)return;const e=t.querySelectorAll("a");if(e.length===0)return;const n=Array.from(document.querySelectorAll("h2, h3, h4, h5, h6")).filter(e=>e.id);if(n.length===0)return;const s={rootMargin:"-80px 0px -80% 0px",threshold:0};let o=null;const i=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(o=e.target,a(e.target.id))})},s);n.forEach(e=>i.observe(e));function a(t){e.forEach(e=>{e.classList.remove("active");const n=e.getAttribute("href");n==="#"+t&&(e.classList.add("active"),e.scrollIntoView({block:"nearest",behavior:"smooth"}))})}e.forEach(t=>{t.addEventListener("click",n=>{e.forEach(e=>e.classList.remove("active")),t.classList.add("active")})})}})()</script></head><body class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"><div id=the-top class="absolute flex self-center"><a class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span>Skip to main content</a></div><header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden"><nav class="flex items-start justify-between sm:items-center"><div class="flex flex-row items-center"><a href=/ class=mr-2><img src=https://skitii.vercel.app/img/octopus.png width=64 height=64 class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+dark:hidden flex" alt=Skitii>
+<img src=https://skitii.vercel.app/img/octopus.png width=64 height=64 class="hidden max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:flex" alt=Skitii></a></div><ul class="flex list-none flex-col text-end sm:flex-row"><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/posts/ title><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Blog</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/series/ title=专题系列><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Topic</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/categories/ title=Categories><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Categories</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/tags/ title=Tags><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Tags</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0"><button id=search-button-m0 title="Search (/)">
+<span class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></span></button></li></ul></nav></header><div class="relative flex grow flex-col"><main id=main-content class=grow><article><header class=max-w-prose><ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden"><li class="hidden inline"><a class="dark:underline-neutral-600 decoration-neutral-300 hover:underline" href=https://skitii.vercel.app/></a><span class="px-1 text-primary-500">/</span></li><li class=inline><a class="dark:underline-neutral-600 decoration-neutral-300 hover:underline" href=https://skitii.vercel.app/posts/>posts</a><span class="px-1 text-primary-500">/</span></li><li class="hidden inline"><a class="dark:underline-neutral-600 decoration-neutral-300 hover:underline" href=https://skitii.vercel.app/posts/amazon-auto-replenishment-system/>亚马逊自动补货系统技术解析</a><span class="px-1 text-primary-500">/</span></li></ol><h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">亚马逊自动补货系统技术解析</h1><div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime="2025-05-03 00:00:00 +0000 UTC">3 May 2025</time><span class="px-2 text-primary-500">&#183;</span><span>5448 words</span><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">11 mins</span></div><div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400"><a href=https://skitii.vercel.app/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">技术分析</a>
+<a href=https://skitii.vercel.app/tags/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">系统架构</a>
+<a href=https://skitii.vercel.app/tags/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">后端开发</a>
+<a href=https://skitii.vercel.app/tags/%E4%BE%9B%E5%BA%94%E9%93%BE/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">供应链</a>
+<a href=https://skitii.vercel.app/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">机器学习</a></div></div></header><section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row"><div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8"><div class="toc pe-5 lg:sticky lg:top-10 print:hidden"><details open class="toc-wrapper -ms-5 mt-0 overflow-hidden rounded-lg ps-5"><summary class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">Table of Contents</summary><div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#一系统概述>一、系统概述</a><ul><li><a href=#11-自动补货系统的定位与目标>1.1 自动补货系统的定位与目标</a></li><li><a href=#12-业务场景>1.2 业务场景</a></li></ul></li><li><a href=#二系统架构设计>二、系统架构设计</a><ul><li><a href=#21-整体架构>2.1 整体架构</a></li><li><a href=#22-数据流图>2.2 数据流图</a></li><li><a href=#23-微服务架构图>2.3 微服务架构图</a></li></ul></li><li><a href=#三核心业务流程与技术实现>三、核心业务流程与技术实现</a><ul><li><a href=#31-库存监控与数据采集流程>3.1 库存监控与数据采集流程</a></li><li><a href=#32-需求预测流程>3.2 需求预测流程</a></li><li><a href=#33-补货决策流程>3.3 补货决策流程</a></li><li><a href=#34-订单执行状态机>3.4 订单执行状态机</a></li></ul></li><li><a href=#四关键技术实现细节>四、关键技术实现细节</a><ul><li><a href=#41-部署架构>4.1 部署架构</a></li><li><a href=#42-高可用与容错设计>4.2 高可用与容错设计</a></li></ul></li><li><a href=#五系统监控与可观测性>五、系统监控与可观测性</a></li><li><a href=#六技术总结>六、技术总结</a><ul><li><a href=#61-核心技术栈>6.1 核心技术栈</a></li><li><a href=#62-架构设计原则>6.2 架构设计原则</a></li><li><a href=#63-关键设计要点>6.3 关键设计要点</a><ul><li><a href=#数据一致性保障>数据一致性保障</a></li><li><a href=#高并发处理>高并发处理</a></li><li><a href=#模型工程化>模型工程化</a></li></ul></li><li><a href=#64-系统演进路线>6.4 系统演进路线</a></li></ul></li><li><a href=#参考资料>参考资料</a></li></ul></nav></div></details></div></div><div class="min-h-0 min-w-0 max-w-prose grow"><meta name=referrer content="no-referrer"><h1 id=亚马逊自动补货系统技术解析 class="relative group">亚马逊自动补货系统技术解析</h1><hr><h2 id=一系统概述 class="relative group">一、系统概述</h2><h3 id=11-自动补货系统的定位与目标 class="relative group">1.1 自动补货系统的定位与目标</h3><ul><li><strong>解决的核心问题</strong>：库存与需求的动态平衡</li><li><strong>系统输入</strong>：销售数据、库存数据、供应商数据、外部市场数据</li><li><strong>系统输出</strong>：补货决策（补什么、补多少、什么时候补、补到哪个仓库）</li><li><strong>关键性能指标</strong>：<ul><li>预测准确率 (Forecast Accuracy)</li><li>补货及时率 (Replenishment Timeliness)</li><li>库存周转率 (Inventory Turnover)</li><li>缺货率 (Stockout Rate)</li></ul></li></ul><h3 id=12-业务场景 class="relative group">1.2 业务场景</h3><ul><li><strong>FBA模式</strong>：Fulfillment by Amazon，亚马逊代发货</li><li><strong>AWD协同</strong>：Amazon Warehousing and Distribution，上游仓储</li><li><strong>多仓库协调</strong>：不同区域仓库间的库存调拨与补货</li></ul><hr><h2 id=二系统架构设计 class="relative group">二、系统架构设计</h2><h3 id=21-整体架构 class="relative group">2.1 整体架构</h3><p><strong>架构图：</strong></p><div class=plantuml-diagram id=plantuml-1764793297695><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+skinparam componentStyle rectangle
+
+title 亚马逊自动补货系统 - 整体架构图
+
+package &#34;数据采集层&#34; as DataCollection #E8F5E9 {
+    [库存系统] as Inventory
+    [订单系统] as Order
+    [供应商系统] as Supplier
+    [物流系统] as Logistics
+    [外部数据源] as External
+}
+
+package &#34;数据处理层&#34; as DataProcessing #E3F2FD {
+    [消息队列\nKafka/Kinesis] as MQ
+    [流处理引擎\nFlink/Spark Streaming] as Stream
+    [批处理引擎\nSpark] as Batch
+    
+    database &#34;数据湖\nS3&#34; as DataLake
+    database &#34;数据仓库\nRedshift&#34; as DW
+    database &#34;实时数据库\nDynamoDB&#34; as RealTimeDB
+    database &#34;时序数据库\nInfluxDB&#34; as TSDB
+}
+
+package &#34;预测计算层&#34; as Prediction #FFF3E0 {
+    [特征工程服务] as Feature
+    [模型训练平台\nSageMaker] as Training
+    [模型服务\nTorchServe] as ModelServing
+    [预测结果缓存\nRedis] as PredCache
+}
+
+package &#34;决策引擎层&#34; as Decision #FCE4EC {
+    [规则引擎\nDrools] as Rules
+    [优化求解器\nOR-Tools] as Optimizer
+    [决策服务] as DecisionService
+    [工作流引擎\nAirflow] as Workflow
+}
+
+package &#34;执行层&#34; as Execution #F3E5F5 {
+    [订单生成服务] as OrderGen
+    [供应商对接服务] as SupplierAPI
+    [状态机管理] as StateMachine
+    [监控告警\nPrometheus] as Monitor
+}
+
+&#39; 数据采集层 -&gt; 数据处理层
+Inventory --&gt; MQ
+Order --&gt; MQ
+Supplier --&gt; MQ
+Logistics --&gt; MQ
+External --&gt; Batch
+
+&#39; 数据处理层内部
+MQ --&gt; Stream
+Stream --&gt; RealTimeDB
+Stream --&gt; TSDB
+Batch --&gt; DataLake
+DataLake --&gt; DW
+
+&#39; 数据处理层 -&gt; 预测计算层
+DW --&gt; Feature
+RealTimeDB --&gt; Feature
+Feature --&gt; Training
+Training --&gt; ModelServing
+ModelServing --&gt; PredCache
+
+&#39; 预测计算层 -&gt; 决策引擎层
+PredCache --&gt; DecisionService
+Rules --&gt; DecisionService
+Optimizer --&gt; DecisionService
+DecisionService --&gt; Workflow
+
+&#39; 决策引擎层 -&gt; 执行层
+Workflow --&gt; OrderGen
+OrderGen --&gt; SupplierAPI
+OrderGen --&gt; StateMachine
+StateMachine --&gt; Monitor
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793297695"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=22-数据流图 class="relative group">2.2 数据流图</h3><p><strong>数据流图：</strong></p><div class=plantuml-diagram id=plantuml-1764793423553><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 自动补货系统 - 数据流图
+
+|数据源|
+start
+:销售订单数据;
+:库存变更数据;
+:供应商库存数据;
+:市场趋势数据;
+
+|数据采集|
+:CDC捕获变更;
+:API拉取外部数据;
+:发送到Kafka;
+
+|实时处理|
+:Flink消费消息;
+:数据清洗去重;
+:实时聚合计算;
+fork
+    :写入时序DB\n(库存水位);
+fork again
+    :写入实时DB\n(销售指标);
+fork again
+    :触发补货检查;
+end fork
+
+|批处理|
+:每日定时任务;
+:Spark批量处理;
+:特征工程计算;
+:写入数据仓库;
+
+|预测服务|
+:加载特征数据;
+:调用ML模型推理;
+:生成45天销量预测;
+:缓存预测结果;
+
+|决策引擎|
+:读取预测结果;
+:计算安全库存;
+:应用业务规则;
+:优化求解补货量;
+:生成补货计划;
+
+|执行层|
+:创建补货订单;
+:通知供应商;
+:跟踪订单状态;
+:更新库存预期;
+
+|监控反馈|
+:记录执行结果;
+:计算准确率指标;
+:反馈模型优化;
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793423553"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=23-微服务架构图 class="relative group">2.3 微服务架构图</h3><p><strong>微服务架构图：</strong></p><div class=plantuml-diagram id=plantuml-1764793471212><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+skinparam componentStyle rectangle
+top to bottom direction
+
+title 自动补货系统 - 微服务架构图
+
+&#39; ===== 入口层 =====
+cloud &#34;API Gateway&#34; as Gateway #E8EAF6
+
+&#39; ===== 核心服务层 =====
+rectangle &#34;核心服务层&#34; #F5F5F5 {
+    together {
+        [库存服务] as InvSvc #C8E6C9
+        [预测服务] as FcstSvc #BBDEFB
+        [决策服务] as DecSvc #FFE0B2
+        [订单服务] as OrdSvc #F8BBD9
+        [供应商服务] as SupSvc #E1BEE7
+    }
+}
+
+&#39; ===== 消息队列 =====
+queue &#34;Kafka&#34; as Kafka #FFF9C4
+
+&#39; ===== 数据存储层 =====
+rectangle &#34;数据存储层&#34; #FAFAFA {
+    database &#34;MySQL&#34; as MySQL
+    database &#34;DynamoDB&#34; as Dynamo
+    database &#34;Redis&#34; as Redis
+    database &#34;S3&#34; as S3
+}
+
+&#39; ===== 连接关系 =====
+&#39; Gateway到服务
+Gateway -down-&gt; InvSvc
+Gateway -down-&gt; FcstSvc
+Gateway -down-&gt; DecSvc
+Gateway -down-&gt; OrdSvc
+
+&#39; 服务间调用 (gRPC)
+DecSvc -right-&gt; InvSvc : gRPC
+DecSvc -left-&gt; FcstSvc : gRPC
+OrdSvc -right-&gt; SupSvc : gRPC
+
+&#39; Kafka消息流
+InvSvc -down-&gt; Kafka : 发布事件
+OrdSvc -down-&gt; Kafka : 发布事件
+Kafka -down-&gt; DecSvc : 消费
+Kafka -down-&gt; FcstSvc : 消费
+
+&#39; 数据存储
+InvSvc -down-&gt; Dynamo
+InvSvc -down-&gt; Redis
+FcstSvc -down-&gt; S3
+OrdSvc -down-&gt; MySQL
+DecSvc -down-&gt; Redis
+
+note bottom of Kafka
+  **异步消息**
+  库存变更事件
+  订单状态事件
+end note
+
+note as N1
+  **支撑服务 (所有服务共享)**
+  • 注册中心 (Service Registry)
+  • 配置中心 (Config Center)
+  • 链路追踪 (Jaeger)
+end note
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793471212"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=三核心业务流程与技术实现 class="relative group">三、核心业务流程与技术实现</h2><h3 id=31-库存监控与数据采集流程 class="relative group">3.1 库存监控与数据采集流程</h3><p><strong>时序图：</strong></p><div class=plantuml-diagram id=plantuml-1764793567843><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 库存监控与数据采集 - 时序图
+
+participant &#34;库存系统&#34; as Inv
+participant &#34;CDC组件\nDebezium&#34; as CDC
+participant &#34;Kafka&#34; as Kafka
+participant &#34;Flink&#34; as Flink
+participant &#34;时序DB\nInfluxDB&#34; as TSDB
+participant &#34;实时DB\nDynamoDB&#34; as Dynamo
+participant &#34;决策服务&#34; as Decision
+
+== 库存变更捕获 ==
+Inv -&gt; CDC: 库存扣减/入库
+CDC -&gt; Kafka: 发送变更事件\n{sku, qty, timestamp, type}
+Kafka -&gt; Flink: 消费消息
+
+== 实时处理 ==
+Flink -&gt; Flink: 数据清洗\n去重、格式化
+Flink -&gt; Flink: 窗口聚合\n(5分钟滑动窗口)
+Flink -&gt; TSDB: 写入库存时序数据
+Flink -&gt; Dynamo: 更新实时库存快照
+
+== 阈值检查 ==
+Flink -&gt; Flink: 检查库存水位
+alt 库存 &lt; 安全库存
+    Flink -&gt; Kafka: 发布补货触发事件
+    Kafka -&gt; Decision: 消费触发事件
+    Decision -&gt; Decision: 启动补货决策流程
+else 库存正常
+    Flink -&gt; Flink: 继续监控
+end
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793567843"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=32-需求预测流程 class="relative group">3.2 需求预测流程</h3><p><strong>时序图：</strong></p><div class=plantuml-diagram id=plantuml-1764793622585><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 需求预测流程 - 时序图
+
+participant &#34;定时调度\nAirflow&#34; as Scheduler
+participant &#34;特征服务&#34; as Feature
+participant &#34;数据仓库\nRedshift&#34; as DW
+participant &#34;模型服务\nSageMaker&#34; as Model
+participant &#34;Redis缓存&#34; as Redis
+participant &#34;决策服务&#34; as Decision
+
+== 每日批量预测 (T&#43;1) ==
+Scheduler -&gt; Feature: 触发特征计算任务
+Feature -&gt; DW: 查询历史销售数据\n(过去365天)
+DW --&gt; Feature: 返回数据
+Feature -&gt; DW: 查询商品属性数据
+DW --&gt; Feature: 返回数据
+Feature -&gt; Feature: 特征工程\n- 时间特征\n- 销售特征\n- 商品特征\n- 外部特征
+
+Feature -&gt; Model: 批量推理请求\n{sku_list, features}
+Model -&gt; Model: TFT模型推理
+Model --&gt; Feature: 返回预测结果\n{sku: [day1..day45]}
+
+Feature -&gt; Redis: 缓存预测结果\nTTL=24h
+Feature -&gt; Scheduler: 任务完成
+
+== 实时预测调整 ==
+Decision -&gt; Redis: 查询预测结果
+Redis --&gt; Decision: 返回缓存预测
+alt 热销商品需要实时调整
+    Decision -&gt; Model: 实时推理请求
+    Model --&gt; Decision: 返回最新预测
+    Decision -&gt; Redis: 更新缓存
+end
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793622585"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><p><strong>预测模型架构图：</strong></p><div class=plantuml-diagram id=plantuml-1764793669673><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title TFT预测模型架构 - 组件图
+
+package &#34;输入层&#34; {
+    [静态特征\n商品属性、类目] as Static
+    [已知时变特征\n节假日、促销计划] as Known
+    [观测时变特征\n历史销量、价格] as Observed
+}
+
+package &#34;特征处理&#34; {
+    [Variable Selection\nNetwork] as VSN
+    [GRN\nGated Residual Network] as GRN
+}
+
+package &#34;时序编码&#34; {
+    [LSTM Encoder\n历史序列编码] as Encoder
+    [LSTM Decoder\n未来序列解码] as Decoder
+}
+
+package &#34;注意力机制&#34; {
+    [Multi-Head\nAttention] as Attention
+    [Interpretable\nAttention] as InterpAttn
+}
+
+package &#34;输出层&#34; {
+    [Quantile Output\np10, p50, p90] as Output
+}
+
+Static --&gt; VSN
+Known --&gt; VSN
+Observed --&gt; VSN
+VSN --&gt; GRN
+GRN --&gt; Encoder
+Encoder --&gt; Attention
+Known --&gt; Decoder
+Attention --&gt; Decoder
+Decoder --&gt; InterpAttn
+InterpAttn --&gt; Output
+
+note right of Output
+  输出未来45天
+  销量预测及置信区间
+end note
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793669673"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=33-补货决策流程 class="relative group">3.3 补货决策流程</h3><p><strong>活动图：</strong></p><div class=plantuml-diagram id=plantuml-1764793716340><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 补货决策流程 - 活动图
+
+start
+
+:接收决策触发信号;
+note right: 定时触发 或 库存告警触发
+
+:获取SKU列表;
+
+partition &#34;循环处理每个SKU&#34; {
+    :查询预测结果\n(未来45天销量预测);
+    
+    :查询当前库存状态;
+    note right
+      - 可用库存
+      - 在途库存
+      - 预留库存
+    end note
+    
+    :获取供应商参数;
+    note right
+      - 补货周期(Lead Time)
+      - 最小起订量(MOQ)
+      - 供货能力
+    end note
+    
+    :计算安全库存;
+    note right
+      safety_stock = Z * σ * √LT
+      Z: 服务水平系数
+      σ: 需求标准差
+      LT: 补货周期
+    end note
+    
+    :计算补货点(ROP);
+    note right
+      ROP = LT期间预测销量 &#43; 安全库存
+    end note
+    
+    if (可用库存 &#43; 在途库存 &lt; ROP?) then (是)
+        :计算基础补货量;
+        note right
+          order_qty = 订货周期销量 
+                    &#43; 安全库存 
+                    - 可用库存 
+                    - 在途库存
+        end note
+        
+        :应用约束条件;
+        
+        if (&lt; MOQ?) then (是)
+            if (值得补货?) then (是)
+                :调整到MOQ;
+            else (否)
+                :跳过本次补货;
+                stop
+            endif
+        endif
+        
+        if (&gt; 仓库容量?) then (是)
+            :调整到最大容量;
+        endif
+        
+        if (&gt; 预算限制?) then (是)
+            :调整到预算内;
+        endif
+        
+        :生成补货建议;
+        note right
+          {sku, qty, supplier, 
+           warehouse, priority}
+        end note
+        
+    else (否)
+        :无需补货;
+    endif
+}
+
+:汇总所有补货建议;
+
+:多仓库分配优化;
+note right
+  使用线性规划
+  优化目标：最小化成本
+  约束：时效、容量、预算
+end note
+
+:生成最终补货计划;
+
+:提交审批/自动执行;
+
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793716340"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><p><strong>补货量计算核心算法：</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 伪代码示例</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>calculate_replenishment</span><span class=p>(</span><span class=n>sku</span><span class=p>:</span> <span class=nb>str</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Optional</span><span class=p>[</span><span class=n>ReplenishmentOrder</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;计算单个SKU的补货量&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 1. 获取预测数据</span>
+</span></span><span class=line><span class=cl>    <span class=n>forecast</span> <span class=o>=</span> <span class=n>prediction_service</span><span class=o>.</span><span class=n>get_forecast</span><span class=p>(</span><span class=n>sku</span><span class=p>,</span> <span class=n>days</span><span class=o>=</span><span class=mi>45</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 2. 获取库存数据</span>
+</span></span><span class=line><span class=cl>    <span class=n>current_stock</span> <span class=o>=</span> <span class=n>inventory_service</span><span class=o>.</span><span class=n>get_available_stock</span><span class=p>(</span><span class=n>sku</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>in_transit</span> <span class=o>=</span> <span class=n>inventory_service</span><span class=o>.</span><span class=n>get_in_transit_stock</span><span class=p>(</span><span class=n>sku</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 3. 获取供应商参数</span>
+</span></span><span class=line><span class=cl>    <span class=n>supplier</span> <span class=o>=</span> <span class=n>supplier_service</span><span class=o>.</span><span class=n>get_primary_supplier</span><span class=p>(</span><span class=n>sku</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>lead_time</span> <span class=o>=</span> <span class=n>supplier</span><span class=o>.</span><span class=n>lead_time_days</span>
+</span></span><span class=line><span class=cl>    <span class=n>moq</span> <span class=o>=</span> <span class=n>supplier</span><span class=o>.</span><span class=n>min_order_quantity</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 4. 计算安全库存</span>
+</span></span><span class=line><span class=cl>    <span class=n>daily_sales_std</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>std</span><span class=p>(</span><span class=n>forecast</span><span class=p>[:</span><span class=mi>30</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=n>service_level_z</span> <span class=o>=</span> <span class=mf>1.65</span>  <span class=c1># 95%服务水平</span>
+</span></span><span class=line><span class=cl>    <span class=n>safety_stock</span> <span class=o>=</span> <span class=n>service_level_z</span> <span class=o>*</span> <span class=n>daily_sales_std</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=n>lead_time</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 5. 计算补货点</span>
+</span></span><span class=line><span class=cl>    <span class=n>lead_time_demand</span> <span class=o>=</span> <span class=nb>sum</span><span class=p>(</span><span class=n>forecast</span><span class=p>[:</span><span class=n>lead_time</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=n>reorder_point</span> <span class=o>=</span> <span class=n>lead_time_demand</span> <span class=o>+</span> <span class=n>safety_stock</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 6. 判断是否需要补货</span>
+</span></span><span class=line><span class=cl>    <span class=n>available_stock</span> <span class=o>=</span> <span class=n>current_stock</span> <span class=o>+</span> <span class=n>in_transit</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>available_stock</span> <span class=o>&gt;=</span> <span class=n>reorder_point</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=kc>None</span>  <span class=c1># 无需补货</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 7. 计算补货量</span>
+</span></span><span class=line><span class=cl>    <span class=n>order_cycle</span> <span class=o>=</span> <span class=mi>30</span>  <span class=c1># 订货周期</span>
+</span></span><span class=line><span class=cl>    <span class=n>cycle_demand</span> <span class=o>=</span> <span class=nb>sum</span><span class=p>(</span><span class=n>forecast</span><span class=p>[:</span><span class=n>order_cycle</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=n>order_quantity</span> <span class=o>=</span> <span class=n>cycle_demand</span> <span class=o>+</span> <span class=n>safety_stock</span> <span class=o>-</span> <span class=n>available_stock</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 8. 应用约束条件</span>
+</span></span><span class=line><span class=cl>    <span class=n>order_quantity</span> <span class=o>=</span> <span class=n>apply_constraints</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>order_quantity</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>min_qty</span><span class=o>=</span><span class=n>moq</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>max_qty</span><span class=o>=</span><span class=n>get_warehouse_capacity</span><span class=p>(</span><span class=n>sku</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=n>budget</span><span class=o>=</span><span class=n>get_available_budget</span><span class=p>(</span><span class=n>sku</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># 9. 生成补货订单</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>ReplenishmentOrder</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>sku</span><span class=o>=</span><span class=n>sku</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>quantity</span><span class=o>=</span><span class=n>order_quantity</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>supplier_id</span><span class=o>=</span><span class=n>supplier</span><span class=o>.</span><span class=n>id</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>expected_arrival</span><span class=o>=</span><span class=n>date</span><span class=o>.</span><span class=n>today</span><span class=p>()</span> <span class=o>+</span> <span class=n>timedelta</span><span class=p>(</span><span class=n>days</span><span class=o>=</span><span class=n>lead_time</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=n>priority</span><span class=o>=</span><span class=n>calculate_priority</span><span class=p>(</span><span class=n>sku</span><span class=p>,</span> <span class=n>available_stock</span><span class=p>,</span> <span class=n>reorder_point</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span></code></pre></div><h3 id=34-订单执行状态机 class="relative group">3.4 订单执行状态机</h3><p><strong>状态机图：</strong></p><div class=plantuml-diagram id=plantuml-1764793775982><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 补货订单状态机
+
+[*] --&gt; Created : 创建订单
+
+Created --&gt; PendingConfirm : 提交供应商
+Created --&gt; Cancelled : 取消
+
+PendingConfirm --&gt; Confirmed : 供应商确认
+PendingConfirm --&gt; Rejected : 供应商拒绝
+PendingConfirm --&gt; Cancelled : 超时取消
+
+Rejected --&gt; Created : 更换供应商
+Rejected --&gt; Cancelled : 放弃
+
+Confirmed --&gt; InProduction : 开始生产
+Confirmed --&gt; Cancelled : 取消
+
+InProduction --&gt; Shipped : 发货
+InProduction --&gt; PartialShipped : 部分发货
+InProduction --&gt; Delayed : 延期
+
+Delayed --&gt; Shipped : 恢复发货
+Delayed --&gt; Cancelled : 取消
+
+PartialShipped --&gt; Shipped : 补发完成
+PartialShipped --&gt; PartialReceived : 部分到货
+
+Shipped --&gt; InTransit : 物流运输中
+
+InTransit --&gt; Arrived : 到达仓库
+InTransit --&gt; Lost : 物流丢失
+
+Lost --&gt; Reshipped : 重新发货
+Lost --&gt; Cancelled : 索赔取消
+
+Arrived --&gt; Receiving : 入库中
+Arrived --&gt; QualityIssue : 质量问题
+
+QualityIssue --&gt; Receiving : 问题处理完成
+QualityIssue --&gt; Returned : 退货
+
+Receiving --&gt; Completed : 入库完成
+PartialReceived --&gt; Completed : 全部入库
+
+Completed --&gt; [*]
+Cancelled --&gt; [*]
+Returned --&gt; [*]
+
+note right of Created
+  初始状态
+  记录订单基本信息
+end note
+
+note right of Confirmed
+  供应商确认后
+  锁定预期库存
+end note
+
+note right of Completed
+  入库完成
+  更新实际库存
+end note
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793775982"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><p><strong>订单执行时序图：</strong></p><div class=plantuml-diagram id=plantuml-1764793828410><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 订单执行流程 - 时序图
+
+participant &#34;决策服务&#34; as Decision
+participant &#34;订单服务&#34; as Order
+database &#34;订单DB&#34; as OrderDB
+participant &#34;Kafka&#34; as Kafka
+participant &#34;供应商服务&#34; as Supplier
+participant &#34;库存服务&#34; as Inventory
+participant &#34;监控系统&#34; as Monitor
+
+== 订单创建 ==
+Decision -&gt; Order: 创建补货订单请求
+Order -&gt; Order: 生成订单ID(雪花算法)
+Order -&gt; Order: 幂等性检查
+Order -&gt; OrderDB: 保存订单(状态=Created)
+Order -&gt; Kafka: 发布OrderCreated事件
+Order --&gt; Decision: 返回订单ID
+
+== 提交供应商 ==
+Order -&gt; Supplier: 发送采购订单
+Supplier -&gt; Supplier: 调用供应商API
+alt 供应商确认
+    Supplier --&gt; Order: 确认成功
+    Order -&gt; OrderDB: 更新状态=Confirmed
+    Order -&gt; Inventory: 预留库存空间
+    Order -&gt; Kafka: 发布OrderConfirmed事件
+else 供应商拒绝
+    Supplier --&gt; Order: 拒绝(库存不足等)
+    Order -&gt; OrderDB: 更新状态=Rejected
+    Order -&gt; Kafka: 发布OrderRejected事件
+end
+
+== 物流跟踪 ==
+loop 定时轮询
+    Supplier -&gt; Supplier: 查询物流状态
+    Supplier -&gt; Order: 更新物流信息
+    Order -&gt; OrderDB: 更新物流状态
+    Order -&gt; Kafka: 发布物流事件
+end
+
+== 入库处理 ==
+Supplier -&gt; Order: 到货通知
+Order -&gt; OrderDB: 更新状态=Arrived
+Order -&gt; Inventory: 触发入库流程
+Inventory -&gt; Inventory: 质检、上架
+Inventory -&gt; Order: 入库完成回调
+Order -&gt; OrderDB: 更新状态=Completed
+Order -&gt; Kafka: 发布OrderCompleted事件
+Kafka -&gt; Monitor: 消费事件
+Monitor -&gt; Monitor: 更新监控指标
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793828410"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=四关键技术实现细节 class="relative group">四、关键技术实现细节</h2><h3 id=41-部署架构 class="relative group">4.1 部署架构</h3><p><strong>部署架构图：</strong></p><p><figure><div class=post-img-view><a data-fancybox=gallery href=https://cdn.nlark.com/yuque/0/2025/png/21760570/1764730675325-c42982e5-6358-44a1-94ba-c7e86f58b287.png><img class="my-0 rounded-md" src=https://cdn.nlark.com/yuque/0/2025/png/21760570/1764730675325-c42982e5-6358-44a1-94ba-c7e86f58b287.png alt></a></div></figure></p><h3 id=42-高可用与容错设计 class="relative group">4.2 高可用与容错设计</h3><p><strong>服务降级策略流程图：</strong></p><div class=plantuml-diagram id=plantuml-1764793881059><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 服务降级与熔断策略
+
+start
+
+:收到预测请求;
+
+if (预测服务健康?) then (是)
+    :调用ML模型推理;
+    if (推理成功?) then (是)
+        :返回预测结果;
+    else (超时/失败)
+        :触发熔断器;
+        :使用降级策略;
+    endif
+else (熔断中)
+    :使用降级策略;
+endif
+
+partition &#34;降级策略&#34; {
+    if (Redis缓存有效?) then (是)
+        :返回缓存预测;
+    else (否)
+        if (历史均值可用?) then (是)
+            :返回历史30天均值;
+        else (否)
+            :返回类目平均值;
+        endif
+    endif
+}
+
+:记录降级指标;
+
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793881059"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=五系统监控与可观测性 class="relative group">五、系统监控与可观测性</h2><p><strong>监控体系架构图：</strong></p><div class=plantuml-diagram id=plantuml-1764793921374><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 监控体系架构
+
+package &#34;业务指标&#34; #E8F5E9 {
+    [预测准确率\nMAPE/WMAPE] as Accuracy
+    [补货及时率] as Timeliness
+    [库存周转率] as Turnover
+    [缺货率] as Stockout
+}
+
+package &#34;技术指标&#34; #E3F2FD {
+    [服务响应时间\nP99 Latency] as Latency
+    [服务可用性\nSLA] as SLA
+    [吞吐量\nQPS/TPS] as Throughput
+    [错误率] as ErrorRate
+}
+
+package &#34;基础设施&#34; #FFF3E0 {
+    [CPU/内存使用率] as Resource
+    [磁盘IO] as DiskIO
+    [网络流量] as Network
+    [容器状态] as Container
+}
+
+database &#34;Prometheus&#34; as Prom
+database &#34;InfluxDB&#34; as Influx
+[Grafana] as Graf
+[AlertManager] as Alert
+
+Accuracy --&gt; Influx
+Timeliness --&gt; Influx
+Turnover --&gt; Influx
+Stockout --&gt; Influx
+
+Latency --&gt; Prom
+SLA --&gt; Prom
+Throughput --&gt; Prom
+ErrorRate --&gt; Prom
+
+Resource --&gt; Prom
+DiskIO --&gt; Prom
+Network --&gt; Prom
+Container --&gt; Prom
+
+Prom --&gt; Graf
+Influx --&gt; Graf
+Prom --&gt; Alert
+
+Alert --&gt; [PagerDuty]
+Alert --&gt; [钉钉/Slack]
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793921374"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=六技术总结 class="relative group">六、技术总结</h2><h3 id=61-核心技术栈 class="relative group">6.1 核心技术栈</h3><table><thead><tr><th>层级</th><th>技术选型</th></tr></thead><tbody><tr><td>数据采集</td><td>Kafka, Kinesis, Debezium (CDC)</td></tr><tr><td>流处理</td><td>Flink, Spark Streaming</td></tr><tr><td>批处理</td><td>Spark, EMR</td></tr><tr><td>存储</td><td>S3, Redshift, DynamoDB, Redis, InfluxDB</td></tr><tr><td>ML平台</td><td>SageMaker, TensorFlow/PyTorch</td></tr><tr><td>服务框架</td><td>Spring Boot, gRPC</td></tr><tr><td>容器化</td><td>Docker, Kubernetes (EKS)</td></tr><tr><td>服务网格</td><td>Istio</td></tr><tr><td>监控</td><td>Prometheus, Grafana, Jaeger, ELK</td></tr></tbody></table><h3 id=62-架构设计原则 class="relative group">6.2 架构设计原则</h3><ol><li><strong>数据驱动</strong>：一切决策基于数据，模型可解释</li><li><strong>服务化</strong>：高内聚低耦合，独立部署迭代</li><li><strong>异步优先</strong>：消息队列解耦，提升吞吐</li><li><strong>可观测</strong>：全链路追踪，快速定位问题</li><li><strong>可降级</strong>：核心功能保证可用，优雅降级</li></ol><h3 id=63-关键设计要点 class="relative group">6.3 关键设计要点</h3><h4 id=数据一致性保障 class="relative group">数据一致性保障</h4><ul><li><strong>库存扣减</strong>：分布式锁 + 最终一致性 + 补偿机制</li><li><strong>订单创建</strong>：Saga模式处理分布式事务</li><li><strong>幂等设计</strong>：雪花算法生成唯一ID</li></ul><h4 id=高并发处理 class="relative group">高并发处理</h4><ul><li><strong>促销期峰值</strong>：限流、缓存预热、弹性伸缩</li><li><strong>批量预测</strong>：T+1批量 + 热点商品实时微调</li><li><strong>异步化</strong>：消息队列解耦，削峰填谷</li></ul><h4 id=模型工程化 class="relative group">模型工程化</h4><ul><li><strong>模型服务化</strong>：TorchServe/TensorFlow Serving</li><li><strong>版本管理</strong>：模型注册表 + 灰度发布</li><li><strong>A/B测试</strong>：流量分割验证效果</li></ul><h3 id=64-系统演进路线 class="relative group">6.4 系统演进路线</h3><div class=plantuml-diagram id=plantuml-1764793999891><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+title 系统演进路线
+
+|阶段一：基础建设|
+:规则引擎补货;
+:人工设定阈值;
+:定时批量执行;
+
+|阶段二：智能化|
+:引入ML预测;
+:动态安全库存;
+:自动化决策;
+
+|阶段三：精细化|
+:多任务学习;
+:实时预测调整;
+:多仓库协同优化;
+
+|阶段四：自治化|
+:端到端自动化;
+:自适应参数调优;
+:异常自动处理;
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1764793999891"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=参考资料 class="relative group">参考资料</h2><ol><li><a href=https://arxiv.org/abs/2512.00370 target=_blank rel=noreferrer>Multi-Task Temporal Fusion Transformer for Joint Sales and Inventory Forecasting</a> - Amazon研究论文</li><li><a href=https://gs.amazon.cn/zhishi/ target=_blank rel=noreferrer>Amazon FBA库存管理最佳实践</a></li><li><a href=https://arxiv.org/abs/1912.09363 target=_blank rel=noreferrer>Temporal Fusion Transformers for Interpretable Multi-horizon Time Series Forecasting</a></li><li><a href=https://developer.aliyun.com/article/790097 target=_blank rel=noreferrer>供应链库存优化算法研究</a></li></ol><hr><p><em>本文档旨在从技术角度深入分析亚马逊自动补货系统的架构设计与核心流程，为后端工程师理解大规模电商补货系统提供参考。</em></p></div></section><footer class="max-w-prose pt-8 print:hidden"><div class=flex><picture class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"><img width=512 height=512 class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full" alt=Skitii loading=lazy decoding=async src=https://skitii.vercel.app/img/donatello.png></picture><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">Author</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">Skitii</div><div class="text-2xl sm:text-lg"></div></div></div><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="group flex" href=https://skitii.vercel.app/posts/web3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/><span class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&larr;</span><span class="ltr:hidden rtl:inline">&rarr;</span></span>
+<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Web3快速入门指南：从前后端开发者到区块链开发者</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime="2025-06-20 00:00:00 +0000 UTC">20 June 2025</time>
+</span></span></a></span><span><a class="group flex text-right" href=https://skitii.vercel.app/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Cursor进阶使用</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime="2025-05-01 00:00:00 +0000 UTC">1 May 2025</time>
+</span></span><span class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&rarr;</span><span class="ltr:hidden rtl:inline">&larr;</span></span></a></span></div></div><div class=pt-3><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class=pt-3><script src=https://utteranc.es/client.js repo=AbnerHuang2/mywebsite issue-term=pathname theme=gruvbox-dark crossorigin=anonymous async></script></div></div></footer></article></main><div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12" id=to-top hidden=true><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label="Scroll to top" title="Scroll to top">&uarr;</a></div><footer class="py-10 print:hidden"><div class="flex items-center justify-between"><div><p class="text-sm text-neutral-500 dark:text-neutral-400">&copy;
+2025
+Skitii</p></div><div class="flex flex-row items-center"><div class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"><button id=appearance-switcher-0 type=button aria-label="appearance switcher"><div class="flex h-12 w-12 items-center justify-center dark:hidden" title="Switch to dark appearance"><span class="icon relative inline-block px-1 align-text-bottom"><svg viewBox="0 0 512 512"><path fill="currentColor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="hidden h-12 w-12 items-center justify-center dark:flex" title="Switch to light appearance"><span class="icon relative inline-block px-1 align-text-bottom"><svg viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js></script><link rel=stylesheet href=https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css><script src=https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js></script><script>(function(e,t,n){t.ChatraID="H8oixnws8SKYQkjBz";var s=e.createElement("script");t[n]=t[n]||function(){(t[n].q=t[n].q||[]).push(arguments)},s.async=!0,s.src="https://call.chatra.io/chatra.js",e.head&&e.head.appendChild(s)})(document,window,"Chatra")</script><script type=text/javascript>L2Dwidget.init({model:{scale:1,hHeadPos:.5,vHeadPos:.618,jsonPath:"https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/hijiki/hijiki.model.json"},display:{superSample:1,width:120,height:300,position:"right",hOffset:20,vOffset:0},mobile:{show:!0,scale:1,motion:!0},react:{opacityDefault:.8,opacityOnHover:1}})</script></footer><div id=search-wrapper class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://skitii.vercel.app/><div id=search-modal class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex flex-none items-center justify-between px-2"><form class="flex min-w-0 flex-auto items-center"><div class="flex h-8 w-8 items-center justify-center text-neutral-400"><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=Search tabindex=0></form><button id=close-search-button class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="Close (Esc)">
+<span class="icon relative inline-block px-1 align-text-bottom"><svg viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto overflow-auto px-2"><ul id=search-results></ul></section></div></div></div></body></html>
