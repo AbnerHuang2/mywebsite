@@ -6,8 +6,15 @@
     <description>Recent content in AI编程 on Skitii</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 01 May 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/ai%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>利用GenAI加速软件开发生命周期策略</title>
+      <link>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</link>
+      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Cursor进阶使用</title>
       <link>http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</link>

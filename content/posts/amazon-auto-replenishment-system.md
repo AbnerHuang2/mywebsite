@@ -7,9 +7,6 @@ categories: ["技术分析"]
 description: "面向后端工程师的系统架构与核心流程深度剖析"
 ---
 
-<meta name="referrer" content="no-referrer" />
-<!-- more -->
-
 # 亚马逊自动补货系统技术解析
 
 ---
@@ -714,10 +711,67 @@ Monitor -> Monitor: 更新监控指标
 
 **部署架构图：**
 
-![](https://cdn.nlark.com/yuque/0/2025/png/21760570/1764730675325-c42982e5-6358-44a1-94ba-c7e86f58b287.png)
+{{< plantuml >}}
+@startuml
+skinparam backgroundColor transparent
 
+title 自动补货系统 - 部署架构图
 
+' ===== 入口层 =====
+node "ALB 负载均衡" as ALB #E8EAF6
 
+' ===== 计算层 =====
+rectangle "计算层 (EKS 多可用区)" as Compute #E3F2FD {
+    rectangle "AZ-1" as AZ1 {
+        [库存服务] as Inv1
+        [预测服务] as Fcst1
+        [决策服务] as Dec1
+        [订单服务] as Ord1
+    }
+    rectangle "AZ-2" as AZ2 {
+        [库存服务] as Inv2
+        [预测服务] as Fcst2
+        [决策服务] as Dec2
+        [订单服务] as Ord2
+    }
+}
+
+' ===== 监控（右侧） =====
+rectangle "监控" as Monitor #FCE4EC {
+    [CloudWatch] as CW
+    [Prometheus] as Prom
+    [Grafana] as Graf
+}
+
+' ===== 数据层 =====
+rectangle "数据层" as Data #FFF3E0 {
+    database "RDS\n(主从)" as RDS
+    database "Redis\n集群" as Redis
+    database "DynamoDB" as Dynamo
+    queue "MSK\n(Kafka)" as MSK
+    storage "S3" as S3
+}
+
+' ===== ML平台 =====
+rectangle "ML平台\n(SageMaker)" as ML #E8F5E9 {
+    [训练集群] as SMTrain
+    [推理端点] as SMInfer
+}
+
+' ===== 布局控制：网格结构 =====
+' 垂直主流程
+ALB -down-> Compute : 请求路由
+Compute -down-> Data : 数据读写
+
+' 水平关联
+Compute -right-> Monitor : 指标上报
+Data -right-> ML : 训练数据
+
+' 隐藏连接保持对齐
+Monitor -[hidden]down-> ML
+
+@enduml
+{{< /plantuml >}}
 
 ### 4.2 高可用与容错设计
 

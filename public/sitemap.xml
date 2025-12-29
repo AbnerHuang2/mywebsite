@@ -5,15 +5,32 @@
     
       <url>
             <loc>http://localhost:1313/</loc>
-            <lastmod>2025-06-20T00:00:00+00:00</lastmod>
+            <lastmod>2025-12-29T00:00:00+00:00</lastmod>
           </url>
     
   
     
       <url>
             <loc>http://localhost:1313/posts/</loc>
-            <lastmod>2025-06-20T00:00:00+00:00</lastmod>
+            <lastmod>2025-12-29T00:00:00+00:00</lastmod>
           </url>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <url>
+            <loc>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</loc>
+            <lastmod>2025-12-29T00:00:00+00:00</lastmod>
+          </url>
+    
+  
     
   
     
@@ -61,14 +78,10 @@
     
   
     
-  
-    
       <url>
             <loc>http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</loc>
             <lastmod>2025-05-01T00:00:00+00:00</lastmod>
           </url>
-    
-  
     
   
     

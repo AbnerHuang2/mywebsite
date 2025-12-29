@@ -6,8 +6,15 @@
     <description>Recent content on Skitii</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 20 Jun 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>利用GenAI加速软件开发生命周期策略</title>
+      <link>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</link>
+      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Web3快速入门指南：从前后端开发者到区块链开发者</title>
       <link>http://localhost:1313/posts/web3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/</link>

@@ -1,0 +1,269 @@
+{{- $src := .Get "src" -}}
+{{- $height := .Get "height" | default "85vh" -}}
+{{- $id := printf "pdf-%d" (now.UnixNano) -}}
+
+<div class="pdf-viewer-container" id="{{ $id }}">
+  <!-- 操作按钮区 - 粘性定位 -->
+  <div class="pdf-toolbar">
+    <a href="{{ $src }}" target="_blank" class="pdf-btn pdf-btn-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <line x1="10" y1="14" x2="21" y2="3"></line>
+      </svg>
+      <span>在新窗口打开</span>
+    </a>
+    <a href="{{ $src }}" download class="pdf-btn pdf-btn-secondary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      <span>下载PDF</span>
+    </a>
+    <button onclick="togglePdfFullscreen('{{ $id }}')" class="pdf-btn pdf-btn-fullscreen">
+      <svg class="icon-expand" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      <svg class="icon-collapse" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="4 14 10 14 10 20"></polyline>
+        <polyline points="20 10 14 10 14 4"></polyline>
+        <line x1="14" y1="10" x2="21" y2="3"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      <span class="btn-text">全屏阅读</span>
+    </button>
+    <span class="pdf-tip">💡 推荐使用全屏阅读获得最佳体验</span>
+  </div>
+  
+  <!-- PDF iframe 容器 -->
+  <div class="pdf-frame-wrapper">
+    <iframe 
+      src="{{ $src }}#toolbar=1&navpanes=0&scrollbar=1&view=FitH" 
+      type="application/pdf" 
+      width="100%" 
+      style="height: {{ $height }}; display: block; border: none;"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
+  </div>
+  
+  <noscript>
+    <p style="padding: 1rem; text-align: center;">
+      您的浏览器不支持内嵌PDF预览，请 <a href="{{ $src }}" target="_blank">点击这里</a> 下载或在新窗口查看。
+    </p>
+  </noscript>
+</div>
+
+<style>
+  .pdf-viewer-container {
+    margin: 1.5rem 0;
+    position: relative;
+    width: 100%;
+    z-index: 20;
+  }
+  
+  .pdf-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    background: var(--color-neutral-800, #1f2937);
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: 1px solid #374151;
+    border-bottom: none;
+  }
+  
+  .pdf-tip {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    opacity: 0.8;
+  }
+  
+  .pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  
+  .pdf-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  
+  .pdf-btn-primary {
+    background: #6366f1;
+    color: white;
+  }
+  
+  .pdf-btn-secondary {
+    background: #4b5563;
+    color: white;
+  }
+  
+  .pdf-btn-fullscreen {
+    background: #059669;
+    color: white;
+  }
+  
+  .pdf-btn-fullscreen .icon-collapse {
+    display: none;
+  }
+  
+  .pdf-frame-wrapper {
+    border: 1px solid #374151;
+    border-radius: 0 0 0.5rem 0.5rem;
+    overflow: hidden;
+    background: #1f2937;
+  }
+  
+  .pdf-frame-wrapper iframe {
+    min-height: 500px;
+  }
+  
+  /* ==================== 全屏模式 ==================== */
+  .pdf-viewer-container.is-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    z-index: 999999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #111 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000000;
+    flex-shrink: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #374151;
+    background: #1f2937 !important;
+    height: 56px;
+    box-sizing: border-box;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-tip {
+    display: none;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-frame-wrapper {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    border: none;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-frame-wrapper iframe {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-btn-fullscreen {
+    background: #dc2626 !important;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-btn-fullscreen .icon-expand {
+    display: none !important;
+  }
+  
+  .pdf-viewer-container.is-fullscreen .pdf-btn-fullscreen .icon-collapse {
+    display: block !important;
+  }
+  
+  /* 移动端适配 */
+  @media (max-width: 640px) {
+    .pdf-toolbar {
+      justify-content: center;
+    }
+    
+    .pdf-tip {
+      display: none;
+    }
+    
+    .pdf-frame-wrapper iframe {
+      height: 70vh !important;
+      min-height: 400px;
+    }
+    
+    .pdf-btn span:not(.btn-text) {
+      display: none;
+    }
+    
+    .pdf-btn {
+      padding: 0.5rem;
+    }
+  }
+  
+  /* 亮色主题适配 */
+  :root:not(.dark) .pdf-toolbar {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+  
+  :root:not(.dark) .pdf-tip {
+    color: #6b7280;
+  }
+  
+  :root:not(.dark) .pdf-frame-wrapper {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+</style>
+
+<script>
+function togglePdfFullscreen(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  container.classList.toggle('is-fullscreen');
+  
+  if (container.classList.contains('is-fullscreen')) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+}
+
+// ESC 键退出全屏
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const fullscreenContainer = document.querySelector('.pdf-viewer-container.is-fullscreen');
+    if (fullscreenContainer) {
+      fullscreenContainer.classList.remove('is-fullscreen');
+      document.body.style.overflow = '';
+    }
+  }
+});
+</script>
