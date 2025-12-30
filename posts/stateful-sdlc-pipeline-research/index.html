@@ -1,0 +1,787 @@
+<!doctype html><html lang=en dir=ltr class=scroll-smooth data-default-appearance=dark data-auto-appearance=true><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#FFFFFF"><title>AI 驱动的有状态 SDLC 流水线：行业调研与落地方案 &#183; Skitii</title><meta name=title content="AI 驱动的有状态 SDLC 流水线：行业调研与落地方案 &#183; Skitii"><script type=text/javascript src=https://skitii.vercel.app/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="></script><link type=text/css rel=stylesheet href=https://skitii.vercel.app/css/main.bundle.min.a645f3fa02b2ca20e7ef61b236048d95cc9bc2e5b2faf1f0ac0aa85431187c1c.css integrity="sha256-pkXz+gKyyiDn72GyNgSNlcybwuWy+vHwrAqoVDEYfBw="><script defer type=text/javascript id=script-bundle src=https://skitii.vercel.app/js/main.bundle.min.0b250a079f6c2f7d0e03d1f0aa1308acb88137e3caebe1268f7478f0c87c5bf8.js integrity="sha256-CyUKB59sL30OA9HwqhMIrLiBN+PK6+Emj3R48Mh8W/g=" data-copy=Copy data-copied=Copied></script><meta name=description content="
+      系统性梳理 AI 驱动软件开发的行业解决方案，包括 AI Agent、Copilot、自动化编排平台等，并提出 PRD→TD→代码→测试→部署 的完整落地实施路径
+    "><link rel=canonical href=https://skitii.vercel.app/posts/stateful-sdlc-pipeline-research/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=icon type=image/png sizes=192x192 href=/android-chrome-192x192.png><link rel=icon type=image/png sizes=512x512 href=/android-chrome-512x512.png><link rel=manifest href=/site.webmanifest><link rel=icon type=image/png href="/favicon-32x32.png?v=1767066219"><meta name=google-site-verification content="PeC9Clz1swOOWEProA3d9p39srZKONgJreLma19x0Cc"><meta property="og:url" content="https://skitii.vercel.app/posts/stateful-sdlc-pipeline-research/"><meta property="og:site_name" content="Skitii"><meta property="og:title" content="AI 驱动的有状态 SDLC 流水线：行业调研与落地方案"><meta property="og:description" content="系统性梳理 AI 驱动软件开发的行业解决方案，包括 AI Agent、Copilot、自动化编排平台等，并提出 PRD→TD→代码→测试→部署 的完整落地实施路径"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-12-20T00:00:00+00:00"><meta property="article:modified_time" content="2025-12-20T00:00:00+00:00"><meta property="article:tag" content="DevOps"><meta property="article:tag" content="SDLC"><meta property="article:tag" content="AI Agent"><meta property="article:tag" content="CI/CD"><meta property="article:tag" content="Cursor"><meta property="article:tag" content="Copilot"><meta name=twitter:card content="summary"><meta name=twitter:title content="AI 驱动的有状态 SDLC 流水线：行业调研与落地方案"><meta name=twitter:description content="系统性梳理 AI 驱动软件开发的行业解决方案，包括 AI Agent、Copilot、自动化编排平台等，并提出 PRD→TD→代码→测试→部署 的完整落地实施路径"><script type=application/ld+json>{"@context":"https://schema.org","@type":"Article","articleSection":"","name":"AI 驱动的有状态 SDLC 流水线：行业调研与落地方案","headline":"AI 驱动的有状态 SDLC 流水线：行业调研与落地方案","description":"系统性梳理 AI 驱动软件开发的行业解决方案，包括 AI Agent、Copilot、自动化编排平台等，并提出 PRD→TD→代码→测试→部署 的完整落地实施路径","inLanguage":"en","url":"https:\/\/skitii.vercel.app\/posts\/stateful-sdlc-pipeline-research\/","author":{"@type":"Person","name":"Skitii"},"copyrightYear":"2025","dateCreated":"2025-12-20T00:00:00\u002b00:00","datePublished":"2025-12-20T00:00:00\u002b00:00","dateModified":"2025-12-20T00:00:00\u002b00:00","keywords":["DevOps","SDLC","AI Agent","CI/CD","Cursor","Copilot","流水线","自动化"],"mainEntityOfPage":"true","wordCount":"6403"}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://skitii.vercel.app/","name":"","position":1},{"@type":"ListItem","item":"https://skitii.vercel.app/posts/","name":"","position":2},{"@type":"ListItem","item":"https://skitii.vercel.app/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/","name":"软件工程","position":3},{"@type":"ListItem","name":"Ai 驱动的有状态 SDLC 流水线：行业调研与落地方案","position":4}]}</script><meta name=author content="Skitii"><style>.plantuml-diagram{text-align:center;margin:2rem 0;overflow-x:auto;background:#fff;padding:1.5rem;border-radius:8px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 3px rgba(0,0,0,5%)}.plantuml-diagram img{max-width:100%;height:auto;display:inline-block;filter:contrast(1.15)brightness(.95)}.plantuml-loading{color:#6c757d;padding:2rem;text-align:center}.plantuml-error{font-size:.9rem;line-height:1.6}@media(prefers-color-scheme:dark){.plantuml-diagram{background:#1e1e1e;border-color:rgba(255,255,255,.15);box-shadow:0 1px 3px rgba(0,0,0,.3)}.plantuml-diagram img{filter:invert(.88)contrast(1.05)brightness(1.1)}}@media(prefers-contrast:high){.plantuml-diagram img{filter:contrast(1.3)brightness(.9)}}@media print{.plantuml-diagram{background:#fff;border:1px solid #ccc;page-break-inside:avoid}.plantuml-diagram img{filter:none;max-width:100%}}</style><style>.toc{max-height:85vh;overflow-y:auto;padding-bottom:2rem;scrollbar-width:thin;scrollbar-color:rgba(156,163,175,.3)transparent}.toc::-webkit-scrollbar{width:4px}.toc::-webkit-scrollbar-track{background:0 0}.toc::-webkit-scrollbar-thumb{background:rgba(156,163,175,.3);border-radius:2px;transition:background .3s}.toc::-webkit-scrollbar-thumb:hover{background:rgba(156,163,175,.5)}.toc ul,.toc li{list-style:none;padding-left:0;margin:0}.toc ul ul{padding-left:1rem;margin-top:.25rem}.toc a{display:block;padding:.35rem .5rem;margin:.15rem 0;font-size:.9rem;font-weight:400;color:#4b5563;text-decoration:none;border-radius:.375rem;transition:all .2s ease;position:relative;line-height:1.4}.toc a:hover{color:#1f2937;background:rgba(139,92,246,8%);padding-left:.75rem}.toc a.active,.toc a:active{color:#7c3aed;background:rgba(139,92,246,.12);font-weight:500;padding-left:.75rem}.toc a.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:#7c3aed;border-radius:2px}@media(prefers-color-scheme:dark){.toc a{color:#9ca3af}.toc a:hover{color:#e5e7eb;background:rgba(167,139,250,.15)}.toc a.active,.toc a:active{color:#a78bfa;background:rgba(167,139,250,.2)}.toc a.active::before{background:#a78bfa}.toc::-webkit-scrollbar-thumb{background:rgba(156,163,175,.2)}.toc::-webkit-scrollbar-thumb:hover{background:rgba(156,163,175,.4)}}.toc-wrapper summary{transition:background .2s}.toc-wrapper summary:hover{background:rgba(139,92,246,.1)!important}.toc-content{border-left-width:2px!important;border-style:solid!important}html{scroll-behavior:smooth}</style><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const t=document.querySelector(".toc");if(!t)return;const e=t.querySelectorAll("a");if(e.length===0)return;const n=Array.from(document.querySelectorAll("h2, h3, h4, h5, h6")).filter(e=>e.id);if(n.length===0)return;const s={rootMargin:"-80px 0px -80% 0px",threshold:0};let o=null;const i=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(o=e.target,a(e.target.id))})},s);n.forEach(e=>i.observe(e));function a(t){e.forEach(e=>{e.classList.remove("active");const n=e.getAttribute("href");n==="#"+t&&(e.classList.add("active"),e.scrollIntoView({block:"nearest",behavior:"smooth"}))})}e.forEach(t=>{t.addEventListener("click",n=>{e.forEach(e=>e.classList.remove("active")),t.classList.add("active")})})}})()</script></head><body class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"><div id=the-top class="absolute flex self-center"><a class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span>Skip to main content</a></div><header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden"><nav class="flex items-start justify-between sm:items-center"><div class="flex flex-row items-center"><a href=/ class=mr-2><img src=https://skitii.vercel.app/img/octopus.png width=64 height=64 class="max-h-[10rem] max-w-[10rem] object-scale-down object-left
+dark:hidden flex" alt=Skitii>
+<img src=https://skitii.vercel.app/img/octopus.png width=64 height=64 class="hidden max-h-[10rem] max-w-[10rem] object-scale-down object-left dark:flex" alt=Skitii></a></div><ul class="flex list-none flex-col text-end sm:flex-row"><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/posts/ title><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Blog</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/series/ title=专题系列><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Topic</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/categories/ title=Categories><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Categories</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0.5"><a href=/tags/ title=Tags><span class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2">Tags</span></a></li><li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0"><button id=search-button-m0 title="Search (/)">
+<span class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></span></button></li></ul></nav></header><div class="relative flex grow flex-col"><main id=main-content class=grow><article><header class=max-w-prose><ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden"><li class="hidden inline"><a class="dark:underline-neutral-600 decoration-neutral-300 hover:underline" href=https://skitii.vercel.app/></a><span class="px-1 text-primary-500">/</span></li><li class=inline><a class="dark:underline-neutral-600 decoration-neutral-300 hover:underline" href=https://skitii.vercel.app/posts/>posts</a><span class="px-1 text-primary-500">/</span></li><li class="hidden inline"><a class="dark:underline-neutral-600 decoration-neutral-300 hover:underline" href=https://skitii.vercel.app/posts/stateful-sdlc-pipeline-research/>AI 驱动的有状态 SDLC 流水线：行业调研与落地方案</a><span class="px-1 text-primary-500">/</span></li></ol><h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">AI 驱动的有状态 SDLC 流水线：行业调研与落地方案</h1><div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime="2025-12-20 00:00:00 +0000 UTC">20 December 2025</time><span class="px-2 text-primary-500">&#183;</span><span>6403 words</span><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">13 mins</span></div><div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400"><a href=https://skitii.vercel.app/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">软件工程</a>
+<a href=https://skitii.vercel.app/tags/devops/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">DevOps</a>
+<a href=https://skitii.vercel.app/tags/sdlc/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">SDLC</a>
+<a href=https://skitii.vercel.app/tags/ai-agent/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">AI Agent</a>
+<a href=https://skitii.vercel.app/tags/ci/cd/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">CI/CD</a>
+<a href=https://skitii.vercel.app/tags/cursor/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">Cursor</a>
+<a href=https://skitii.vercel.app/tags/copilot/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">Copilot</a>
+<a href=https://skitii.vercel.app/tags/%E6%B5%81%E6%B0%B4%E7%BA%BF/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">流水线</a>
+<a href=https://skitii.vercel.app/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/ class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400">自动化</a></div></div></header><section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row"><div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8"><div class="toc pe-5 lg:sticky lg:top-10 print:hidden"><details open class="toc-wrapper -ms-5 mt-0 overflow-hidden rounded-lg ps-5"><summary class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">Table of Contents</summary><div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#第一部分目标场景定义>第一部分：目标场景定义</a><ul><li><a href=#11-核心目标>1.1 核心目标</a></li><li><a href=#12-完整流程概览>1.2 完整流程概览</a></li></ul></li><li><a href=#第二部分行业解决方案调研>第二部分：行业解决方案调研</a><ul><li><a href=#21-ai-编程助手code-copilot-类>2.1 AI 编程助手（Code Copilot 类）</a><ul><li><a href=#211-工具对比>2.1.1 工具对比</a></li><li><a href=#212-cursor-深度分析>2.1.2 Cursor 深度分析</a></li></ul></li><li><a href=#22-ai-agent自主编程类>2.2 AI Agent（自主编程类）</a><ul><li><a href=#221-工具对比>2.2.1 工具对比</a></li><li><a href=#222-agent-能力边界>2.2.2 Agent 能力边界</a></li></ul></li><li><a href=#23-传统-cicd-与-devops-平台>2.3 传统 CI/CD 与 DevOps 平台</a><ul><li><a href=#231-覆盖范围对比>2.3.1 覆盖范围对比</a></li><li><a href=#232-主流平台对比>2.3.2 主流平台对比</a></li></ul></li><li><a href=#24-工作流编排平台>2.4 工作流编排平台</a><ul><li><a href=#241-temporal--cadence>2.4.1 Temporal / Cadence</a></li></ul></li><li><a href=#25-新兴-ai-native-平台>2.5 新兴 AI-Native 平台</a></li><li><a href=#26-调研总结>2.6 调研总结</a></li></ul></li><li><a href=#第三部分系统架构设计>第三部分：系统架构设计</a><ul><li><a href=#31-整体架构>3.1 整体架构</a></li><li><a href=#32-上下文存储设计>3.2 上下文存储设计</a></li><li><a href=#33-状态机设计>3.3 状态机设计</a></li></ul></li><li><a href=#第四部分分阶段落地方案>第四部分：分阶段落地方案</a><ul><li><a href=#41-phase-0基础设施准备1-周>4.1 Phase 0：基础设施准备（1 周）</a><ul><li><a href=#目标>目标</a></li><li><a href=#技术选型>技术选型</a></li><li><a href=#知识库结构>知识库结构</a></li></ul></li><li><a href=#42-phase-1prd--td-自动生成2-周>4.2 Phase 1：PRD → TD 自动生成（2 周）</a><ul><li><a href=#目标-1>目标</a></li><li><a href=#流程详解>流程详解</a></li><li><a href=#核心实现>核心实现</a></li><li><a href=#mcp-server-实现>MCP Server 实现</a></li></ul></li><li><a href=#43-phase-2td--代码生成2-周>4.3 Phase 2：TD → 代码生成（2 周）</a><ul><li><a href=#目标-2>目标</a></li><li><a href=#流程详解-1>流程详解</a></li><li><a href=#代码生成策略>代码生成策略</a></li></ul></li><li><a href=#44-phase-3ai-review--测试生成2-周>4.4 Phase 3：AI Review + 测试生成（2 周）</a><ul><li><a href=#目标-3>目标</a></li><li><a href=#ai-review-检查项>AI Review 检查项</a></li><li><a href=#测试生成流程>测试生成流程</a></li></ul></li><li><a href=#45-phase-4mr--部署2-周>4.5 Phase 4：MR + 部署（2 周）</a><ul><li><a href=#目标-4>目标</a></li><li><a href=#部署流程>部署流程</a></li></ul></li></ul></li><li><a href=#第五部分人工审核流程设计>第五部分：人工审核流程设计</a><ul><li><a href=#51-审核界面设计>5.1 审核界面设计</a></li><li><a href=#52-审核状态流转>5.2 审核状态流转</a></li><li><a href=#53-反馈闭环机制>5.3 反馈闭环机制</a></li></ul></li><li><a href=#第六部分技术实现路径>第六部分：技术实现路径</a><ul><li><a href=#61-推荐技术栈>6.1 推荐技术栈</a></li><li><a href=#62-快速验证路径mvp>6.2 快速验证路径（MVP）</a></li><li><a href=#63-关键接口设计>6.3 关键接口设计</a></li></ul></li><li><a href=#第七部分风险与缓解>第七部分：风险与缓解</a></li><li><a href=#参考资料>参考资料</a><ul><li><a href=#论文>论文</a><ul><li><a href=#ai-驱动软件开发>AI 驱动软件开发</a></li><li><a href=#代码生成与理解>代码生成与理解</a></li><li><a href=#ai-agent-与自主系统>AI Agent 与自主系统</a></li></ul></li><li><a href=#工具与项目>工具与项目</a><ul><li><a href=#ai-编程助手>AI 编程助手</a></li><li><a href=#ai-agent-平台>AI Agent 平台</a></li><li><a href=#协议与规范>协议与规范</a></li><li><a href=#工作流编排>工作流编排</a></li></ul></li><li><a href=#最佳实践与报告>最佳实践与报告</a><ul><li><a href=#行业报告>行业报告</a></li><li><a href=#企业实践指南>企业实践指南</a></li><li><a href=#开源社区资源>开源社区资源</a></li><li><a href=#技术博客>技术博客</a></li></ul></li></ul></li></ul></nav></div></details></div></div><div class="min-h-0 min-w-0 max-w-prose grow"><meta name=referrer content="no-referrer"><blockquote><p>本文针对"AI 驱动的有状态 SDLC 流水线平台"的构建需求，系统性梳理行业解决方案，并提出从 PRD 到部署的完整落地实施路径。核心关注：<strong>AI 能力边界、人工审核介入点、上下文状态管理、分阶段快速推进</strong>。</p></blockquote><hr><h2 id=第一部分目标场景定义 class="relative group">第一部分：目标场景定义</h2><h3 id=11-核心目标 class="relative group">1.1 核心目标</h3><p>构建一套 <strong>AI 驱动 + 人工审核</strong> 的 SDLC 流水线平台，实现：</p><table><thead><tr><th>阶段</th><th>AI 能力</th><th>人工介入</th></tr></thead><tbody><tr><td>PRD → TD</td><td>自动生成技术设计</td><td>审核/修改提示词和 TD</td></tr><tr><td>TD → 代码</td><td>分模块生成代码</td><td>审核/修改代码</td></tr><tr><td>代码 Review</td><td>AI 自动审查</td><td>确认修改建议</td></tr><tr><td>测试生成</td><td>自动生成测试用例</td><td>审核测试覆盖</td></tr><tr><td>部署上线</td><td>自动触发 Pipeline</td><td>审批 MR</td></tr></tbody></table><h3 id=12-完整流程概览 class="relative group">1.2 完整流程概览</h3><div class=plantuml-diagram id=plantuml-1767453596620><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+|#E8F5E9|准备阶段|
+start
+:上传知识库/代码库;
+:配置项目规范;
+
+|#E3F2FD|需求分析|
+:输入 PRD 链接;
+:AI 生成需求分析提示词;
+:人工审核/修改提示词;
+:AI 生成技术设计 (TD);
+:人工审核/修改 TD;
+
+|#FFF3E0|开发阶段|
+:AI 分模块生成代码;
+:人工审核代码;
+:AI Review 代码;
+:确认修改建议;
+
+|#F3E5F5|测试阶段|
+:AI 生成测试用例;
+:审核测试覆盖;
+:自动执行测试;
+
+|#FFEBEE|部署阶段|
+:生成 MR;
+:人工审批 MR;
+:触发自动部署;
+:AI 系统测试;
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453596620"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=第二部分行业解决方案调研 class="relative group">第二部分：行业解决方案调研</h2><h3 id=21-ai-编程助手code-copilot-类 class="relative group">2.1 AI 编程助手（Code Copilot 类）</h3><h4 id=211-工具对比 class="relative group">2.1.1 工具对比</h4><table><thead><tr><th>工具</th><th>核心能力</th><th>上下文能力</th><th>状态持久化</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>GitHub Copilot</strong></td><td>代码补全、Chat</td><td>当前文件 + 打开文件</td><td>❌ 不支持跨会话</td><td>日常编码辅助</td></tr><tr><td><strong>Cursor</strong></td><td>AI 原生 IDE、Composer</td><td>项目级理解、MCP 扩展</td><td>⚠️ 部分支持</td><td>复杂任务、重构</td></tr><tr><td><strong>Windsurf</strong></td><td>AI Flow 多步骤编排</td><td>任务级上下文</td><td>✅ 内置任务管理</td><td>多步骤任务</td></tr><tr><td><strong>Cline</strong></td><td>VS Code 插件、多模型</td><td>会话级</td><td>⚠️ 本地存储</td><td>灵活定制</td></tr><tr><td><strong>Continue</strong></td><td>开源、可自定义</td><td>可扩展</td><td>需开发</td><td>二次开发</td></tr></tbody></table><h4 id=212-cursor-深度分析 class="relative group">2.1.2 Cursor 深度分析</h4><p>Cursor 是目前最适合构建有状态 SDLC 的基础平台：</p><div class=plantuml-diagram id=plantuml-1767453676560><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+package &#34;Cursor 扩展能力&#34; {
+  [MCP Protocol] as mcp
+  [.cursor/rules] as rules
+  [Composer] as composer
+  [Codebase Index] as index
+}
+
+package &#34;可集成外部系统&#34; {
+  [Jira MCP Server] as jira
+  [Confluence MCP Server] as conf
+  [自定义 Context Server] as ctx
+  [GitLab MCP Server] as gitlab
+}
+
+mcp --&gt; jira
+mcp --&gt; conf
+mcp --&gt; ctx
+mcp --&gt; gitlab
+
+rules --&gt; composer : 注入规则
+index --&gt; composer : 代码理解
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453676560"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><p><strong>关键能力</strong>：</p><ul><li><strong>MCP (Model Context Protocol)</strong>：可扩展的工具协议，支持接入外部数据源</li><li><strong>Rules 系统</strong>：项目级规则配置，统一代码风格和架构模式</li><li><strong>Composer</strong>：多步骤任务编排，支持复杂重构</li></ul><h3 id=22-ai-agent自主编程类 class="relative group">2.2 AI Agent（自主编程类）</h3><h4 id=221-工具对比 class="relative group">2.2.1 工具对比</h4><table><thead><tr><th>Agent</th><th>开发商</th><th>核心理念</th><th>自主性</th><th>成熟度</th></tr></thead><tbody><tr><td><strong>Devin</strong></td><td>Cognition Labs</td><td>AI Software Engineer</td><td>高（端到端）</td><td>商业化中</td></tr><tr><td><strong>OpenHands</strong></td><td>开源社区</td><td>CodeAct 范式</td><td>中高</td><td>活跃开发</td></tr><tr><td><strong>SWE-agent</strong></td><td>Princeton</td><td>SWE-bench 基准</td><td>中</td><td>研究项目</td></tr><tr><td><strong>Aider</strong></td><td>开源</td><td>Git 感知编码</td><td>中</td><td>稳定可用</td></tr><tr><td><strong>Claude Code</strong></td><td>Anthropic</td><td>终端 Agent</td><td>中高</td><td>新发布</td></tr></tbody></table><h4 id=222-agent-能力边界 class="relative group">2.2.2 Agent 能力边界</h4><div class=plantuml-diagram id=plantuml-1767453731933><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;AI Agent 能力谱系&#34; {
+  rectangle &#34;低自主性\n(辅助模式)&#34; as low #E8F5E9 {
+    card &#34;代码补全&#34; as c1
+    card &#34;问答对话&#34; as c2
+  }
+  
+  rectangle &#34;中自主性\n(协作模式)&#34; as mid #FFF3E0 {
+    card &#34;多文件编辑&#34; as c3
+    card &#34;重构任务&#34; as c4
+    card &#34;Bug 修复&#34; as c5
+  }
+  
+  rectangle &#34;高自主性\n(代理模式)&#34; as high #FFEBEE {
+    card &#34;端到端开发&#34; as c6
+    card &#34;自主调试&#34; as c7
+    card &#34;环境操作&#34; as c8
+  }
+}
+
+low -right-&gt; mid
+mid -right-&gt; high
+
+note bottom of low : Copilot, Cursor Chat
+note bottom of mid : Cursor Composer, Aider
+note bottom of high : Devin, OpenHands
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453731933"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=23-传统-cicd-与-devops-平台 class="relative group">2.3 传统 CI/CD 与 DevOps 平台</h3><h4 id=231-覆盖范围对比 class="relative group">2.3.1 覆盖范围对比</h4><div class=plantuml-diagram id=plantuml-1767453803878><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;SDLC 全生命周期&#34; {
+  rectangle &#34;需求\n分析&#34; as req #FFE0B2
+  rectangle &#34;技术\n设计&#34; as design #FFE0B2
+  rectangle &#34;编码\n开发&#34; as dev #C8E6C9
+  rectangle &#34;代码\n审查&#34; as review #C8E6C9
+  rectangle &#34;构建\n测试&#34; as build #BBDEFB
+  rectangle &#34;部署\n发布&#34; as deploy #BBDEFB
+  rectangle &#34;运维\n监控&#34; as ops #BBDEFB
+}
+
+req --&gt; design
+design --&gt; dev
+dev --&gt; review
+review --&gt; build
+build --&gt; deploy
+deploy --&gt; ops
+
+note top of req : 传统 CI/CD 不覆盖
+note top of design : 传统 CI/CD 不覆盖
+note bottom of build : Jenkins/GitLab CI
+note bottom of deploy : ArgoCD/Spinnaker
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453803878"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h4 id=232-主流平台对比 class="relative group">2.3.2 主流平台对比</h4><table><thead><tr><th>平台</th><th>核心能力</th><th>AI 集成</th><th>状态管理</th></tr></thead><tbody><tr><td><strong>Jenkins</strong></td><td>流水线编排</td><td>插件生态</td><td>Pipeline 状态</td></tr><tr><td><strong>GitLab CI</strong></td><td>原生 Git 集成</td><td>Duo AI</td><td>MR + Pipeline</td></tr><tr><td><strong>GitHub Actions</strong></td><td>事件驱动</td><td>Copilot</td><td>Workflow 状态</td></tr><tr><td><strong>Azure DevOps</strong></td><td>端到端覆盖</td><td>Azure AI</td><td>Work Item 关联</td></tr><tr><td><strong>阿里云效</strong></td><td>一站式研发</td><td>通义灵码</td><td>需求-代码关联</td></tr></tbody></table><h3 id=24-工作流编排平台 class="relative group">2.4 工作流编排平台</h3><h4 id=241-temporal--cadence class="relative group">2.4.1 Temporal / Cadence</h4><p><strong>核心价值</strong>：将长时运行的业务流程建模为有状态的工作流</p><div class=plantuml-diagram id=plantuml-1767453856566><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+package &#34;Temporal 核心概念&#34; {
+  [Workflow] as wf
+  [Activity] as act
+  [Worker] as worker
+  [Signal] as sig
+}
+
+database &#34;State Store&#34; as db
+
+wf --&gt; act : 编排
+worker --&gt; wf : 执行
+sig --&gt; wf : 外部事件
+wf --&gt; db : 状态持久化
+
+note right of wf
+  自动故障恢复
+  支持人工审批等待
+  完整执行历史
+end note
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453856566"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><p><strong>适用场景</strong>：</p><ul><li>需要等待人工审批的长流程</li><li>需要故障恢复和重试</li><li>需要完整的审计追踪</li></ul><h3 id=25-新兴-ai-native-平台 class="relative group">2.5 新兴 AI-Native 平台</h3><table><thead><tr><th>平台</th><th>理念</th><th>当前状态</th></tr></thead><tbody><tr><td><strong>Copilot Workspace</strong></td><td>Issue → PR 全流程</td><td>Preview 阶段</td></tr><tr><td><strong>Devin</strong></td><td>AI Software Engineer</td><td>商业化中</td></tr><tr><td><strong>Factory AI</strong></td><td>AI 工厂模式</td><td>早期阶段</td></tr><tr><td><strong>All Hands AI</strong></td><td>开源 AI Agent 平台</td><td>活跃开发</td></tr></tbody></table><h3 id=26-调研总结 class="relative group">2.6 调研总结</h3><div class=plantuml-diagram id=plantuml-1767453902913><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+skinparam defaultTextAlignment center
+skinparam rectangleBorderThickness 2
+skinparam cardBorderThickness 1
+
+left to right direction
+
+rectangle &#34;行业现状\n(痛点)&#34; as pain #E3F2FD {
+  card &#34;工具孤岛&#34; as c1 #FFCDD2
+  card &#34;AI 无状态&#34; as c2 #FFCDD2
+  card &#34;编排缺失&#34; as c3 #FFCDD2
+}
+
+rectangle &#34;可用组件\n(基础)&#34; as base #E8F5E9 {
+  card &#34;Cursor&#43;MCP&#34; as s1 #C8E6C9
+  card &#34;Temporal&#34; as s2 #C8E6C9
+  card &#34;EventDriven&#34; as s3 #C8E6C9
+}
+
+rectangle &#34;需要构建\n(目标)&#34; as target #FFF3E0 {
+  card &#34;ContextStore&#34; as b1 #FFE0B2
+  card &#34;审核流程&#34; as b2 #FFE0B2
+  card &#34;编排层&#34; as b3 #FFE0B2
+}
+
+c1 -right-&gt; s1
+c2 -right-&gt; b1
+c3 -right-&gt; s2
+s3 -right-&gt; b3
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453902913"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><p><strong>核心结论</strong>：</p><table><thead><tr><th>发现</th><th>说明</th><th>对策</th></tr></thead><tbody><tr><td><strong>无现成方案</strong></td><td>没有开箱即用的 AI SDLC 平台</td><td>需要自建</td></tr><tr><td><strong>组件已就绪</strong></td><td>AI 能力、编排能力已成熟</td><td>整合即可</td></tr><tr><td><strong>Cursor 是最佳起点</strong></td><td>MCP 扩展性强，社区活跃</td><td>基于 Cursor 构建</td></tr><tr><td><strong>人工审核是核心</strong></td><td>AI 输出需要人工把关</td><td>设计审核流程</td></tr></tbody></table><hr><h2 id=第三部分系统架构设计 class="relative group">第三部分：系统架构设计</h2><h3 id=31-整体架构 class="relative group">3.1 整体架构</h3><div class=plantuml-diagram id=plantuml-1767453961683><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+package &#34;用户交互层&#34; {
+  [Cursor IDE] as cursor
+  [Web Dashboard] as web
+  [CLI 工具] as cli
+}
+
+package &#34;编排层&#34; {
+  [SDLC Orchestrator] as orch
+  [状态机引擎] as fsm
+  [审核流程管理] as review
+}
+
+package &#34;AI 能力层&#34; {
+  [需求分析 Agent] as req_agent
+  [代码生成 Agent] as code_agent
+  [Review Agent] as review_agent
+  [测试生成 Agent] as test_agent
+}
+
+package &#34;集成层&#34; {
+  [Jira Connector] as jira
+  [Confluence Connector] as conf
+  [GitLab Connector] as gitlab
+  [CI/CD Connector] as cicd
+}
+
+database &#34;Context Store&#34; as ctx_db
+database &#34;知识库&#34; as kb
+
+cursor --&gt; orch : MCP Protocol
+web --&gt; orch : REST API
+cli --&gt; orch : gRPC
+
+orch --&gt; fsm
+orch --&gt; review
+orch --&gt; req_agent
+orch --&gt; code_agent
+orch --&gt; review_agent
+orch --&gt; test_agent
+
+orch --&gt; jira
+orch --&gt; conf
+orch --&gt; gitlab
+orch --&gt; cicd
+
+orch --&gt; ctx_db
+req_agent --&gt; kb
+code_agent --&gt; kb
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767453961683"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=32-上下文存储设计 class="relative group">3.2 上下文存储设计</h3><div class=plantuml-diagram id=plantuml-1767454021955><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+package &#34;Context Store&#34; {
+  
+  rectangle &#34;项目级上下文&#34; as proj #E8F5E9 {
+    card &#34;技术栈规范&#34;
+    card &#34;架构模式&#34;
+    card &#34;代码风格&#34;
+  }
+  
+  rectangle &#34;任务级上下文&#34; as task #E3F2FD {
+    card &#34;PRD 内容&#34;
+    card &#34;TD 文档&#34;
+    card &#34;关联代码&#34;
+    card &#34;审核历史&#34;
+  }
+  
+  rectangle &#34;会话级上下文&#34; as session #FFF3E0 {
+    card &#34;AI 对话历史&#34;
+    card &#34;生成的代码片段&#34;
+    card &#34;接受/拒绝记录&#34;
+  }
+  
+}
+
+proj --&gt; task : 继承
+task --&gt; session : 继承
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454021955"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=33-状态机设计 class="relative group">3.3 状态机设计</h3><div class=plantuml-diagram id=plantuml-1767454070366><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+[*] --&gt; PRD_INPUT : 创建任务
+
+state &#34;需求阶段&#34; as req_phase {
+  PRD_INPUT --&gt; PROMPT_GENERATED : AI 生成提示词
+  PROMPT_GENERATED --&gt; PROMPT_REVIEWED : 人工审核
+  PROMPT_REVIEWED --&gt; TD_GENERATED : AI 生成 TD
+  TD_GENERATED --&gt; TD_REVIEWED : 人工审核
+}
+
+state &#34;开发阶段&#34; as dev_phase {
+  TD_REVIEWED --&gt; CODE_GENERATED : AI 生成代码
+  CODE_GENERATED --&gt; CODE_HUMAN_REVIEWED : 人工审核
+  CODE_HUMAN_REVIEWED --&gt; CODE_AI_REVIEWED : AI Review
+  CODE_AI_REVIEWED --&gt; CODE_APPROVED : 审核通过
+}
+
+state &#34;测试阶段&#34; as test_phase {
+  CODE_APPROVED --&gt; TEST_GENERATED : 生成测试用例
+  TEST_GENERATED --&gt; TEST_REVIEWED : 人工审核
+  TEST_REVIEWED --&gt; TEST_EXECUTED : 执行测试
+  TEST_EXECUTED --&gt; TEST_PASSED : 测试通过
+}
+
+state &#34;部署阶段&#34; as deploy_phase {
+  TEST_PASSED --&gt; MR_CREATED : 创建 MR
+  MR_CREATED --&gt; MR_APPROVED : 人工审批
+  MR_APPROVED --&gt; DEPLOYED : 自动部署
+  DEPLOYED --&gt; SYS_TESTED : AI 系统测试
+}
+
+SYS_TESTED --&gt; [*] : 完成
+
+note right of PROMPT_REVIEWED : 可返回修改
+note right of TD_REVIEWED : 可返回修改
+note right of CODE_HUMAN_REVIEWED : 可返回修改
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454070366"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=第四部分分阶段落地方案 class="relative group">第四部分：分阶段落地方案</h2><h3 id=41-phase-0基础设施准备1-周 class="relative group">4.1 Phase 0：基础设施准备（1 周）</h3><h4 id=目标 class="relative group">目标</h4><ul><li>搭建基础环境</li><li>配置知识库和代码库</li></ul><h4 id=技术选型 class="relative group">技术选型</h4><table><thead><tr><th>组件</th><th>推荐方案</th><th>备选方案</th></tr></thead><tbody><tr><td>向量数据库</td><td>Milvus</td><td>Qdrant, Pinecone</td></tr><tr><td>文档存储</td><td>PostgreSQL + S3</td><td>MongoDB</td></tr><tr><td>消息队列</td><td>Redis Streams</td><td>Kafka</td></tr><tr><td>LLM</td><td>Claude 3.5</td><td>GPT-4, DeepSeek</td></tr></tbody></table><h4 id=知识库结构 class="relative group">知识库结构</h4><div class=plantuml-diagram id=plantuml-1767454152349><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+package &#34;知识库&#34; {
+  folder &#34;代码库索引&#34; {
+    [项目 A 代码]
+    [项目 B 代码]
+    [公共库代码]
+  }
+  
+  folder &#34;文档库&#34; {
+    [技术规范]
+    [架构文档]
+    [历史 TD]
+  }
+  
+  folder &#34;最佳实践&#34; {
+    [代码模板]
+    [设计模式]
+    [Review 清单]
+  }
+}
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454152349"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=42-phase-1prd--td-自动生成2-周 class="relative group">4.2 Phase 1：PRD → TD 自动生成（2 周）</h3><h4 id=目标-1 class="relative group">目标</h4><ul><li>输入 PRD 链接，自动生成需求分析提示词</li><li>人工审核提示词后，自动生成 TD</li></ul><h4 id=流程详解 class="relative group">流程详解</h4><div class=plantuml-diagram id=plantuml-1767454203154><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+|用户|
+start
+:输入 PRD 链接;
+
+|系统|
+:解析 PRD 内容;
+:提取关键信息;
+note right
+  功能需求
+  非功能需求
+  业务规则
+  边界条件
+end note
+
+:加载 TD 模板;
+:生成需求分析提示词;
+
+|用户|
+:审核提示词;
+if (需要修改?) then (是)
+  :修改提示词;
+else (否)
+endif
+:确认提示词;
+
+|系统|
+:调用 LLM 生成 TD;
+:结构化输出;
+
+|用户|
+:审核 TD;
+if (需要修改?) then (是)
+  :输入修改指令;
+  |系统|
+  :增量修改 TD;
+  |用户|
+else (否)
+endif
+:确认 TD;
+:保存到 Context Store;
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454203154"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h4 id=核心实现 class="relative group">核心实现</h4><p><strong>1. PRD 解析器</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 伪代码示例</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>PRDParser</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>parse</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>prd_url</span><span class=p>:</span> <span class=nb>str</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>PRDContent</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 1. 获取 PRD 内容（支持 Confluence、Notion 等）</span>
+</span></span><span class=line><span class=cl>        <span class=n>raw_content</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>fetch_content</span><span class=p>(</span><span class=n>prd_url</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=c1># 2. 结构化提取</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>PRDContent</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=n>title</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>extract_title</span><span class=p>(</span><span class=n>raw_content</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>            <span class=n>background</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>extract_background</span><span class=p>(</span><span class=n>raw_content</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>            <span class=n>requirements</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>extract_requirements</span><span class=p>(</span><span class=n>raw_content</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>            <span class=n>acceptance_criteria</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>extract_ac</span><span class=p>(</span><span class=n>raw_content</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span></code></pre></div><p><strong>2. 提示词模板</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl><span class=gu>## 需求分析任务
+</span></span></span><span class=line><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=cl><span class=gu>### 背景信息
+</span></span></span><span class=line><span class=cl><span class=gu></span>{prd_background}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### 功能需求
+</span></span></span><span class=line><span class=cl><span class=gu></span>{prd_requirements}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### 约束条件
+</span></span></span><span class=line><span class=cl><span class=gu></span><span class=k>-</span> 技术栈：{project_tech_stack}
+</span></span><span class=line><span class=cl><span class=k>-</span> 现有架构：{existing_architecture}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gu>### 输出要求
+</span></span></span><span class=line><span class=cl><span class=gu></span>请按以下结构生成技术设计文档：
+</span></span><span class=line><span class=cl><span class=k>1.</span> 概述
+</span></span><span class=line><span class=cl><span class=k>2.</span> 系统架构
+</span></span><span class=line><span class=cl><span class=k>3.</span> 接口设计
+</span></span><span class=line><span class=cl><span class=k>4.</span> 数据模型
+</span></span><span class=line><span class=cl><span class=k>5.</span> 核心流程
+</span></span><span class=line><span class=cl><span class=k>6.</span> 异常处理
+</span></span><span class=line><span class=cl><span class=k>7.</span> 测试策略
+</span></span></code></pre></div><h4 id=mcp-server-实现 class="relative group">MCP Server 实现</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-typescript data-lang=typescript><span class=line><span class=cl><span class=c1>// SDLC Context MCP Server
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kr>const</span> <span class=nx>tools</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>name</span><span class=o>:</span> <span class=s2>&#34;get_prd_content&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>description</span><span class=o>:</span> <span class=s2>&#34;获取 PRD 内容&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>parameters</span><span class=o>:</span> <span class=p>{</span> <span class=nx>prd_url</span><span class=o>:</span> <span class=s2>&#34;string&#34;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>name</span><span class=o>:</span> <span class=s2>&#34;generate_td_prompt&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>description</span><span class=o>:</span> <span class=s2>&#34;生成 TD 提示词&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>parameters</span><span class=o>:</span> <span class=p>{</span> <span class=nx>prd_id</span><span class=o>:</span> <span class=s2>&#34;string&#34;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>name</span><span class=o>:</span> <span class=s2>&#34;save_td&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>description</span><span class=o>:</span> <span class=s2>&#34;保存技术设计&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>parameters</span><span class=o>:</span> <span class=p>{</span> <span class=nx>task_id</span><span class=o>:</span> <span class=s2>&#34;string&#34;</span><span class=p>,</span> <span class=nx>td_content</span><span class=o>:</span> <span class=s2>&#34;string&#34;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>name</span><span class=o>:</span> <span class=s2>&#34;get_task_context&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>description</span><span class=o>:</span> <span class=s2>&#34;获取任务完整上下文&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nx>parameters</span><span class=o>:</span> <span class=p>{</span> <span class=nx>task_id</span><span class=o>:</span> <span class=s2>&#34;string&#34;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>];</span>
+</span></span></code></pre></div><h3 id=43-phase-2td--代码生成2-周 class="relative group">4.3 Phase 2：TD → 代码生成（2 周）</h3><h4 id=目标-2 class="relative group">目标</h4><ul><li>根据 TD 分模块生成代码</li><li>支持增量生成和修改</li></ul><h4 id=流程详解-1 class="relative group">流程详解</h4><div class=plantuml-diagram id=plantuml-1767454251996><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+|用户|
+start
+:选择已审核的 TD;
+
+|系统|
+:分析 TD 结构;
+:识别代码模块;
+note right
+  API 层
+  Service 层
+  Repository 层
+  Model 层
+end note
+
+:加载相关代码上下文;
+:逐模块生成代码;
+
+|用户|
+:逐模块审核;
+while (还有模块?) is (是)
+  :查看生成的代码;
+  if (需要修改?) then (是)
+    :输入修改指令;
+    |系统|
+    :重新生成该模块;
+    |用户|
+  else (否)
+  endif
+  :确认该模块;
+endwhile (否)
+
+|系统|
+:整合所有模块;
+:生成到本地文件;
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454251996"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h4 id=代码生成策略 class="relative group">代码生成策略</h4><div class=plantuml-diagram id=plantuml-1767454295988><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;代码生成策略&#34; {
+  
+  card &#34;1. 骨架生成&#34; as s1 #E8F5E9
+  card &#34;2. 接口填充&#34; as s2 #E3F2FD
+  card &#34;3. 业务逻辑&#34; as s3 #FFF3E0
+  card &#34;4. 异常处理&#34; as s4 #FFEBEE
+  
+  s1 --&gt; s2
+  s2 --&gt; s3
+  s3 --&gt; s4
+}
+
+note bottom of s1 : 先生成文件结构和类骨架
+note bottom of s2 : 填充接口定义和数据模型
+note bottom of s3 : 实现核心业务逻辑
+note bottom of s4 : 添加异常处理和边界检查
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454295988"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=44-phase-3ai-review--测试生成2-周 class="relative group">4.4 Phase 3：AI Review + 测试生成（2 周）</h3><h4 id=目标-3 class="relative group">目标</h4><ul><li>AI 自动审查生成的代码</li><li>自动生成测试用例</li></ul><h4 id=ai-review-检查项 class="relative group">AI Review 检查项</h4><table><thead><tr><th>类别</th><th>检查项</th></tr></thead><tbody><tr><td><strong>代码规范</strong></td><td>命名规范、格式、注释</td></tr><tr><td><strong>架构一致</strong></td><td>分层规范、依赖方向</td></tr><tr><td><strong>安全检查</strong></td><td>SQL 注入、XSS、敏感信息</td></tr><tr><td><strong>性能问题</strong></td><td>N+1 查询、内存泄漏</td></tr><tr><td><strong>边界条件</strong></td><td>空值处理、异常处理</td></tr></tbody></table><h4 id=测试生成流程 class="relative group">测试生成流程</h4><div class=plantuml-diagram id=plantuml-1767454367331><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+|系统|
+start
+:分析代码结构;
+:识别测试边界;
+
+fork
+  :生成单元测试;
+fork again
+  :生成集成测试;
+fork again
+  :生成 E2E 测试;
+end fork
+
+:整合测试套件;
+
+|用户|
+:审核测试覆盖;
+if (覆盖充分?) then (是)
+else (否)
+  :指定补充场景;
+  |系统|
+  :生成补充测试;
+  |用户|
+endif
+
+|系统|
+:执行测试;
+:报告结果;
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454367331"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=45-phase-4mr--部署2-周 class="relative group">4.5 Phase 4：MR + 部署（2 周）</h3><h4 id=目标-4 class="relative group">目标</h4><ul><li>自动创建 MR</li><li>人工审批后自动部署</li><li>AI 系统测试</li></ul><h4 id=部署流程 class="relative group">部署流程</h4><div class=plantuml-diagram id=plantuml-1767454412896><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+|系统|
+start
+:汇总所有变更;
+:生成 MR 描述;
+note right
+  变更摘要
+  关联 Jira Issue
+  测试报告链接
+  Review 清单
+end note
+:创建 GitLab MR;
+
+|审批人|
+:收到 MR 通知;
+:查看变更内容;
+:查看 AI Review 报告;
+if (批准?) then (是)
+  :Approve MR;
+else (否)
+  :Request Changes;
+  |系统|
+  :通知开发者;
+  stop
+endif
+
+|系统|
+:触发 CI Pipeline;
+:构建 &amp; 测试;
+if (Pipeline 通过?) then (是)
+  :部署到测试环境;
+  :AI 系统测试;
+  if (测试通过?) then (是)
+    :部署到生产环境;
+  else (否)
+    :回滚 &amp; 通知;
+  endif
+else (否)
+  :通知失败原因;
+endif
+stop
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454412896"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=第五部分人工审核流程设计 class="relative group">第五部分：人工审核流程设计</h2><h3 id=51-审核界面设计 class="relative group">5.1 审核界面设计</h3><div class=plantuml-diagram id=plantuml-1767454460215><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;审核界面布局&#34; {
+  
+  rectangle &#34;左侧面板&#34; as left #E8F5E9 {
+    card &#34;任务列表&#34;
+    card &#34;状态筛选&#34;
+    card &#34;我的待办&#34;
+  }
+  
+  rectangle &#34;中间主区&#34; as center #E3F2FD {
+    card &#34;AI 生成内容&#34;
+    card &#34;Diff 对比视图&#34;
+    card &#34;修改编辑器&#34;
+  }
+  
+  rectangle &#34;右侧面板&#34; as right #FFF3E0 {
+    card &#34;任务上下文&#34;
+    card &#34;PRD 摘要&#34;
+    card &#34;历史版本&#34;
+    card &#34;AI 建议&#34;
+  }
+  
+  rectangle &#34;底部操作栏&#34; as bottom #FFEBEE {
+    card &#34;批准&#34; as approve
+    card &#34;请求修改&#34; as request
+    card &#34;重新生成&#34; as regen
+    card &#34;添加评论&#34; as comment
+  }
+}
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454460215"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=52-审核状态流转 class="relative group">5.2 审核状态流转</h3><div class=plantuml-diagram id=plantuml-1767454508104><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+[*] --&gt; PENDING : 生成完成
+
+PENDING --&gt; APPROVED : 批准
+PENDING --&gt; CHANGES_REQUESTED : 请求修改
+PENDING --&gt; REGENERATING : 重新生成
+
+CHANGES_REQUESTED --&gt; PENDING : 修改完成
+REGENERATING --&gt; PENDING : 重新生成完成
+
+APPROVED --&gt; [*]
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454508104"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=53-反馈闭环机制 class="relative group">5.3 反馈闭环机制</h3><div class=plantuml-diagram id=plantuml-1767454550704><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+|审核人|
+:查看 AI 输出;
+if (满意?) then (是)
+  :批准;
+  stop
+else (否)
+endif
+
+:选择反馈类型;
+
+switch (反馈类型?)
+case (补充提示词)
+  :输入额外指令;
+  |系统|
+  :追加到 prompt;
+  :重新生成;
+  
+case (直接修改)
+  :手动编辑内容;
+  |系统|
+  :记录修改;
+  :学习偏好;
+  
+case (拒绝重做)
+  :说明问题;
+  |系统|
+  :重置状态;
+  :通知相关人;
+endswitch
+
+|审核人|
+:重新审核;
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454550704"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><hr><h2 id=第六部分技术实现路径 class="relative group">第六部分：技术实现路径</h2><h3 id=61-推荐技术栈 class="relative group">6.1 推荐技术栈</h3><table><thead><tr><th>层级</th><th>技术选型</th><th>说明</th></tr></thead><tbody><tr><td><strong>用户入口</strong></td><td>Cursor + MCP</td><td>开发者主要交互入口</td></tr><tr><td><strong>Web Dashboard</strong></td><td>Next.js + Tailwind</td><td>审核和管理界面</td></tr><tr><td><strong>编排引擎</strong></td><td>Temporal</td><td>长流程状态管理</td></tr><tr><td><strong>API 网关</strong></td><td>Go + Gin</td><td>高性能 API</td></tr><tr><td><strong>消息队列</strong></td><td>Redis Streams</td><td>事件驱动</td></tr><tr><td><strong>数据库</strong></td><td>PostgreSQL</td><td>结构化存储</td></tr><tr><td><strong>向量库</strong></td><td>Milvus</td><td>知识库检索</td></tr><tr><td><strong>LLM</strong></td><td>Claude 3.5 Sonnet</td><td>代码生成能力强</td></tr></tbody></table><h3 id=62-快速验证路径mvp class="relative group">6.2 快速验证路径（MVP）</h3><div class=plantuml-diagram id=plantuml-1767454593574><pre class=plantuml-code style=display:none>@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;MVP 范围（4周）&#34; #E8F5E9 {
+  card &#34;1. MCP Server\n(Context 管理)&#34; as mcp
+  card &#34;2. PRD 解析\n(Confluence 集成)&#34; as prd
+  card &#34;3. TD 生成\n(模板 &#43; LLM)&#34; as td
+  card &#34;4. 简单审核\n(Cursor 内)&#34; as review
+}
+
+rectangle &#34;后续迭代&#34; #FFF3E0 {
+  card &#34;代码生成&#34; as code
+  card &#34;AI Review&#34; as airev
+  card &#34;测试生成&#34; as test
+  card &#34;Web Dashboard&#34; as web
+}
+
+mcp --&gt; prd
+prd --&gt; td
+td --&gt; review
+review --&gt; code
+code --&gt; airev
+airev --&gt; test
+test --&gt; web
+
+@enduml</pre><div class=plantuml-loading>正在加载图表...</div><img class=plantuml-image style=display:none alt="PlantUML Diagram"><div class=plantuml-error style=display:none;color:#dc3545;padding:1rem;background:#fff3cd;border-radius:4px;margin-top:1rem></div></div><script>window.plantumlEncoderLoaded||(window.plantumlEncoderLoaded=new Promise((e,t)=>{if(typeof plantumlEncoder!="undefined"){e();return}const n=document.createElement("script");n.src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js",n.onload=()=>e(),n.onerror=()=>t(new Error("CDN加载失败")),document.head.appendChild(n),setTimeout(()=>t(new Error("CDN加载超时")),1e4)}))</script><script>(function(){const t=document.getElementById("plantuml-1767454593574"),r=t.querySelector(".plantuml-code").textContent,n=t.querySelector(".plantuml-image"),a=t.querySelector(".plantuml-loading"),s=t.querySelector(".plantuml-error"),e=["https://www.plantuml.com/plantuml/svg/","https://kroki.io/plantuml/svg/"];let c=0;function o(e,t){a.style.display="none",s.style.display="block",s.innerHTML=`
+      <strong>⚠️ ${e}</strong><br>
+      <small>${t}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `,console.error("PlantUML error:",e,t)}function i(t,r=0){if(r>=e.length){o("所有服务器均加载失败","已尝试 "+e.join(", "));return}const l=e[r]+t,c=setTimeout(()=>{console.warn(`服务器 ${e[r]} 超时，尝试下一个...`),i(t,r+1)},1e4);n.onload=function(){clearTimeout(c),a.style.display="none",n.style.display="block",s.style.display="none"},n.onerror=function(){clearTimeout(c),console.warn(`服务器 ${e[r]} 加载失败，尝试下一个...`),i(t,r+1)},n.src=l}window.plantumlEncoderLoaded.then(()=>{try{if(typeof plantumlEncoder=="undefined")throw new Error("plantumlEncoder 未定义");const e=plantumlEncoder.encode(r);e.length>2048&&console.warn("图表代码较长，可能加载较慢"),i(e)}catch(e){o("图表编码失败",e.message)}}).catch(e=>{o("依赖库加载失败",e.message)})})()</script><h3 id=63-关键接口设计 class="relative group">6.3 关键接口设计</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># API 设计示例</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 1. 创建任务</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>POST /api/tasks</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Request</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>prd_url</span><span class=p>:</span><span class=w> </span><span class=l>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>project_id</span><span class=p>:</span><span class=w> </span><span class=l>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Response</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>task_id</span><span class=p>:</span><span class=w> </span><span class=l>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;PRD_PARSING&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 2. 获取提示词</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>GET /api/tasks/{task_id}/prompt</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Response</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>prompt</span><span class=p>:</span><span class=w> </span><span class=l>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>prd_summary</span><span class=p>:</span><span class=w> </span><span class=l>object</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>suggestions</span><span class=p>:</span><span class=w> </span><span class=l>array</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 3. 确认提示词，生成 TD</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>POST /api/tasks/{task_id}/generate-td</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Request</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>prompt</span><span class=p>:</span><span class=w> </span><span class=l>string </span><span class=w> </span><span class=c># 可能已修改</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Response</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>td_id</span><span class=p>:</span><span class=w> </span><span class=l>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;TD_GENERATING&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 4. 获取 TD</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>GET /api/tasks/{task_id}/td</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Response</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>content</span><span class=p>:</span><span class=w> </span><span class=l>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=l>number</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>status</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;PENDING_REVIEW&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 5. 审核 TD</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>POST /api/tasks/{task_id}/td/review</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>Request</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>action</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;approve&#34;</span><span class=w> </span><span class=l>| &#34;request_changes&#34; | &#34;regenerate&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>feedback</span><span class=p>:</span><span class=w> </span><span class=l>string?</span><span class=w>
+</span></span></span></code></pre></div><hr><h2 id=第七部分风险与缓解 class="relative group">第七部分：风险与缓解</h2><table><thead><tr><th>风险</th><th>影响</th><th>缓解措施</th></tr></thead><tbody><tr><td><strong>AI 输出质量不稳定</strong></td><td>返工成本高</td><td>多轮审核、Few-shot 示例</td></tr><tr><td><strong>上下文丢失</strong></td><td>前后不一致</td><td>持久化存储、版本控制</td></tr><tr><td><strong>团队接受度低</strong></td><td>推广困难</td><td>渐进式引入、展示 ROI</td></tr><tr><td><strong>安全合规</strong></td><td>代码泄露</td><td>私有化部署、访问控制</td></tr><tr><td><strong>模型成本</strong></td><td>预算超支</td><td>缓存、增量调用</td></tr></tbody></table><hr><h2 id=参考资料 class="relative group">参考资料</h2><h3 id=论文 class="relative group">论文</h3><h4 id=ai-驱动软件开发 class="relative group">AI 驱动软件开发</h4><ol><li><p><strong><a href=https://arxiv.org/abs/2408.03416 target=_blank rel=noreferrer>AI-Native Software Development Life Cycle (SDLC)</a></strong> - arXiv:2408.03416</p><ul><li>提出 AI 原生 SDLC 框架，探讨如何将 AI 深度集成到软件开发全生命周期</li></ul></li><li><p><strong><a href=https://arxiv.org/abs/2511.15293 target=_blank rel=noreferrer>AutoSW: Iterative End-to-End Automated Software Development</a></strong> - arXiv:2511.15293</p><ul><li>端到端自动化软件开发方法，支持迭代式开发流程</li></ul></li><li><p><strong><a href=https://arxiv.org/abs/2310.06770 target=_blank rel=noreferrer>SWE-bench: Can Language Models Resolve Real-world GitHub Issues?</a></strong> - arXiv:2310.06770</p><ul><li>评估大语言模型解决真实 GitHub Issue 能力的基准测试</li></ul></li><li><p><strong><a href=https://arxiv.org/abs/2405.15793 target=_blank rel=noreferrer>SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering</a></strong> - arXiv:2405.15793</p><ul><li>Princeton 团队提出的自动化软件工程 Agent 架构</li></ul></li></ol><h4 id=代码生成与理解 class="relative group">代码生成与理解</h4><ol start=5><li><p><strong><a href=https://arxiv.org/abs/2203.13474 target=_blank rel=noreferrer>CodeGen: An Open Large Language Model for Code</a></strong> - arXiv:2203.13474</p><ul><li>Salesforce 开源代码生成大模型</li></ul></li><li><p><strong><a href=https://arxiv.org/abs/2305.06161 target=_blank rel=noreferrer>StarCoder: May the Source Be with You!</a></strong> - arXiv:2305.06161</p><ul><li>BigCode 项目开源代码大模型</li></ul></li><li><p><strong><a href=https://arxiv.org/abs/2107.03374 target=_blank rel=noreferrer>Evaluating Large Language Models Trained on Code</a></strong> - arXiv:2107.03374</p><ul><li>OpenAI Codex 评估论文</li></ul></li></ol><h4 id=ai-agent-与自主系统 class="relative group">AI Agent 与自主系统</h4><ol start=8><li><p><strong><a href=https://arxiv.org/abs/2309.07864 target=_blank rel=noreferrer>The Rise and Potential of Large Language Model Based Agents</a></strong> - arXiv:2309.07864</p><ul><li>LLM Agent 综述论文</li></ul></li><li><p><strong><a href=https://github.com/Significant-Gravitas/AutoGPT target=_blank rel=noreferrer>AutoGPT: An Autonomous GPT-4 Experiment</a></strong> - GitHub</p><ul><li>自主 AI Agent 开源项目</li></ul></li><li><p><strong><a href=https://arxiv.org/abs/2201.11903 target=_blank rel=noreferrer>Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a></strong> - arXiv:2201.11903</p><ul><li>思维链提示方法，提升 AI 推理能力</li></ul></li></ol><h3 id=工具与项目 class="relative group">工具与项目</h3><h4 id=ai-编程助手 class="relative group">AI 编程助手</h4><ul><li><a href=https://cursor.sh/ target=_blank rel=noreferrer>Cursor</a> - AI 原生 IDE，支持 MCP 扩展</li><li><a href=https://github.com/features/copilot target=_blank rel=noreferrer>GitHub Copilot</a> - GitHub 官方 AI 编程助手</li><li><a href=https://codeium.com/windsurf target=_blank rel=noreferrer>Windsurf</a> - Codeium 推出的 AI Flow IDE</li><li><a href=https://github.com/cline/cline target=_blank rel=noreferrer>Cline</a> - VS Code AI 编程插件</li><li><a href=https://continue.dev/ target=_blank rel=noreferrer>Continue</a> - 开源 AI 编程助手</li><li><a href=https://aider.chat/ target=_blank rel=noreferrer>Aider</a> - 命令行 AI 编程工具</li></ul><h4 id=ai-agent-平台 class="relative group">AI Agent 平台</h4><ul><li><a href=https://github.com/All-Hands-AI/OpenHands target=_blank rel=noreferrer>OpenHands</a> - 开源 AI Agent 平台（原 OpenDevin）</li><li><a href=https://github.com/princeton-nlp/SWE-agent target=_blank rel=noreferrer>SWE-agent</a> - Princeton 自动化编程 Agent</li><li><a href=https://www.cognition.ai/blog/introducing-devin target=_blank rel=noreferrer>Devin</a> - Cognition Labs AI Software Engineer</li><li><a href=https://www.anthropic.com/claude-code target=_blank rel=noreferrer>Claude Code</a> - Anthropic 终端 AI Agent</li></ul><h4 id=协议与规范 class="relative group">协议与规范</h4><ul><li><a href=https://modelcontextprotocol.io/ target=_blank rel=noreferrer>MCP Protocol</a> - Anthropic 模型上下文协议</li><li><a href=https://github.com/modelcontextprotocol/servers target=_blank rel=noreferrer>MCP Servers</a> - MCP Server 官方示例</li><li><a href=https://microsoft.github.io/language-server-protocol/ target=_blank rel=noreferrer>Language Server Protocol</a> - 微软语言服务器协议</li></ul><h4 id=工作流编排 class="relative group">工作流编排</h4><ul><li><a href=https://temporal.io/ target=_blank rel=noreferrer>Temporal</a> - 分布式工作流编排引擎</li><li><a href=https://docs.temporal.io/ target=_blank rel=noreferrer>Temporal Documentation</a> - Temporal 官方文档</li><li><a href=https://cadenceworkflow.io/ target=_blank rel=noreferrer>Cadence</a> - Uber 开源工作流引擎</li><li><a href=https://airflow.apache.org/ target=_blank rel=noreferrer>Apache Airflow</a> - 数据工作流编排</li><li><a href=https://argoproj.github.io/argo-workflows/ target=_blank rel=noreferrer>Argo Workflows</a> - Kubernetes 原生工作流</li></ul><h3 id=最佳实践与报告 class="relative group">最佳实践与报告</h3><h4 id=行业报告 class="relative group">行业报告</h4><ul><li><a href=https://dora.dev/research/ target=_blank rel=noreferrer>DORA State of DevOps Report 2024</a> - Google DORA 团队年度研发效能报告</li><li><a href=https://github.blog/news-insights/octoverse/ target=_blank rel=noreferrer>GitHub Octoverse 2024</a> - GitHub 年度开发者报告</li><li><a href=https://survey.stackoverflow.co/2024/ target=_blank rel=noreferrer>Stack Overflow Developer Survey 2024</a> - 开发者调查报告</li><li><a href=https://www.gartner.com/en/information-technology/articles/ai-agents-transforming-software-engineering target=_blank rel=noreferrer>Gartner: AI Agents in Software Engineering</a> - Gartner AI Agent 分析</li></ul><h4 id=企业实践指南 class="relative group">企业实践指南</h4><ul><li><a href=https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-accelerate-software-dev-lifecycle-gen-ai/ target=_blank rel=noreferrer>AWS: 利用生成式 AI 加速 SDLC</a> - AWS 官方指南</li><li><a href=https://cloud.google.com/ai/generative-ai/docs/developer target=_blank rel=noreferrer>Google Cloud: Generative AI for Developers</a> - Google Cloud 开发者指南</li><li><a href=https://docs.github.com/en/copilot/using-github-copilot/best-practices-for-using-github-copilot target=_blank rel=noreferrer>Microsoft: GitHub Copilot Best Practices</a> - GitHub Copilot 最佳实践</li><li><a href=https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview target=_blank rel=noreferrer>Anthropic: Claude Best Practices</a> - Claude 提示工程指南</li></ul><h4 id=开源社区资源 class="relative group">开源社区资源</h4><ul><li><a href=https://github.com/Shubhamsaboo/awesome-llm-apps target=_blank rel=noreferrer>Awesome LLM Apps</a> - LLM 应用合集</li><li><a href=https://github.com/srcbook/awesome-ai-coding target=_blank rel=noreferrer>Awesome AI Coding</a> - AI 编程工具合集</li><li><a href=https://www.langchain.com/ target=_blank rel=noreferrer>LangChain</a> - LLM 应用开发框架</li><li><a href=https://www.llamaindex.ai/ target=_blank rel=noreferrer>LlamaIndex</a> - LLM 数据框架</li></ul><h4 id=技术博客 class="relative group">技术博客</h4><ul><li><a href=https://openai.com/research/ target=_blank rel=noreferrer>OpenAI Research Blog</a> - OpenAI 研究博客</li><li><a href=https://www.anthropic.com/research target=_blank rel=noreferrer>Anthropic Research</a> - Anthropic 研究博客</li><li><a href=https://blog.google/technology/ai/ target=_blank rel=noreferrer>Google AI Blog</a> - Google AI 博客</li><li><a href=https://github.blog/engineering/ target=_blank rel=noreferrer>GitHub Engineering Blog</a> - GitHub 工程博客</li></ul></div></section><footer class="max-w-prose pt-8 print:hidden"><div class=flex><picture class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full"><img width=512 height=512 class="!mb-0 !mt-0 me-4 w-24 h-auto rounded-full" alt=Skitii loading=lazy decoding=async src=https://skitii.vercel.app/img/donatello.png></picture><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">Author</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">Skitii</div><div class="text-2xl sm:text-lg"></div></div></div><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span></span><span><a class="group flex text-right" href=https://skitii.vercel.app/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">利用GenAI加速软件开发生命周期策略</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime="2025-12-15 00:00:00 +0000 UTC">15 December 2025</time>
+</span></span><span class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"><span class="ltr:inline rtl:hidden">&rarr;</span><span class="ltr:hidden rtl:inline">&larr;</span></span></a></span></div></div><div class=pt-3><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class=pt-3><script src=https://utteranc.es/client.js repo=AbnerHuang2/mywebsite issue-term=pathname theme=gruvbox-dark crossorigin=anonymous async></script></div></div></footer></article></main><div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12" id=to-top hidden=true><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label="Scroll to top" title="Scroll to top">&uarr;</a></div><footer class="py-10 print:hidden"><div class="flex items-center justify-between"><div><p class="text-sm text-neutral-500 dark:text-neutral-400">&copy;
+2025
+Skitii</p></div><div class="flex flex-row items-center"><div class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"><button id=appearance-switcher-0 type=button aria-label="appearance switcher"><div class="flex h-12 w-12 items-center justify-center dark:hidden" title="Switch to dark appearance"><span class="icon relative inline-block px-1 align-text-bottom"><svg viewBox="0 0 512 512"><path fill="currentColor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="hidden h-12 w-12 items-center justify-center dark:flex" title="Switch to light appearance"><span class="icon relative inline-block px-1 align-text-bottom"><svg viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js></script><link rel=stylesheet href=https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css><script src=https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/live2d-widget@3.1.4/lib/L2Dwidget.0.min.js></script><script>(function(e,t,n){t.ChatraID="H8oixnws8SKYQkjBz";var s=e.createElement("script");t[n]=t[n]||function(){(t[n].q=t[n].q||[]).push(arguments)},s.async=!0,s.src="https://call.chatra.io/chatra.js",e.head&&e.head.appendChild(s)})(document,window,"Chatra")</script><script type=text/javascript>L2Dwidget.init({model:{scale:1,hHeadPos:.5,vHeadPos:.618,jsonPath:"https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/hijiki/hijiki.model.json"},display:{superSample:1,width:120,height:300,position:"right",hOffset:20,vOffset:0},mobile:{show:!0,scale:1,motion:!0},react:{opacityDefault:.8,opacityOnHover:1}})</script></footer><div id=search-wrapper class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://skitii.vercel.app/><div id=search-modal class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex flex-none items-center justify-between px-2"><form class="flex min-w-0 flex-auto items-center"><div class="flex h-8 w-8 items-center justify-center text-neutral-400"><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=Search tabindex=0></form><button id=close-search-button class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="Close (Esc)">
+<span class="icon relative inline-block px-1 align-text-bottom"><svg viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto overflow-auto px-2"><ul id=search-results></ul></section></div></div></div></body></html>
