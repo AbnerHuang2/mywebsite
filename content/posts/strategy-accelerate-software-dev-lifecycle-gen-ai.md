@@ -1,6 +1,6 @@
 ---
 title: "利用GenAI加速软件开发生命周期策略"
-date: 2025-12-29
+date: 2025-12-15
 draft: false
 tags: ["AI编程", "软件工程", "GenAI", "开发效率"]
 categories: ["软件工程"]

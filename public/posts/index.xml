@@ -37,6 +37,13 @@
       <description></description>
     </item>
     <item>
+      <title>AI 驱动的有状态 SDLC 流水线：行业调研与落地方案</title>
+      <link>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</link>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>ClickHouse核心原理深度剖析</title>
       <link>http://localhost:1313/posts/clickhouse%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</link>
       <pubDate>Sun, 01 Dec 2024 00:00:00 +0000</pubDate>

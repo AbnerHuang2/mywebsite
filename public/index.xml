@@ -6,12 +6,19 @@
     <description>Recent content on Skitii</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI 驱动的有状态 SDLC 流水线：行业调研与落地方案</title>
+      <link>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</link>
+      <pubDate>Sat, 20 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</guid>
+      <description></description>
+    </item>
     <item>
       <title>利用GenAI加速软件开发生命周期策略</title>
       <link>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</link>
-      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 15 Dec 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</guid>
       <description></description>
     </item>
