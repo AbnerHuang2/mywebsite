@@ -17,8 +17,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#FFFFFF" />
   
-  <title>ES核心原理 &middot; Skitii</title>
-    <meta name="title" content="ES核心原理 &middot; Skitii" />
+  <title>ElasticSearch核心原理深度剖析 &middot; Skitii</title>
+    <meta name="title" content="ElasticSearch核心原理深度剖析 &middot; Skitii" />
   
   
   
@@ -71,7 +71,7 @@
   <meta
     name="description"
     content="
-      ES核心原理
+      深入剖析ElasticSearch的倒排索引、分布式架构、写入查询流程和Segment机制
     "
   />
   
@@ -91,7 +91,7 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 
-<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1767065999" />
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1767427214" />
 
 
   
@@ -106,18 +106,22 @@
   
   <meta property="og:url" content="http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/">
   <meta property="og:site_name" content="Skitii">
-  <meta property="og:title" content="ES核心原理">
-  <meta property="og:description" content="ES核心原理">
+  <meta property="og:title" content="ElasticSearch核心原理深度剖析">
+  <meta property="og:description" content="深入剖析ElasticSearch的倒排索引、分布式架构、写入查询流程和Segment机制">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2022-03-02T09:53:49+00:00">
-    <meta property="article:modified_time" content="2022-03-02T09:53:49+00:00">
+    <meta property="article:published_time" content="2024-12-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-12-15T00:00:00+00:00">
+    <meta property="article:tag" content="ElasticSearch">
+    <meta property="article:tag" content="搜索引擎">
+    <meta property="article:tag" content="分布式系统">
+    <meta property="article:tag" content="Lucene">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="ES核心原理">
-  <meta name="twitter:description" content="ES核心原理">
+  <meta name="twitter:title" content="ElasticSearch核心原理深度剖析">
+  <meta name="twitter:description" content="深入剖析ElasticSearch的倒排索引、分布式架构、写入查询流程和Segment机制">
 
   
   <script type="application/ld+json">
@@ -125,9 +129,9 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "",
-    "name": "ES核心原理",
-    "headline": "ES核心原理",
-    "description": "ES核心原理",
+    "name": "ElasticSearch核心原理深度剖析",
+    "headline": "ElasticSearch核心原理深度剖析",
+    "description": "深入剖析ElasticSearch的倒排索引、分布式架构、写入查询流程和Segment机制",
     
     "inLanguage": "en",
     "url" : "http:\/\/localhost:1313\/posts\/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86\/",
@@ -135,16 +139,16 @@
       "@type": "Person",
       "name": "Skitii"
     },
-    "copyrightYear": "2022",
-    "dateCreated": "2022-03-02T09:53:49\u002b00:00",
-    "datePublished": "2022-03-02T09:53:49\u002b00:00",
+    "copyrightYear": "2024",
+    "dateCreated": "2024-12-15T00:00:00\u002b00:00",
+    "datePublished": "2024-12-15T00:00:00\u002b00:00",
     
-    "dateModified": "2022-03-02T09:53:49\u002b00:00",
+    "dateModified": "2024-12-15T00:00:00\u002b00:00",
     
-    
+    "keywords": ["ElasticSearch","搜索引擎","分布式系统","Lucene"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "911"
+    "wordCount": "7709"
   }
   </script>
     
@@ -173,7 +177,7 @@
      },
      {
        "@type": "ListItem",
-       "name": "Es核心原理",
+       "name": "Elastic Search核心原理深度剖析",
        "position": 4
      }
    ]
@@ -646,7 +650,7 @@ html {
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
       href="http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/"
-      >ES核心原理</a
+      >ElasticSearch核心原理深度剖析</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -655,7 +659,7 @@ html {
 
       
       <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        ES核心原理
+        ElasticSearch核心原理深度剖析
       </h1>
       
         <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
@@ -693,7 +697,7 @@ html {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2022-03-02 09:53:49 &#43;0000 UTC">2 March 2022</time><span class="px-2 text-primary-500">&middot;</span><span>911 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span>
+      <time datetime="2024-12-15 00:00:00 &#43;0000 UTC">15 December 2024</time><span class="px-2 text-primary-500">&middot;</span><span>7709 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">16 mins</span>
     
 
     
@@ -714,6 +718,32 @@ html {
           
         
       
+        
+          
+            <a
+              href="http://localhost:1313/tags/elasticsearch/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >ElasticSearch</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >搜索引擎</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >分布式系统</a
+            >
+          
+            <a
+              href="http://localhost:1313/tags/lucene/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Lucene</a
+            >
+          
         
       
     </div>
@@ -737,21 +767,80 @@ html {
   <div class="toc-content border-s border-neutral-300 py-2 ps-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#核心思想">核心思想</a></li>
-    <li><a href="#内部存储结构">内部存储结构</a></li>
-    <li><a href="#数据写入过程">数据写入过程</a>
+    <li><a href="#1-elasticsearch是什么">1. ElasticSearch是什么？</a>
       <ul>
-        <li><a href="#整体写入流程">整体写入流程</a></li>
-        <li><a href="#shard写入流程">Shard写入流程</a>
+        <li><a href="#11-核心特点">1.1 核心特点</a></li>
+        <li><a href="#12-核心组件">1.2 核心组件</a>
           <ul>
-            <li><a href="#先写translog还是先写buffer">先写translog还是先写buffer</a></li>
+            <li><a href="#组件说明">组件说明</a></li>
           </ul>
         </li>
-        <li><a href="#问题">问题</a></li>
+        <li><a href="#13-适用场景">1.3 适用场景</a></li>
+        <li><a href="#14-与其他系统对比">1.4 与其他系统对比</a></li>
       </ul>
     </li>
-    <li><a href="#数据读取过程">数据读取过程</a></li>
-    <li><a href="#参考文档">参考文档</a></li>
+    <li><a href="#2-elasticsearch解决什么问题">2. ElasticSearch解决什么问题？</a>
+      <ul>
+        <li><a href="#21-传统数据库的搜索局限">2.1 传统数据库的搜索局限</a></li>
+        <li><a href="#22-搜索场景的特点">2.2 搜索场景的特点</a></li>
+        <li><a href="#23-核心需求">2.3 核心需求</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-怎么解决的">3. 怎么解决的？</a>
+      <ul>
+        <li><a href="#31-倒排索引">3.1 倒排索引</a></li>
+        <li><a href="#32-分布式架构">3.2 分布式架构</a></li>
+        <li><a href="#33-分段存储segment">3.3 分段存储（Segment）</a></li>
+        <li><a href="#34-近实时搜索">3.4 近实时搜索</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-核心流程">4. 核心流程</a>
+      <ul>
+        <li><a href="#40-es-整体工作流程">4.0 ES 整体工作流程</a>
+          <ul>
+            <li><a href="#流程说明">流程说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#41-底层存储结构">4.1 底层存储结构</a>
+          <ul>
+            <li><a href="#lucene-索引结构">Lucene 索引结构</a></li>
+            <li><a href="#倒排索引详细结构">倒排索引详细结构</a></li>
+            <li><a href="#实际案例用户表的倒排索引">实际案例：用户表的倒排索引</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-数据写入流程">4.2 数据写入流程</a>
+          <ul>
+            <li><a href="#写入流程详解">写入流程详解</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-数据查询流程">4.3 数据查询流程</a>
+          <ul>
+            <li><a href="#查询流程详解">查询流程详解</a></li>
+          </ul>
+        </li>
+        <li><a href="#44-segment-merge-机制">4.4 Segment Merge 机制</a>
+          <ul>
+            <li><a href="#merge-机制详解">Merge 机制详解</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-elasticsearch-存在的问题与挑战">5. ElasticSearch 存在的问题与挑战</a>
+      <ul>
+        <li><a href="#51-近实时搜索的延迟">5.1 近实时搜索的延迟</a></li>
+        <li><a href="#52-深度分页问题">5.2 深度分页问题</a></li>
+        <li><a href="#53-更新和删除代价高">5.3 更新和删除代价高</a></li>
+        <li><a href="#54-集群脑裂风险">5.4 集群脑裂风险</a></li>
+        <li><a href="#55-内存压力">5.5 内存压力</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结">6. 总结</a>
+      <ul>
+        <li><a href="#61-elasticsearch-的优势">6.1 ElasticSearch 的优势</a></li>
+        <li><a href="#62-需要注意的问题">6.2 需要注意的问题</a></li>
+        <li><a href="#63-最佳实践建议">6.3 最佳实践建议</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
   </div>
@@ -764,92 +853,2349 @@ html {
       <div class="min-h-0 min-w-0 max-w-prose grow">
         <meta name="referrer" content="no-referrer" />
 <!-- more -->
-<h2 id="核心思想" class="relative group">核心思想 </h2><p>Query then Fetch （先查找数据所在位置，再获取数据内容）</p>
-<h2 id="内部存储结构" class="relative group">内部存储结构 </h2><p>
+<h2 id="1-elasticsearch是什么" class="relative group">1. ElasticSearch是什么？ </h2><p>ElasticSearch（简称 ES）是一个基于 Lucene 的分布式搜索和分析引擎。由 Elastic 公司开发维护，于 2010 年首次发布，目前已成为最流行的企业级搜索引擎。</p>
+<h3 id="11-核心特点" class="relative group">1.1 核心特点 </h3><ul>
+<li><strong>倒排索引</strong>：基于 Lucene 的倒排索引，实现高效的全文搜索</li>
+<li><strong>分布式架构</strong>：天然支持数据分片和副本，可水平扩展</li>
+<li><strong>近实时搜索</strong>：写入数据约 1 秒后即可被搜索到</li>
+<li><strong>RESTful API</strong>：通过 HTTP + JSON 进行交互，使用门槛低</li>
+<li><strong>Schema Free</strong>：支持动态映射，灵活的文档结构</li>
+<li><strong>丰富的查询 DSL</strong>：支持全文搜索、结构化搜索、聚合分析</li>
+</ul>
+<h3 id="12-核心组件" class="relative group">1.2 核心组件 </h3><div class="plantuml-diagram" id="plantuml-1768376879000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam componentStyle rectangle
+
+package &#34;ElasticSearch 集群&#34; {
+    [Cluster\n集群] as Cluster
+    [Node\n节点] as Node
+    [Index\n索引] as Index
+    [Shard\n分片] as Shard
+    [Segment\n段] as Segment
+}
+
+package &#34;Lucene 层&#34; {
+    [Inverted Index\n倒排索引] as InvertedIndex
+    [Doc Values\n列式存储] as DocValues
+    [Stored Fields\n原始文档] as StoredFields
+}
+
+package &#34;节点角色&#34; {
+    [Master Node\n主节点] as Master
+    [Data Node\n数据节点] as Data
+    [Coordinating Node\n协调节点] as Coord
+}
+
+Cluster --&gt; Node : 包含多个
+Node --&gt; Index : 存储多个
+Index --&gt; Shard : 分成多个
+Shard --&gt; Segment : 包含多个
+
+Segment --&gt; InvertedIndex
+Segment --&gt; DocValues
+Segment --&gt; StoredFields
+
+Node --&gt; Master : 可以是
+Node --&gt; Data : 可以是
+Node --&gt; Coord : 可以是
+
+note right of Cluster
+  **集群**
+  多个节点组成
+  共享集群名称
+end note
+
+note right of Shard
+  **分片**
+  Primary: 主分片（写入）
+  Replica: 副本分片（读取&#43;容灾）
+end note
+
+note right of InvertedIndex
+  **核心数据结构**
+  Term → DocId 列表
+  支持高效全文搜索
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
 
 
-
-  <figure>
-    <div class="post-img-view">
-        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657874852844-a053a682-5259-4539-bb7a-87b03fdff08f.jpeg">
-            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657874852844-a053a682-5259-4539-bb7a-87b03fdff08f.jpeg" alt="" />
-        </a>
-    </div>
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
     
-  </figure>
-
-
-Node : es集群中的节点
-Shard: 分片（相当于master节点，主要负责写）
-Replica : 副本（相当于slave节点，主要负责读）
-Lucene : es数据写入，存储，查询的内核
-Index : 应该可以理解为一个数据库</p>
-<h2 id="数据写入过程" class="relative group">数据写入过程 </h2><p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/distrib-write.html" target="_blank" rel="noreferrer">https://www.elastic.co/guide/cn/elasticsearch/guide/current/distrib-write.html</a></p>
-<h3 id="整体写入流程" class="relative group">整体写入流程 </h3><p>
-
-
-
-  <figure>
-    <div class="post-img-view">
-        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1657852744444-905da9a9-2129-4dd6-aa3b-6b56d9e4237f.png#averageHue=%23eef3e9&amp;clientId=u705aa42f-361a-4&amp;from=paste&amp;height=674&amp;id=u92656088&amp;originHeight=674&amp;originWidth=766&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=300590&amp;status=done&amp;style=none&amp;taskId=u6be6d4cd-722b-4768-b2b1-6ccbc4fb4ce&amp;title=&amp;width=766">
-            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1657852744444-905da9a9-2129-4dd6-aa3b-6b56d9e4237f.png#averageHue=%23eef3e9&amp;clientId=u705aa42f-361a-4&amp;from=paste&amp;height=674&amp;id=u92656088&amp;originHeight=674&amp;originWidth=766&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=300590&amp;status=done&amp;style=none&amp;taskId=u6be6d4cd-722b-4768-b2b1-6ccbc4fb4ce&amp;title=&amp;width=766" alt="image.png" />
-        </a>
-    </div>
     
-  </figure>
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
 
-</p>
-<h3 id="shard写入流程" class="relative group">Shard写入流程 </h3><p>通过上述流程，我们大概清晰了一个写请求，到ES之后，ES是如何处理的。那数据又是怎么真正落盘的呢？</p>
-<h4 id="先写translog还是先写buffer" class="relative group">先写translog还是先写buffer </h4><p>官方给点说法是先写buffer，然后追加translog。
-<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/2.x/translog.html" target="_blank" rel="noreferrer">https://www.elastic.co/guide/cn/elasticsearch/guide/2.x/translog.html</a>
-
-
-
-
-  <figure>
-    <div class="post-img-view">
-        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657953212420-deca01b4-9a55-4383-a49d-0c441f6bcbc0.jpeg">
-            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/jpeg/21760570/1657953212420-deca01b4-9a55-4383-a49d-0c441f6bcbc0.jpeg" alt="" />
-        </a>
-    </div>
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768376879000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
     
-  </figure>
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
 
-</p>
+
+<h4 id="组件说明" class="relative group">组件说明 </h4><table>
+  <thead>
+      <tr>
+          <th>组件</th>
+          <th>说明</th>
+          <th>类比</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Cluster</td>
+          <td>集群，多个节点的集合</td>
+          <td>数据库集群</td>
+      </tr>
+      <tr>
+          <td>Node</td>
+          <td>节点，一个 ES 实例</td>
+          <td>数据库实例</td>
+      </tr>
+      <tr>
+          <td>Index</td>
+          <td>索引，文档的集合</td>
+          <td>数据库表</td>
+      </tr>
+      <tr>
+          <td>Shard</td>
+          <td>分片，索引的子集</td>
+          <td>分区/分表</td>
+      </tr>
+      <tr>
+          <td>Segment</td>
+          <td>段，Lucene 的存储单元</td>
+          <td>数据文件</td>
+      </tr>
+      <tr>
+          <td>Document</td>
+          <td>文档，一条数据记录</td>
+          <td>表中的一行</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="13-适用场景" class="relative group">1.3 适用场景 </h3><p><strong>✅ 适用场景：</strong></p>
+<ul>
+<li>全文搜索（站内搜索、商品搜索）</li>
+<li>日志分析（ELK Stack）</li>
+<li>实时数据分析和可视化</li>
+<li>应用性能监控（APM）</li>
+<li>安全分析（SIEM）</li>
+<li>地理位置搜索</li>
+</ul>
+<p><strong>❌ 不适用场景：</strong></p>
+<ul>
+<li>事务性操作（OLTP）</li>
+<li>频繁的更新操作</li>
+<li>强一致性要求的场景</li>
+<li>复杂的关联查询（Join）</li>
+<li>作为主数据存储（建议配合 MySQL 等使用）</li>
+</ul>
+<h3 id="14-与其他系统对比" class="relative group">1.4 与其他系统对比 </h3><table>
+  <thead>
+      <tr>
+          <th>特性</th>
+          <th>ElasticSearch</th>
+          <th>MySQL</th>
+          <th>ClickHouse</th>
+          <th>MongoDB</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>存储方式</td>
+          <td>倒排索引+行列混合</td>
+          <td>行式</td>
+          <td>列式</td>
+          <td>文档(BSON)</td>
+      </tr>
+      <tr>
+          <td>搜索能力</td>
+          <td>极强（全文搜索）</td>
+          <td>弱</td>
+          <td>中等</td>
+          <td>中等</td>
+      </tr>
+      <tr>
+          <td>分析能力</td>
+          <td>强（聚合）</td>
+          <td>中等</td>
+          <td>极强</td>
+          <td>中等</td>
+      </tr>
+      <tr>
+          <td>写入性能</td>
+          <td>中等</td>
+          <td>高</td>
+          <td>极高</td>
+          <td>高</td>
+      </tr>
+      <tr>
+          <td>更新性能</td>
+          <td>弱</td>
+          <td>高</td>
+          <td>弱</td>
+          <td>高</td>
+      </tr>
+      <tr>
+          <td>事务支持</td>
+          <td>无</td>
+          <td>完整</td>
+          <td>无</td>
+          <td>部分</td>
+      </tr>
+      <tr>
+          <td>分布式</td>
+          <td>原生支持</td>
+          <td>需中间件</td>
+          <td>原生支持</td>
+          <td>原生支持</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="2-elasticsearch解决什么问题" class="relative group">2. ElasticSearch解决什么问题？ </h2><h3 id="21-传统数据库的搜索局限" class="relative group">2.1 传统数据库的搜索局限 </h3><p>在传统关系型数据库中，全文搜索存在以下问题：</p>
 <ol>
-<li>shard收到写入请求时，将数据写入到缓存区中</li>
-<li>数据写入成功之后，再记录translog</li>
-<li>缓存区每秒将数据写入到Lucene Index的segment文件中。同时es维护了一个定时服务，将小的segment合并成大的segment，避免segment文件过多。</li>
-<li>记录输入最后落盘的数据位置到commit point中</li>
-<li>删除translog中commit point之前的日志记录</li>
+<li>
+<p><strong>LIKE 查询效率低</strong>：</p>
+<ul>
+<li><code>WHERE content LIKE '%关键词%'</code> 无法使用索引</li>
+<li>全表扫描，性能随数据量线性下降</li>
+<li>百万级数据查询可能需要数秒</li>
+</ul>
+</li>
+<li>
+<p><strong>不支持分词</strong>：</p>
+<ul>
+<li>中文 &ldquo;我爱北京天安门&rdquo; 无法按词搜索</li>
+<li>无法处理同义词、近义词</li>
+<li>无法进行相关性排序</li>
+</ul>
+</li>
+<li>
+<p><strong>扩展性差</strong>：</p>
+<ul>
+<li>单机性能瓶颈</li>
+<li>分库分表后全文搜索更加困难</li>
+<li>跨库搜索需要在应用层聚合</li>
+</ul>
+</li>
 </ol>
-<h3 id="问题" class="relative group">问题 </h3><ol>
-<li>如果在数据同步到副本的时候，有个副本所在的node宕机了，怎么处理？ 如果过一会这个node又恢复了呢？</li>
-<li>如果数据写入到了segment，但是没来的急记录到commit point中，下次重启，这条数据好像又会重新执行一遍？ 应该可以跳过</li>
-<li>先写内存，在追加translog是不是会导致数据丢失？ 如果再写完translog才返回成功应就不会。</li>
+<h3 id="22-搜索场景的特点" class="relative group">2.2 搜索场景的特点 </h3><ul>
+<li><strong>读多写少</strong>：搜索请求远多于写入请求</li>
+<li><strong>模糊匹配</strong>：用户输入不精确，需要容错</li>
+<li><strong>相关性排序</strong>：返回最匹配的结果，而非全部结果</li>
+<li><strong>高并发</strong>：需要支持大量并发搜索请求</li>
+<li><strong>低延迟</strong>：用户期望毫秒级响应</li>
+</ul>
+<h3 id="23-核心需求" class="relative group">2.3 核心需求 </h3><ol>
+<li><strong>高效的全文搜索</strong>：毫秒级返回搜索结果</li>
+<li><strong>灵活的分词能力</strong>：支持中英文分词、同义词等</li>
+<li><strong>相关性评分</strong>：返回最相关的文档</li>
+<li><strong>水平扩展</strong>：支持 PB 级数据存储和搜索</li>
+<li><strong>高可用性</strong>：节点故障不影响服务</li>
 </ol>
-<p><strong>问题1解答</strong>
-es在数据写入的时候，默认是需要所有副本都写入成功才算成功。这样可以保证数据的一致性。但是这也同时导致可用性降低，只要一个节点宕机了，可能数据写入就失败了。
-当然也可以通过配置最多成功的个数来避免有一个节点宕机从而导致写入失败。提升可用性。那这种情况下，会不会导致脏读呢？写入了一个数据，下一个读取请求被负载均衡到写入失败的节点，那不就造成脏读了吗？
-不会的。当数据写入失败时，Primary Shard会有重试机制，如果重试失败了，就会将对应的Replica移除。</p>
-<p>Lucene在写segment的时候，也会先写内存，在落盘，所以也可能存在还没有落盘的之前，服务器宕机了，数据丢失了。</p>
-<h2 id="数据读取过程" class="relative group">数据读取过程 </h2><p>
+<h2 id="3-怎么解决的" class="relative group">3. 怎么解决的？ </h2><p>ElasticSearch 通过以下核心机制解决上述问题：</p>
+<h3 id="31-倒排索引" class="relative group">3.1 倒排索引 </h3><p><strong>核心思想</strong>：建立词条（Term）到文档（Document）的映射，而非文档到词条的映射。</p>
+<div class="plantuml-diagram" id="plantuml-1768376974000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam rectangleBackgroundColor LightYellow
+skinparam rectangleBorderColor Black
+
+rectangle &#34;原始文档&#34; as Docs {
+    rectangle &#34;Doc1: 我爱北京天安门&#34; as D1
+    rectangle &#34;Doc2: 北京欢迎你&#34; as D2
+    rectangle &#34;Doc3: 天安门广场&#34; as D3
+}
+
+note bottom of Docs
+    **传统查询**
+    遍历每个文档
+    检查是否包含关键词
+    O(n) 复杂度
+end note
+
+rectangle &#34;倒排索引&#34; as InvertedIndex {
+    rectangle &#34;我 → [Doc1]&#34; as T1
+    rectangle &#34;爱 → [Doc1]&#34; as T2
+    rectangle &#34;北京 → [Doc1, Doc2]&#34; as T3 #LightGreen
+    rectangle &#34;天安门 → [Doc1, Doc3]&#34; as T4 #LightGreen
+    rectangle &#34;欢迎 → [Doc2]&#34; as T5
+    rectangle &#34;广场 → [Doc3]&#34; as T6
+}
+
+note bottom of InvertedIndex
+    **倒排查询**
+    直接定位包含词条的文档
+    O(1) 复杂度 ✓
+end note
+
+Docs -down[hidden]-&gt; InvertedIndex
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
 
 
-
-  <figure>
-    <div class="post-img-view">
-        <a data-fancybox="gallery" href="https://cdn.nlark.com/yuque/0/2022/png/21760570/1657852931891-3af21c69-21f1-459f-b173-f7f4a3a4633d.png#averageHue=%23fcfcfc&amp;clientId=u705aa42f-361a-4&amp;from=paste&amp;height=578&amp;id=ucb9632d8&amp;originHeight=578&amp;originWidth=784&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=101278&amp;status=done&amp;style=none&amp;taskId=u44b2b56c-9015-4b14-bf21-124c9f7d241&amp;title=&amp;width=784">
-            <img class="my-0 rounded-md" src="https://cdn.nlark.com/yuque/0/2022/png/21760570/1657852931891-3af21c69-21f1-459f-b173-f7f4a3a4633d.png#averageHue=%23fcfcfc&amp;clientId=u705aa42f-361a-4&amp;from=paste&amp;height=578&amp;id=ucb9632d8&amp;originHeight=578&amp;originWidth=784&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=101278&amp;status=done&amp;style=none&amp;taskId=u44b2b56c-9015-4b14-bf21-124c9f7d241&amp;title=&amp;width=784" alt="image.png" />
-        </a>
-    </div>
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
     
-  </figure>
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
 
-</p>
-<h2 id="参考文档" class="relative group">参考文档 </h2><p><a href="https://xie.infoq.cn/article/73c7bc776a8ab2a0d7a173472" target="_blank" rel="noreferrer">https://xie.infoq.cn/article/73c7bc776a8ab2a0d7a173472</a> (ES写入流程)
-<a href="https://zhuanlan.zhihu.com/p/139762008" target="_blank" rel="noreferrer">https://zhuanlan.zhihu.com/p/139762008</a>
-<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/distrib-write.html" target="_blank" rel="noreferrer">https://www.elastic.co/guide/cn/elasticsearch/guide/current/distrib-write.html</a> （官方文档过程）</p>
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768376974000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>倒排索引的组成</strong>：</p>
+<ul>
+<li><strong>Term Dictionary</strong>：词条字典，存储所有词条，支持快速查找</li>
+<li><strong>Posting List</strong>：倒排列表，存储包含该词条的文档 ID 列表</li>
+<li><strong>Term Frequency</strong>：词频，词条在文档中出现的次数</li>
+<li><strong>Position</strong>：位置信息，用于短语查询</li>
+</ul>
+<h3 id="32-分布式架构" class="relative group">3.2 分布式架构 </h3><ul>
+<li><strong>数据分片</strong>：将索引拆分为多个 Shard，分布到不同节点</li>
+<li><strong>副本机制</strong>：每个 Shard 有多个 Replica，保证高可用</li>
+<li><strong>自动路由</strong>：根据文档 ID 自动路由到对应分片</li>
+<li><strong>并行查询</strong>：查询时并行搜索所有分片，合并结果</li>
+</ul>
+<h3 id="33-分段存储segment" class="relative group">3.3 分段存储（Segment） </h3><ul>
+<li>数据写入时先进入内存缓冲区（Buffer）</li>
+<li>定期刷新为不可变的 Segment 文件</li>
+<li>Segment 不可修改，删除和更新通过标记实现</li>
+<li>后台合并小 Segment 为大 Segment</li>
+</ul>
+<h3 id="34-近实时搜索" class="relative group">3.4 近实时搜索 </h3><ul>
+<li><strong>Refresh</strong>：每秒将内存缓冲区数据刷新到文件系统缓存，生成新 Segment</li>
+<li><strong>Flush</strong>：将文件系统缓存的数据持久化到磁盘</li>
+<li><strong>Translog</strong>：事务日志，保证数据不丢失</li>
+</ul>
+<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-es-整体工作流程" class="relative group">4.0 ES 整体工作流程 </h3><div class="plantuml-diagram" id="plantuml-1768377052000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 250
+
+actor &#34;客户端&#34; as Client
+participant &#34;Coordinating Node\n协调节点&#34; as Coord
+participant &#34;Primary Shard\n主分片&#34; as Primary
+participant &#34;Replica Shard\n副本分片&#34; as Replica
+participant &#34;Lucene\n存储引擎&#34; as Lucene
+database &#34;Segment\n段文件&#34; as Segment
+
+== 写入流程 ==
+Client -&gt; Coord: 写入请求
+activate Coord
+Coord -&gt; Coord: 路由计算\nshard = hash(doc_id) % num_shards
+Coord -&gt; Primary: 转发到主分片
+deactivate Coord
+
+activate Primary
+Primary -&gt; Lucene: 写入 Buffer
+activate Lucene
+Lucene -&gt; Lucene: 1. 分词处理\n2. 构建倒排索引\n3. 写入内存
+Lucene --&gt; Primary: 写入成功
+deactivate Lucene
+
+Primary -&gt; Replica: 同步到副本
+activate Replica
+Replica -&gt; Replica: 写入本地
+Replica --&gt; Primary: 同步完成
+deactivate Replica
+
+Primary --&gt; Client: 返回成功
+deactivate Primary
+
+== Refresh 机制 (每秒) ==
+Lucene -&gt; Segment: 生成新 Segment
+note right of Segment
+  **近实时搜索**
+  数据写入约 1 秒后可搜索
+end note
+
+== 查询流程 (Query Then Fetch) ==
+Client -&gt; Coord: 查询请求
+activate Coord
+
+Coord -&gt; Primary: Query 阶段
+Coord -&gt; Replica: Query 阶段
+activate Primary
+activate Replica
+
+Primary -&gt; Primary: 搜索本地 Segment
+Primary --&gt; Coord: 返回 DocId &#43; Score
+deactivate Primary
+
+Replica -&gt; Replica: 搜索本地 Segment
+Replica --&gt; Coord: 返回 DocId &#43; Score
+deactivate Replica
+
+Coord -&gt; Coord: 合并排序\n取 Top N 文档
+
+Coord -&gt; Primary: Fetch 阶段（获取文档内容）
+activate Primary
+Primary --&gt; Coord: 返回文档
+deactivate Primary
+
+Coord --&gt; Client: 返回结果
+deactivate Coord
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377052000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="流程说明" class="relative group">流程说明 </h4><ol>
+<li>
+<p><strong>写入流程</strong>：</p>
+<ul>
+<li>协调节点接收请求，计算路由确定目标分片</li>
+<li>主分片写入数据，同步到副本分片</li>
+<li>数据先写入内存 Buffer，定期 Refresh 生成 Segment</li>
+</ul>
+</li>
+<li>
+<p><strong>查询流程（Query Then Fetch）</strong>：</p>
+<ul>
+<li><strong>Query 阶段</strong>：并行查询所有分片，返回匹配文档的 ID 和评分</li>
+<li><strong>Fetch 阶段</strong>：根据排序后的 Top N 文档 ID，获取完整文档内容</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="lucene-索引结构" class="relative group">Lucene 索引结构 </h4><div class="plantuml-diagram" id="plantuml-1768377122000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam classAttributeIconSize 0
+
+class &#34;Index\n索引&#34; as Index {
+    &#43; index_name: String
+    &#43; settings: Settings
+    &#43; mappings: Mappings
+    &#43; shards: Shard[]
+}
+
+class &#34;Shard\n分片&#34; as Shard {
+    &#43; shard_id: int
+    &#43; is_primary: boolean
+    &#43; segments: Segment[]
+    &#43; translog: Translog
+}
+
+class &#34;Segment\n段&#34; as Segment {
+    &#43; segment_name: String
+    &#43; doc_count: int
+    &#43; deleted_docs: int
+    &#43; files: SegmentFiles
+}
+
+class &#34;Segment Files\n段文件&#34; as Files {
+    &#43; .tip: Term Index（词条索引）
+    &#43; .tim: Term Dictionary（词条字典）
+    &#43; .doc: Posting List（倒排列表）
+    &#43; .pos: Position（位置信息）
+    &#43; .fdt: Stored Fields（原始文档）
+    &#43; .dvd: Doc Values（列式存储）
+    &#43; .liv: Live Docs（存活文档标记）
+}
+
+Index &#34;1&#34; o-- &#34;1..*&#34; Shard : 包含
+Shard &#34;1&#34; o-- &#34;0..*&#34; Segment : 包含
+Segment &#34;1&#34; o-- &#34;1&#34; Files : 包含
+
+note right of Index
+  **索引 = 分片的集合**
+  逻辑概念，类似数据库表
+end note
+
+note right of Shard
+  **分片 = Lucene 索引**
+  实际的物理存储单元
+  包含完整的倒排索引
+end note
+
+note right of Segment
+  **Segment = 不可变文件**
+  写入后不能修改
+  只能通过 Merge 合并
+end note
+
+note bottom of Files
+  **Lucene 文件格式**
+  - 倒排索引：.tip &#43; .tim &#43; .doc
+  - 原始文档：.fdt
+  - 列式存储：.dvd（聚合/排序）
+  - 删除标记：.liv
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377122000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="倒排索引详细结构" class="relative group">倒排索引详细结构 </h4><pre tabindex="0"><code>倒排索引组成：
+├── Term Index (.tip)      # FST 结构，前缀树，指向 Term Dictionary
+├── Term Dictionary (.tim) # 词条字典，存储所有 Term
+└── Posting List (.doc)    # 倒排列表
+    ├── DocId List         # 文档 ID 列表（差值压缩）
+    ├── Term Frequency     # 词频（用于评分）
+    └── Position (.pos)    # 位置信息（用于短语查询）
+</code></pre><h4 id="实际案例用户表的倒排索引" class="relative group">实际案例：用户表的倒排索引 </h4><p>假设有一个用户索引 <code>users</code>，包含以下 3 条文档：</p>
+<table>
+  <thead>
+      <tr>
+          <th>_id</th>
+          <th>name</th>
+          <th>city</th>
+          <th>bio</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>张三</td>
+          <td>北京</td>
+          <td>资深Java开发工程师</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>李四</td>
+          <td>上海</td>
+          <td>Java架构师，擅长分布式系统</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>王五</td>
+          <td>北京</td>
+          <td>Go语言开发，熟悉Java</td>
+      </tr>
+  </tbody>
+</table>
+<p>ES 会为每个字段建立独立的倒排索引：</p>
+<div class="plantuml-diagram" id="plantuml-1768377189000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam defaultFontSize 12
+
+rectangle &#34;原始文档 (Stored Fields)&#34; as Docs #LightBlue {
+    rectangle &#34;Doc1: {name:张三, city:北京, bio:资深Java开发工程师}&#34; as D1
+    rectangle &#34;Doc2: {name:李四, city:上海, bio:Java架构师，擅长分布式系统}&#34; as D2
+    rectangle &#34;Doc3: {name:王五, city:北京, bio:Go语言开发，熟悉Java}&#34; as D3
+}
+
+rectangle &#34;name 字段倒排索引&#34; as NameIndex #LightYellow {
+    rectangle &#34;张三 → [Doc1]&#34; as N1
+    rectangle &#34;李四 → [Doc2]&#34; as N2
+    rectangle &#34;王五 → [Doc3]&#34; as N3
+}
+
+rectangle &#34;city 字段倒排索引&#34; as CityIndex #LightGreen {
+    rectangle &#34;北京 → [Doc1, Doc3]&#34; as C1
+    rectangle &#34;上海 → [Doc2]&#34; as C2
+}
+
+rectangle &#34;bio 字段倒排索引 (分词后)&#34; as BioIndex #LightPink {
+    rectangle &#34;java → [Doc1, Doc2, Doc3]&#34; as B1
+    rectangle &#34;开发 → [Doc1, Doc3]&#34; as B2
+    rectangle &#34;工程师 → [Doc1]&#34; as B3
+    rectangle &#34;架构师 → [Doc2]&#34; as B4
+    rectangle &#34;分布式 → [Doc2]&#34; as B5
+    rectangle &#34;系统 → [Doc2]&#34; as B6
+    rectangle &#34;go → [Doc3]&#34; as B7
+    rectangle &#34;语言 → [Doc3]&#34; as B8
+}
+
+Docs -down[hidden]-&gt; NameIndex
+NameIndex -right[hidden]-&gt; CityIndex
+CityIndex -down[hidden]-&gt; BioIndex
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377189000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>查询示例</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// 查询：city = &#34;北京&#34; AND bio 包含 &#34;Java&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;query&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;bool&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;must&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nt">&#34;term&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;city&#34;</span><span class="p">:</span> <span class="s2">&#34;北京&#34;</span> <span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nt">&#34;match&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;bio&#34;</span><span class="p">:</span> <span class="s2">&#34;Java&#34;</span> <span class="p">}</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><strong>查询执行过程</strong>：</p>
+<ol>
+<li><strong>city 字段查找</strong>：<code>北京 → [Doc1, Doc3]</code></li>
+<li><strong>bio 字段查找</strong>：<code>java → [Doc1, Doc2, Doc3]</code></li>
+<li><strong>求交集</strong>：<code>[Doc1, Doc3] ∩ [Doc1, Doc2, Doc3] = [Doc1, Doc3]</code></li>
+<li><strong>返回结果</strong>：张三、王五</li>
+</ol>
+<p><strong>倒排索引文件存储结构</strong>：</p>
+<p>词条到文档的映射关系通过 <strong>三个文件协同工作</strong> 完成：</p>
+<div class="plantuml-diagram" id="plantuml-1768377246000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam defaultFontSize 11
+
+rectangle &#34;.tip 文件 (Term Index)&#34; as TIP #LightBlue {
+    rectangle &#34;FST 前缀树\n快速定位词条位置&#34; as FST
+    rectangle &#34;j → offset:1024\ng → offset:2048\n...&#34; as TIPContent
+}
+
+rectangle &#34;.tim 文件 (Term Dictionary)&#34; as TIM #LightYellow {
+    rectangle &#34;存储所有词条 &#43; 指向 Posting 的指针&#34; as TIMDesc
+    rectangle &#34;offset:1024 → java → postingPtr:100\noffset:1025 → 架构师 → postingPtr:200\noffset:2048 → go → postingPtr:300\n...&#34; as TIMContent
+}
+
+rectangle &#34;.doc 文件 (Posting List) ⭐核心映射&#34; as DOC #LightGreen {
+    rectangle &#34;存储 Term → DocId 的映射关系&#34; as DOCDesc
+    rectangle &#34;postingPtr:100 → java → [Doc1, Doc2, Doc3]\npostingPtr:200 → 架构师 → [Doc2]\npostingPtr:300 → go → [Doc3]\n...&#34; as DOCContent
+}
+
+TIP -down-&gt; TIM : &#34;1. 通过前缀\n定位词条位置&#34;
+TIM -down-&gt; DOC : &#34;2. 通过指针\n找到文档列表&#34;
+
+note right of DOC #Pink
+  **核心答案**
+  词条 → 文档ID 的映射
+  存储在 .doc 文件中
+  （Posting List）
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377246000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>查询 &ldquo;java&rdquo; 的完整过程</strong>：</p>
+<pre tabindex="0"><code>1. 查 .tip 文件：前缀 &#34;j&#34; → 定位到 .tim 文件 offset:1024
+2. 查 .tim 文件：offset:1024 找到词条 &#34;java&#34; → postingPtr:100  
+3. 查 .doc 文件：postingPtr:100 → DocId 列表 [1, 2, 3] ⭐ 这就是映射！
+4. 返回结果：包含 &#34;java&#34; 的文档是 Doc1, Doc2, Doc3
+</code></pre><p><strong>各文件职责总结</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>文件</th>
+          <th>后缀</th>
+          <th>存储内容</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Term Index</strong></td>
+          <td><code>.tip</code></td>
+          <td>词条前缀的 FST 索引</td>
+          <td>快速定位词条在 .tim 中的位置</td>
+      </tr>
+      <tr>
+          <td><strong>Term Dictionary</strong></td>
+          <td><code>.tim</code></td>
+          <td>所有词条 + Posting 指针</td>
+          <td>存储词条，指向 .doc</td>
+      </tr>
+      <tr>
+          <td><strong>Posting List</strong></td>
+          <td><code>.doc</code></td>
+          <td><strong>Term → DocId 列表</strong></td>
+          <td>⭐ <strong>核心：存储映射关系</strong></td>
+      </tr>
+      <tr>
+          <td><strong>Positions</strong></td>
+          <td><code>.pos</code></td>
+          <td>词条在文档中的位置</td>
+          <td>支持短语查询</td>
+      </tr>
+      <tr>
+          <td><strong>Payloads</strong></td>
+          <td><code>.pay</code></td>
+          <td>词频等额外信息</td>
+          <td>用于相关性评分</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>💡 <strong>简单记忆</strong>：<code>.tip</code> 找词条位置 → <code>.tim</code> 找词条 → <code>.doc</code> 找文档列表</p>
+</blockquote>
+<p><strong>Doc Values（列式存储）</strong>：</p>
+<p>用于 <code>keyword</code> 类型字段的排序和聚合，按列存储：</p>
+<pre tabindex="0"><code>city 字段 Doc Values:
+Doc1 → 北京
+Doc2 → 上海  
+Doc3 → 北京
+
+# 聚合查询 &#34;按城市统计用户数&#34; 时直接遍历此列
+# 结果：北京=2, 上海=1
+</code></pre><h3 id="42-数据写入流程" class="relative group">4.2 数据写入流程 </h3><div class="plantuml-diagram" id="plantuml-1768377365000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant &#34;Client&#34; as Client
+participant &#34;Primary Shard&#34; as Primary
+participant &#34;Index Buffer\n内存缓冲区&#34; as Buffer
+participant &#34;Translog\n事务日志&#34; as Translog
+participant &#34;OS Cache\n文件系统缓存&#34; as Cache
+participant &#34;Disk\n磁盘&#34; as Disk
+
+Client -&gt; Primary: 写入文档
+activate Primary
+
+Primary -&gt; Buffer: 1. 写入内存 Buffer
+activate Buffer
+Buffer -&gt; Buffer: 分词、构建倒排索引
+deactivate Buffer
+
+Primary -&gt; Translog: 2. 追加 Translog
+activate Translog
+Translog -&gt; Disk: fsync（默认每请求）
+note right
+  **数据安全保障**
+  Translog 保证数据不丢失
+  即使宕机也可恢复
+end note
+deactivate Translog
+
+Primary --&gt; Client: 返回成功
+deactivate Primary
+
+== Refresh（默认每秒） ==
+Buffer -&gt; Cache: 生成新 Segment
+activate Cache
+Cache -&gt; Cache: 写入文件系统缓存
+note right
+  **近实时可搜索**
+  数据进入 OS Cache
+  即可被搜索到
+end note
+deactivate Cache
+
+== Flush（默认 30 分钟或 Translog 达到 512MB） ==
+Cache -&gt; Disk: fsync 持久化
+activate Disk
+Disk -&gt; Disk: Segment 文件落盘
+deactivate Disk
+
+Translog -&gt; Translog: 清空 Translog
+note right
+  **Commit Point**
+  记录已持久化的 Segment
+  Translog 可安全删除
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377365000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="写入流程详解" class="relative group">写入流程详解 </h4><ol>
+<li>
+<p><strong>写入内存 Buffer</strong>：</p>
+<ul>
+<li>文档经过分词器（Analyzer）处理</li>
+<li>构建内存中的倒排索引</li>
+<li>此时数据<strong>不可搜索</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>追加 Translog</strong>：</p>
+<ul>
+<li>记录写入操作日志</li>
+<li>默认每个请求都 fsync 到磁盘</li>
+<li>保证宕机后数据可恢复</li>
+</ul>
+</li>
+<li>
+<p><strong>Refresh（默认 1 秒）</strong>：</p>
+<ul>
+<li>将内存 Buffer 写入文件系统缓存</li>
+<li>生成新的 Segment</li>
+<li>数据变为<strong>可搜索</strong>状态</li>
+<li>这是&quot;近实时&quot;的来源</li>
+</ul>
+</li>
+<li>
+<p><strong>Flush（默认 30 分钟）</strong>：</p>
+<ul>
+<li>将文件系统缓存的 Segment 持久化到磁盘</li>
+<li>清空 Translog</li>
+<li>触发条件：时间间隔或 Translog 大小超过阈值</li>
+</ul>
+</li>
+</ol>
+<h3 id="43-数据查询流程" class="relative group">4.3 数据查询流程 </h3><div class="plantuml-diagram" id="plantuml-1768377417000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+actor &#34;Client&#34; as Client
+participant &#34;Coordinating Node\n协调节点&#34; as Coord
+participant &#34;Shard 0&#34; as S0
+participant &#34;Shard 1&#34; as S1
+participant &#34;Shard 2&#34; as S2
+
+Client -&gt; Coord: 查询: {&#34;query&#34;: {&#34;match&#34;: {&#34;content&#34;: &#34;北京&#34;}}, &#34;from&#34;: 0, &#34;size&#34;: 10}
+activate Coord
+
+== Query 阶段 ==
+Coord -&gt; S0: 查询请求
+Coord -&gt; S1: 查询请求
+Coord -&gt; S2: 查询请求
+
+activate S0
+activate S1
+activate S2
+
+S0 -&gt; S0: 1. 查询倒排索引\n2. 计算相关性评分\n3. 返回 Top(from&#43;size) 文档
+S1 -&gt; S1: 同上
+S2 -&gt; S2: 同上
+
+S0 --&gt; Coord: [(doc_id, score), ...]
+S1 --&gt; Coord: [(doc_id, score), ...]
+S2 --&gt; Coord: [(doc_id, score), ...]
+
+deactivate S0
+deactivate S1
+deactivate S2
+
+Coord -&gt; Coord: 合并所有分片结果\n全局排序\n取 Top 10
+
+note right of Coord
+  **Query 阶段结果**
+  只返回 doc_id 和 score
+  不返回文档内容
+end note
+
+== Fetch 阶段 ==
+Coord -&gt; S0: 获取 Doc1, Doc5 的内容
+Coord -&gt; S2: 获取 Doc8 的内容
+
+activate S0
+activate S2
+
+S0 --&gt; Coord: 返回文档内容
+S2 --&gt; Coord: 返回文档内容
+
+deactivate S0
+deactivate S2
+
+Coord -&gt; Coord: 组装最终结果
+Coord --&gt; Client: 返回搜索结果
+
+deactivate Coord
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377417000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="查询流程详解" class="relative group">查询流程详解 </h4><ol>
+<li>
+<p><strong>Query 阶段</strong>：</p>
+<ul>
+<li>协调节点将查询广播到所有相关分片</li>
+<li>每个分片在本地执行查询，返回 <code>from + size</code> 个文档的 ID 和评分</li>
+<li>协调节点合并所有结果，全局排序，确定最终的 Top N</li>
+</ul>
+</li>
+<li>
+<p><strong>Fetch 阶段</strong>：</p>
+<ul>
+<li>协调节点根据 Query 阶段的结果，向相关分片请求文档内容</li>
+<li>只请求最终需要返回的文档（Top N）</li>
+<li>分片返回完整文档，协调节点组装后返回给客户端</li>
+</ul>
+</li>
+<li>
+<p><strong>相关性评分</strong>：</p>
+<ul>
+<li>默认使用 BM25 算法（5.x 之前使用 TF-IDF）</li>
+<li>考虑词频（TF）、逆文档频率（IDF）、文档长度等因素</li>
+</ul>
+</li>
+</ol>
+<h3 id="44-segment-merge-机制" class="relative group">4.4 Segment Merge 机制 </h3><div class="plantuml-diagram" id="plantuml-1768377477000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+participant &#34;写入操作&#34; as Write
+participant &#34;Refresh&#34; as Refresh
+participant &#34;Segment 列表&#34; as Segments
+participant &#34;Merge 调度器&#34; as Scheduler
+participant &#34;Merge 任务&#34; as Task
+
+== 持续写入产生多个 Segment ==
+Write -&gt; Refresh: 每秒 Refresh
+activate Refresh
+Refresh -&gt; Segments: 生成 Segment 1 (10 docs)
+Refresh -&gt; Segments: 生成 Segment 2 (10 docs)
+Refresh -&gt; Segments: 生成 Segment 3 (10 docs)
+Refresh -&gt; Segments: 生成 Segment 4 (10 docs)
+deactivate Refresh
+
+note right of Segments
+  **问题**
+  Segment 过多会影响查询性能
+  每次查询需要搜索所有 Segment
+end note
+
+== Merge 过程 ==
+Scheduler -&gt; Scheduler: 检测到 Segment 数量过多
+activate Scheduler
+Scheduler -&gt; Task: 创建 Merge 任务
+deactivate Scheduler
+
+activate Task
+Task -&gt; Segments: 读取 Segment 1, 2, 3, 4
+Task -&gt; Task: 1. 合并倒排索引\n2. 移除已删除文档\n3. 重新排序
+Task -&gt; Segments: 生成新 Segment (40 docs)
+Task -&gt; Segments: 删除旧 Segments
+
+note right of Task
+  **Merge 效果**
+  - 减少 Segment 数量
+  - 物理删除已标记删除的文档
+  - 优化存储空间
+  - 提升查询性能
+end note
+
+deactivate Task
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377477000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<h4 id="merge-机制详解" class="relative group">Merge 机制详解 </h4><ol>
+<li>
+<p><strong>为什么需要 Merge</strong>：</p>
+<ul>
+<li>每次 Refresh 都会生成新 Segment</li>
+<li>Segment 数量过多影响查询性能（需要搜索所有 Segment）</li>
+<li>删除操作只是标记，不会真正释放空间</li>
+</ul>
+</li>
+<li>
+<p><strong>Merge 策略</strong>：</p>
+<ul>
+<li><strong>Tiered Merge Policy</strong>（默认）：按大小分层合并</li>
+<li>小 Segment 优先合并</li>
+<li>控制单次 Merge 的 Segment 数量和大小</li>
+</ul>
+</li>
+<li>
+<p><strong>Merge 过程</strong>：</p>
+<ul>
+<li>选择多个小 Segment</li>
+<li>合并倒排索引和存储的文档</li>
+<li>物理删除已标记删除的文档</li>
+<li>生成新的大 Segment</li>
+<li>原子性替换旧 Segment</li>
+</ul>
+</li>
+<li>
+<p><strong>Force Merge</strong>：</p>
+<ul>
+<li>手动触发：<code>POST /index/_forcemerge?max_num_segments=1</code></li>
+<li>强制合并为指定数量的 Segment</li>
+<li><strong>注意</strong>：会消耗大量 I/O，建议在低峰期执行</li>
+</ul>
+</li>
+</ol>
+<h2 id="5-elasticsearch-存在的问题与挑战" class="relative group">5. ElasticSearch 存在的问题与挑战 </h2><h3 id="51-近实时搜索的延迟" class="relative group">5.1 近实时搜索的延迟 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>数据写入后默认需要 1 秒才能被搜索到</li>
+<li>某些场景下 1 秒的延迟无法接受</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>实时监控告警</li>
+<li>即时消息搜索</li>
+<li>交易完成后立即查询</li>
+</ul>
+<p><strong>可视化展示</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1768377580000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+
+participant &#34;Client&#34; as Client
+participant &#34;ES&#34; as ES
+database &#34;Segment&#34; as Segment
+
+Client -&gt; ES: 写入文档 doc_id=1
+activate ES
+ES -&gt; ES: 写入 Buffer
+ES --&gt; Client: 写入成功
+deactivate ES
+
+Client -&gt; ES: 查询 doc_id=1
+activate ES
+ES -&gt; Segment: 搜索所有 Segment
+Segment --&gt; ES: 未找到
+note right #Pink
+  **问题**
+  文档在 Buffer 中
+  尚未 Refresh 到 Segment
+  查询不到！
+end note
+ES --&gt; Client: 返回空结果
+deactivate ES
+
+... 1秒后 Refresh ...
+
+Client -&gt; ES: 再次查询 doc_id=1
+activate ES
+ES -&gt; Segment: 搜索所有 Segment
+Segment --&gt; ES: 找到文档
+ES --&gt; Client: 返回文档
+deactivate ES
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377580000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>写入后手动 Refresh：<code>POST /index/_refresh</code>（影响性能，慎用）</li>
+<li>使用 <code>?refresh=wait_for</code> 参数等待 Refresh 完成</li>
+<li>调整 <code>index.refresh_interval</code> 参数（权衡实时性和性能）</li>
+<li>对于需要立即可见的场景，使用 <code>GET /index/_doc/{id}</code> 直接读取</li>
+</ul>
+<h3 id="52-深度分页问题" class="relative group">5.2 深度分页问题 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li><code>from + size</code> 分页方式在深度分页时性能急剧下降</li>
+<li>例如 <code>from=10000, size=10</code>，每个分片需要返回 10010 条数据</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>需要跳页访问的场景</li>
+<li>导出大量数据</li>
+<li>翻页到很后面的页码</li>
+</ul>
+<p><strong>问题示意</strong>：</p>
+<div class="plantuml-diagram" id="plantuml-1768377627000">
+  <pre class="plantuml-code" style="display:none;">@startuml
+skinparam backgroundColor transparent
+
+rectangle &#34;查询: from=10000, size=10&#34; as Query
+
+rectangle &#34;Shard 0&#34; as S0 {
+    rectangle &#34;返回 10010 条&#34; as S0R #Pink
+}
+rectangle &#34;Shard 1&#34; as S1 {
+    rectangle &#34;返回 10010 条&#34; as S1R #Pink
+}
+rectangle &#34;Shard 2&#34; as S2 {
+    rectangle &#34;返回 10010 条&#34; as S2R #Pink
+}
+
+rectangle &#34;协调节点&#34; as Coord {
+    rectangle &#34;合并 30030 条\n排序后取 10 条&#34; as Merge #Yellow
+}
+
+Query -down-&gt; S0
+Query -down-&gt; S1
+Query -down-&gt; S2
+
+S0 -down-&gt; Coord
+S1 -down-&gt; Coord
+S2 -down-&gt; Coord
+
+note bottom of Coord #Pink
+    **性能问题**
+    - 每个分片返回 from&#43;size 条数据
+    - 协调节点需要合并大量数据
+    - 内存和网络开销巨大
+    - 默认限制 max_result_window=10000
+end note
+
+@enduml</pre>
+  <div class="plantuml-loading">正在加载图表...</div>
+  <img class="plantuml-image" style="display:none;" alt="PlantUML Diagram" />
+  <div class="plantuml-error" style="display:none; color:#dc3545; padding:1rem; background:#fff3cd; border-radius:4px; margin-top:1rem;"></div>
+</div>
+
+
+<script>
+if (!window.plantumlEncoderLoaded) {
+  window.plantumlEncoderLoaded = new Promise((resolve, reject) => {
+    if (typeof plantumlEncoder !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('CDN加载失败'));
+    document.head.appendChild(script);
+    
+    
+    setTimeout(() => reject(new Error('CDN加载超时')), 10000);
+  });
+}
+</script>
+
+<script>
+(function() {
+  const container = document.getElementById('plantuml-1768377627000');
+  const code = container.querySelector('.plantuml-code').textContent;
+  const img = container.querySelector('.plantuml-image');
+  const loading = container.querySelector('.plantuml-loading');
+  const errorDiv = container.querySelector('.plantuml-error');
+  
+  
+  const servers = [
+    'https://www.plantuml.com/plantuml/svg/',
+    'https://kroki.io/plantuml/svg/'
+  ];
+  
+  let currentServer = 0;
+  
+  function showError(message, detail) {
+    loading.style.display = 'none';
+    errorDiv.style.display = 'block';
+    errorDiv.innerHTML = `
+      <strong>⚠️ ${message}</strong><br>
+      <small>${detail}</small><br>
+      <small style="color:#666;">提示: 请检查网络连接或稍后重试</small>
+    `;
+    console.error('PlantUML error:', message, detail);
+  }
+  
+  function tryLoadImage(encoded, serverIndex = 0) {
+    if (serverIndex >= servers.length) {
+      showError('所有服务器均加载失败', '已尝试 ' + servers.join(', '));
+      return;
+    }
+    
+    const url = servers[serverIndex] + encoded;
+    const timeout = setTimeout(() => {
+      console.warn(`服务器 ${servers[serverIndex]} 超时，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    }, 10000); 
+    
+    img.onload = function() {
+      clearTimeout(timeout);
+      loading.style.display = 'none';
+      img.style.display = 'block';
+      errorDiv.style.display = 'none';
+    };
+    
+    img.onerror = function() {
+      clearTimeout(timeout);
+      console.warn(`服务器 ${servers[serverIndex]} 加载失败，尝试下一个...`);
+      tryLoadImage(encoded, serverIndex + 1);
+    };
+    
+    img.src = url;
+  }
+  
+  
+  window.plantumlEncoderLoaded
+    .then(() => {
+      try {
+        if (typeof plantumlEncoder === 'undefined') {
+          throw new Error('plantumlEncoder 未定义');
+        }
+        
+        
+        const encoded = plantumlEncoder.encode(code);
+        
+        
+        if (encoded.length > 2048) {
+          console.warn('图表代码较长，可能加载较慢');
+        }
+        
+        
+        tryLoadImage(encoded);
+        
+      } catch (e) {
+        showError('图表编码失败', e.message);
+      }
+    })
+    .catch(err => {
+      showError('依赖库加载失败', err.message);
+    });
+})();
+</script>
+
+
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li><strong>Scroll API</strong>：适合大量数据导出，维护快照</li>
+<li><strong>Search After</strong>：基于上一页最后一条的排序值，只支持向后翻页</li>
+<li><strong>避免深度分页</strong>：业务层限制最大页码</li>
+<li>使用 <code>index.max_result_window</code> 调整限制（治标不治本）</li>
+</ul>
+<h3 id="53-更新和删除代价高" class="relative group">5.3 更新和删除代价高 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>Segment 不可变，更新 = 删除旧文档 + 写入新文档</li>
+<li>删除只是标记（.liv 文件），不会立即释放空间</li>
+<li>需要等待 Merge 才能真正删除</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>频繁更新的数据</li>
+<li>需要立即删除的合规场景</li>
+<li>空间敏感的场景</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>减少更新频率，批量更新</li>
+<li>定期执行 Force Merge</li>
+<li>设计时避免频繁更新的字段</li>
+<li>使用版本号或时间戳做逻辑删除</li>
+</ul>
+<h3 id="54-集群脑裂风险" class="relative group">5.4 集群脑裂风险 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>网络分区可能导致集群分裂为多个独立集群</li>
+<li>每个子集群选举出自己的 Master</li>
+<li>数据写入不同子集群，导致数据不一致</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>跨机房部署</li>
+<li>网络不稳定环境</li>
+<li>Master 节点不足</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>7.x+ 版本已大幅改进选举机制，风险降低</li>
+<li>设置合理的 Master 节点数量（至少 3 个）</li>
+<li>使用 <code>discovery.zen.minimum_master_nodes</code>（旧版本）</li>
+<li>网络规划避免分区</li>
+</ul>
+<h3 id="55-内存压力" class="relative group">5.5 内存压力 </h3><p><strong>问题描述</strong>：</p>
+<ul>
+<li>倒排索引的 Term Dictionary 需要加载到内存</li>
+<li>聚合查询需要大量内存</li>
+<li>Field Data 可能导致 OOM</li>
+</ul>
+<p><strong>影响场景</strong>：</p>
+<ul>
+<li>高基数字段聚合（如用户 ID）</li>
+<li>大量 text 字段</li>
+<li>复杂的嵌套聚合</li>
+</ul>
+<p><strong>缓解措施</strong>：</p>
+<ul>
+<li>使用 Doc Values 代替 Field Data</li>
+<li>控制聚合的基数</li>
+<li>合理设置 JVM 堆内存（不超过 32GB）</li>
+<li>使用 Circuit Breaker 防止 OOM</li>
+</ul>
+<h2 id="6-总结" class="relative group">6. 总结 </h2><h3 id="61-elasticsearch-的优势" class="relative group">6.1 ElasticSearch 的优势 </h3><ol>
+<li><strong>高效的全文搜索</strong>：基于倒排索引，毫秒级搜索响应</li>
+<li><strong>灵活的分词</strong>：支持多种分词器，可定制化</li>
+<li><strong>分布式架构</strong>：原生支持分片和副本，易于扩展</li>
+<li><strong>近实时搜索</strong>：写入约 1 秒后可搜索</li>
+<li><strong>丰富的查询能力</strong>：全文搜索 + 结构化查询 + 聚合分析</li>
+</ol>
+<h3 id="62-需要注意的问题" class="relative group">6.2 需要注意的问题 </h3><ol>
+<li><strong>近实时延迟</strong>：写入后不能立即搜索到</li>
+<li><strong>深度分页</strong>：避免 <code>from + size</code> 深度分页</li>
+<li><strong>更新代价高</strong>：减少不必要的更新操作</li>
+<li><strong>不适合 OLTP</strong>：不要用于事务场景</li>
+<li><strong>内存管理</strong>：注意 JVM 和系统内存分配</li>
+</ol>
+<h3 id="63-最佳实践建议" class="relative group">6.3 最佳实践建议 </h3><ul>
+<li>
+<p><strong>索引设计</strong>：</p>
+<ul>
+<li>合理设置分片数（建议每个分片 10-50GB）</li>
+<li>避免过多字段（控制在 1000 以内）</li>
+<li>使用合适的字段类型（keyword vs text）</li>
+<li>禁用不需要搜索的字段的索引</li>
+</ul>
+</li>
+<li>
+<p><strong>写入优化</strong>：</p>
+<ul>
+<li>批量写入（Bulk API，每批 5-15MB）</li>
+<li>写入时可临时增大 <code>refresh_interval</code></li>
+<li>使用自动生成的 ID 或避免版本冲突</li>
+</ul>
+</li>
+<li>
+<p><strong>查询优化</strong>：</p>
+<ul>
+<li>使用 Filter 代替 Query（可缓存）</li>
+<li>避免 <code>*</code> 通配符开头的查询</li>
+<li>使用 Search After 替代深度分页</li>
+<li>合理使用 <code>_source</code> 过滤返回字段</li>
+</ul>
+</li>
+<li>
+<p><strong>集群规划</strong>：</p>
+<ul>
+<li>分离 Master、Data、Coordinating 节点角色</li>
+<li>JVM 堆内存不超过 32GB，预留一半给文件系统缓存</li>
+<li>使用 SSD 存储</li>
+<li>监控关键指标：索引延迟、搜索延迟、GC 时间</li>
+</ul>
+</li>
+<li>
+<p><strong>运维管理</strong>：</p>
+<ul>
+<li>定期监控分片大小和数量</li>
+<li>低峰期执行 Force Merge</li>
+<li>使用 ILM（Index Lifecycle Management）管理索引生命周期</li>
+<li>定期备份（Snapshot）</li>
+</ul>
+</li>
+</ul>
+<p>ElasticSearch 在全文搜索和日志分析场景下具有显著优势，但需要理解其工作原理和限制，才能充分发挥其潜力。通过合理的索引设计、查询优化和集群规划，可以构建高效、稳定的搜索服务。</p>
 
       </div>
     </section>
@@ -928,7 +3274,7 @@ es在数据写入的时候，默认是需要所有副本都写入成功才算成
       <div class="flex justify-between pt-3">
         <span>
           
-            <a class="group flex" href="http://localhost:1313/posts/canal%E5%AE%9E%E8%B7%B5/">
+            <a class="group flex" href="http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">
               <span
                 class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
                 ><span class="ltr:inline rtl:hidden">&larr;</span
@@ -937,11 +3283,11 @@ es在数据写入的时候，默认是需要所有副本都写入成功才算成
               <span class="flex flex-col">
                 <span
                   class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
-                  >Canal实践</span
+                  >Cursor进阶使用</span
                 >
                 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
                   
-                    <time datetime="2022-03-08 10:53:49 &#43;0000 UTC">8 March 2022</time>
+                    <time datetime="2025-05-01 00:00:00 &#43;0000 UTC">1 May 2025</time>
                   
                 </span>
               </span>
@@ -950,15 +3296,15 @@ es在数据写入的时候，默认是需要所有副本都写入成功才算成
         </span>
         <span>
           
-            <a class="group flex text-right" href="http://localhost:1313/posts/guaua-cache%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">
+            <a class="group flex text-right" href="http://localhost:1313/posts/clickhouse%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/">
               <span class="flex flex-col">
                 <span
                   class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
-                  >Guaua Cache原理分析</span
+                  >ClickHouse核心原理深度剖析</span
                 >
                 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
                   
-                    <time datetime="2022-02-25 00:00:00 &#43;0000 UTC">25 February 2022</time>
+                    <time datetime="2024-12-01 00:00:00 &#43;0000 UTC">1 December 2024</time>
                   
                 </span>
               </span>
@@ -1023,7 +3369,7 @@ es在数据写入的时候，默认是需要所有副本都写入成功才算成
       
         <p class="text-sm text-neutral-500 dark:text-neutral-400">
             &copy;
-            2025
+            2026
             Skitii
         </p>
       

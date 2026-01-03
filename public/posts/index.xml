@@ -6,12 +6,19 @@
     <description>Recent content on Skitii</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI 驱动的有状态 SDLC 流水线：行业调研与落地方案</title>
+      <link>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</link>
+      <pubDate>Sat, 20 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</guid>
+      <description></description>
+    </item>
     <item>
       <title>利用GenAI加速软件开发生命周期策略</title>
       <link>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</link>
-      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 15 Dec 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/strategy-accelerate-software-dev-lifecycle-gen-ai/</guid>
       <description></description>
     </item>
@@ -37,10 +44,10 @@
       <description></description>
     </item>
     <item>
-      <title>AI 驱动的有状态 SDLC 流水线：行业调研与落地方案</title>
-      <link>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</link>
-      <pubDate>Wed, 15 Jan 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/stateful-sdlc-pipeline-research/</guid>
+      <title>ElasticSearch核心原理深度剖析</title>
+      <link>http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</guid>
       <description></description>
     </item>
     <item>
@@ -195,13 +202,6 @@
       <link>http://localhost:1313/posts/canal%E5%AE%9E%E8%B7%B5/</link>
       <pubDate>Tue, 08 Mar 2022 10:53:49 +0000</pubDate>
       <guid>http://localhost:1313/posts/canal%E5%AE%9E%E8%B7%B5/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ES核心原理</title>
-      <link>http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</link>
-      <pubDate>Wed, 02 Mar 2022 09:53:49 +0000</pubDate>
-      <guid>http://localhost:1313/posts/es%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/</guid>
       <description></description>
     </item>
     <item>

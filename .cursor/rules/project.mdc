@@ -1,0 +1,202 @@
+---
+alwaysApply: true
+---
+
+# Hugo 博客项目开发规范
+
+## 项目概述
+这是一个基于 Hugo (v0.152.2) 的个人技术博客，使用 Congo 主题 (v2.9.0)。
+主要内容包括 Java、Go、MySQL、Redis、RocketMQ 等技术文章。
+
+## 技术栈
+- **静态站点生成器**: Hugo v0.152.2
+- **主题**: Congo v2.9.0 (通过 Git Submodule 管理)
+- **部署**: GitHub Actions + Vercel
+- **语言**: Markdown, HTML, CSS, JavaScript
+
+## 目录结构规范
+
+### 核心目录说明
+```
+mywebsite/
+├── archetypes/          # 文章模板
+├── assets/              # 资源文件（图片等）
+├── config/              # Hugo 配置文件
+│   └── _default/        # 默认配置
+├── content/             # 文章内容（主要工作区）
+│   └── posts/           # 博客文章
+├── layouts/             # 自定义布局模板（优先级高于主题）
+│   ├── _default/        # 默认布局
+│   ├── partials/        # 部分模板（扩展点）
+│   └── shortcodes/      # 自定义短代码
+├── static/              # 静态资源（直接复制到输出）
+├── themes/              # 主题目录
+│   └── congo/           # Congo 主题（不要修改！）
+└── public/              # 生成的静态网站（忽略）
+```
+
+## 开发规范
+
+### 1. 主题修改原则 ⚠️
+- ✅ **只修改** `layouts/` 目录下的文件
+- ❌ **绝不修改** `themes/congo/` 目录下的文件
+- ✅ 利用 Hugo 的模板优先级机制进行覆盖
+- ✅ 使用主题提供的扩展点（extend-head.html, extend-footer.html 等）
+
+### 2. 文章撰写规范
+
+#### 创建新文章
+```bash
+hugo new posts/your-post-name.md
+```
+
+#### Front Matter 必需字段
+```yaml
+---
+title: "文章标题"
+date: 2025-11-14T10:00:00+08:00
+draft: false
+categories: ["Java", "Go", "MySQL"]  # 分类
+tags: ["并发编程", "GMP", "索引"]    # 标签
+---
+```
+
+#### 支持的内容格式
+- 标准 Markdown 语法
+- PlantUML 图表（使用 `{{< plantuml >}}` shortcode）
+- 图片放大（Fancybox 自动处理）
+- 数学公式（通过配置支持）
+
+### 3. PlantUML 使用规范
+
+#### 标准写法
+```markdown
+{{< plantuml >}}
+@startuml
+skinparam backgroundColor transparent
+Alice -> Bob: Hello
+@enduml
+{{< /plantuml >}}
+```
+
+#### 注意事项
+- 始终使用 `backgroundColor transparent` 保证深色模式兼容
+- 复杂图表建议使用对比度增强脚本优化
+- 依赖网络访问 PlantUML 服务器
+
+#### 批量转换工具
+```bash
+# 转换代码块格式
+./convert-plantuml.sh content/posts/your-article.md
+
+# 移除背景色
+./remove-plantuml-bg.sh content/posts/your-article.md
+
+# 增强对比度
+./enhance-plantuml-contrast.sh content/posts/your-article.md
+```
+
+### 4. 图片处理规范
+
+#### 存放位置
+- 文章配图：`assets/img/` 或 `static/img/`
+- Favicon 相关：`static/` 根目录
+
+#### 引用方式
+```markdown
+# 使用 Fancybox 支持的方式
+![图片描述](/img/your-image.png)
+
+# 或使用自定义 figure shortcode
+{{< figure src="/img/your-image.png" title="图片标题" >}}
+```
+
+### 5. 自定义功能扩展
+
+#### 已集成功能
+- ✅ Utterances 评论系统
+- ✅ Live2D 看板娘
+- ✅ Chatra 聊天系统
+- ✅ Fancybox 图片放大
+- ✅ PlantUML 图表渲染
+- ✅ TOC 目录美化
+- ✅ 中文字数统计
+
+#### 扩展点位置
+- `layouts/partials/extend-head.html` - 在 `</head>` 之前注入
+- `layouts/partials/extend-footer.html` - 在 `</body>` 之前注入
+- `layouts/partials/comments.html` - 文章评论区
+- `layouts/partials/plantuml-style.html` - PlantUML 样式
+- `layouts/partials/toc-style.html` - 目录样式
+
+## 开发工作流
+
+### 本地开发
+```bash
+# 克隆项目（包含子模块）
+git clone git@github.com:AbnerHuang2/mywebsite.git --recurse-submodules
+
+# 切换到工作分支
+git checkout master
+
+# 更新主题
+git submodule update --remote --merge
+
+# 启动本地服务器
+hugo server -D
+
+# 访问 http://localhost:1313
+```
+
+### 部署流程
+```bash
+# 1. 提交代码
+git add .
+git commit -m "feat: 添加新文章"
+git push origin master
+
+# 2. 自动触发 GitHub Actions 构建
+# 3. 构建结果推送到 gh-pages 分支
+# 4. Vercel 自动部署到生产环境
+```
+
+### Git 分支说明
+- `master` - 工作分支（源代码）
+- `gh-pages` - 部署分支（自动生成，不要手动修改）
+
+## 代码风格指南
+
+### HTML/Template 规范
+- 使用 2 空格缩进
+- 注释清晰标注功能模块
+- 保持模板逻辑简洁
+
+### Markdown 规范
+- 中英文之间添加空格
+- 使用语义化的标题层级
+- 代码块指定语言类型
+- 重要内容使用 ⚠️ 等符号标注
+
+### JavaScript 规范
+- 使用现代 ES6+ 语法
+- 添加错误处理和超时机制
+- 注释解释复杂逻辑
+- 避免全局变量污染
+
+## 配置文件说明
+
+### 主配置文件
+- `config/_default/config.toml` - 网站基础配置
+- `config/_default/params.toml` - 主题参数配置
+- `config/_default/languages.en.toml` - 语言配置
+- `config/_default/menus.en.toml` - 菜单配置
+- `config/_default/markup.toml` - Markdown 渲染配置
+- `config/_default/module.toml` - 模块配置
+
+### 关键配置项
+```toml
+baseURL = "https://skitii.vercel.app/"
+theme = "congo"
+hasCJKLanguage = true  # 中文支持
+enableRobotsTXT = true
+```

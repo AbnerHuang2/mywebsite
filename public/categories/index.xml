@@ -6,12 +6,12 @@
     <description>Recent content in Categories on Skitii</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 29 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>软件工程</title>
       <link>http://localhost:1313/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</link>
-      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 20 Dec 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</guid>
       <description></description>
     </item>
@@ -27,6 +27,13 @@
       <link>http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/</link>
       <pubDate>Sat, 03 May 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ElasticSearch</title>
+      <link>http://localhost:1313/categories/elasticsearch/</link>
+      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/elasticsearch/</guid>
       <description></description>
     </item>
     <item>
@@ -83,13 +90,6 @@
       <link>http://localhost:1313/categories/redis/</link>
       <pubDate>Wed, 27 Apr 2022 09:30:31 +0000</pubDate>
       <guid>http://localhost:1313/categories/redis/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ElasticSearch</title>
-      <link>http://localhost:1313/categories/elasticsearch/</link>
-      <pubDate>Wed, 02 Mar 2022 09:53:49 +0000</pubDate>
-      <guid>http://localhost:1313/categories/elasticsearch/</guid>
       <description></description>
     </item>
     <item>
