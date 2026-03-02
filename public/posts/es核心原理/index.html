@@ -91,7 +91,7 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 
-<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1767427214" />
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=1772417995" />
 
 
   
@@ -862,7 +862,7 @@ html {
 <li><strong>Schema Free</strong>：支持动态映射，灵活的文档结构</li>
 <li><strong>丰富的查询 DSL</strong>：支持全文搜索、结构化搜索、聚合分析</li>
 </ul>
-<h3 id="12-核心组件" class="relative group">1.2 核心组件 </h3><div class="plantuml-diagram" id="plantuml-1768376879000">
+<h3 id="12-核心组件" class="relative group">1.2 核心组件 </h3><div class="plantuml-diagram" id="plantuml-1772673154000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam componentStyle rectangle
@@ -946,7 +946,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768376879000');
+  const container = document.getElementById('plantuml-1772673154000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1192,7 +1192,7 @@ if (!window.plantumlEncoderLoaded) {
 </ol>
 <h2 id="3-怎么解决的" class="relative group">3. 怎么解决的？ </h2><p>ElasticSearch 通过以下核心机制解决上述问题：</p>
 <h3 id="31-倒排索引" class="relative group">3.1 倒排索引 </h3><p><strong>核心思想</strong>：建立词条（Term）到文档（Document）的映射，而非文档到词条的映射。</p>
-<div class="plantuml-diagram" id="plantuml-1768376974000">
+<div class="plantuml-diagram" id="plantuml-1772673218000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam rectangleBackgroundColor LightYellow
@@ -1256,7 +1256,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768376974000');
+  const container = document.getElementById('plantuml-1772673218000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1363,7 +1363,7 @@ if (!window.plantumlEncoderLoaded) {
 <li><strong>Flush</strong>：将文件系统缓存的数据持久化到磁盘</li>
 <li><strong>Translog</strong>：事务日志，保证数据不丢失</li>
 </ul>
-<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-es-整体工作流程" class="relative group">4.0 ES 整体工作流程 </h3><div class="plantuml-diagram" id="plantuml-1768377052000">
+<h2 id="4-核心流程" class="relative group">4. 核心流程 </h2><h3 id="40-es-整体工作流程" class="relative group">4.0 ES 整体工作流程 </h3><div class="plantuml-diagram" id="plantuml-1772673267000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -1462,7 +1462,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377052000');
+  const container = document.getElementById('plantuml-1772673267000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1563,7 +1563,7 @@ if (!window.plantumlEncoderLoaded) {
 </li>
 </ol>
 <hr>
-<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="lucene-索引结构" class="relative group">Lucene 索引结构 </h4><div class="plantuml-diagram" id="plantuml-1768377122000">
+<h3 id="41-底层存储结构" class="relative group">4.1 底层存储结构 </h3><h4 id="lucene-索引结构" class="relative group">Lucene 索引结构 </h4><div class="plantuml-diagram" id="plantuml-1772673318000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam classAttributeIconSize 0
@@ -1656,7 +1656,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377122000');
+  const container = document.getElementById('plantuml-1772673318000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1778,7 +1778,7 @@ if (!window.plantumlEncoderLoaded) {
   </tbody>
 </table>
 <p>ES 会为每个字段建立独立的倒排索引：</p>
-<div class="plantuml-diagram" id="plantuml-1768377189000">
+<div class="plantuml-diagram" id="plantuml-1772673372000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam defaultFontSize 12
@@ -1843,7 +1843,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377189000');
+  const container = document.getElementById('plantuml-1772673372000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -1947,7 +1947,7 @@ if (!window.plantumlEncoderLoaded) {
 </ol>
 <p><strong>倒排索引文件存储结构</strong>：</p>
 <p>词条到文档的映射关系通过 <strong>三个文件协同工作</strong> 完成：</p>
-<div class="plantuml-diagram" id="plantuml-1768377246000">
+<div class="plantuml-diagram" id="plantuml-1772673417000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam defaultFontSize 11
@@ -2005,7 +2005,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377246000');
+  const container = document.getElementById('plantuml-1772673417000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2148,7 +2148,7 @@ Doc3 → 北京
 
 # 聚合查询 &#34;按城市统计用户数&#34; 时直接遍历此列
 # 结果：北京=2, 上海=1
-</code></pre><h3 id="42-数据写入流程" class="relative group">4.2 数据写入流程 </h3><div class="plantuml-diagram" id="plantuml-1768377365000">
+</code></pre><h3 id="42-数据写入流程" class="relative group">4.2 数据写入流程 </h3><div class="plantuml-diagram" id="plantuml-1772673470000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2234,7 +2234,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377365000');
+  const container = document.getElementById('plantuml-1772673470000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2352,7 +2352,7 @@ if (!window.plantumlEncoderLoaded) {
 </ul>
 </li>
 </ol>
-<h3 id="43-数据查询流程" class="relative group">4.3 数据查询流程 </h3><div class="plantuml-diagram" id="plantuml-1768377417000">
+<h3 id="43-数据查询流程" class="relative group">4.3 数据查询流程 </h3><div class="plantuml-diagram" id="plantuml-1772673534000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2442,7 +2442,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377417000');
+  const container = document.getElementById('plantuml-1772673534000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2550,7 +2550,7 @@ if (!window.plantumlEncoderLoaded) {
 </ul>
 </li>
 </ol>
-<h3 id="44-segment-merge-机制" class="relative group">4.4 Segment Merge 机制 </h3><div class="plantuml-diagram" id="plantuml-1768377477000">
+<h3 id="44-segment-merge-机制" class="relative group">4.4 Segment Merge 机制 </h3><div class="plantuml-diagram" id="plantuml-1772673586000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 skinparam sequenceArrowThickness 2
@@ -2627,7 +2627,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377477000');
+  const container = document.getElementById('plantuml-1772673586000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2758,7 +2758,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>交易完成后立即查询</li>
 </ul>
 <p><strong>可视化展示</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1768377580000">
+<div class="plantuml-diagram" id="plantuml-1772674027000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2822,7 +2822,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377580000');
+  const container = document.getElementById('plantuml-1772674027000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -2924,7 +2924,7 @@ if (!window.plantumlEncoderLoaded) {
 <li>翻页到很后面的页码</li>
 </ul>
 <p><strong>问题示意</strong>：</p>
-<div class="plantuml-diagram" id="plantuml-1768377627000">
+<div class="plantuml-diagram" id="plantuml-1772674077000">
   <pre class="plantuml-code" style="display:none;">@startuml
 skinparam backgroundColor transparent
 
@@ -2988,7 +2988,7 @@ if (!window.plantumlEncoderLoaded) {
 
 <script>
 (function() {
-  const container = document.getElementById('plantuml-1768377627000');
+  const container = document.getElementById('plantuml-1772674077000');
   const code = container.querySelector('.plantuml-code').textContent;
   const img = container.querySelector('.plantuml-image');
   const loading = container.querySelector('.plantuml-loading');
@@ -3274,7 +3274,7 @@ if (!window.plantumlEncoderLoaded) {
       <div class="flex justify-between pt-3">
         <span>
           
-            <a class="group flex" href="http://localhost:1313/posts/cursor%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">
+            <a class="group flex" href="http://localhost:1313/posts/go-channel%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
               <span
                 class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
                 ><span class="ltr:inline rtl:hidden">&larr;</span
@@ -3283,11 +3283,11 @@ if (!window.plantumlEncoderLoaded) {
               <span class="flex flex-col">
                 <span
                   class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
-                  >Cursor进阶使用</span
+                  >Go Channel 实现原理</span
                 >
                 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
                   
-                    <time datetime="2025-05-01 00:00:00 &#43;0000 UTC">1 May 2025</time>
+                    <time datetime="2025-03-02 00:00:00 &#43;0000 UTC">2 March 2025</time>
                   
                 </span>
               </span>

@@ -30,6 +30,13 @@
       <description></description>
     </item>
     <item>
+      <title>Go</title>
+      <link>http://localhost:1313/categories/go/</link>
+      <pubDate>Sun, 02 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/go/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>ElasticSearch</title>
       <link>http://localhost:1313/categories/elasticsearch/</link>
       <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
@@ -41,13 +48,6 @@
       <link>http://localhost:1313/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
       <pubDate>Sun, 01 Dec 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Go</title>
-      <link>http://localhost:1313/categories/go/</link>
-      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/go/</guid>
       <description></description>
     </item>
     <item>

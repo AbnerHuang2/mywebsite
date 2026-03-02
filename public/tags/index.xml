@@ -177,6 +177,34 @@
       <description></description>
     </item>
     <item>
+      <title>Channel</title>
+      <link>http://localhost:1313/tags/channel/</link>
+      <pubDate>Sun, 02 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/channel/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CSP</title>
+      <link>http://localhost:1313/tags/csp/</link>
+      <pubDate>Sun, 02 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/csp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Go</title>
+      <link>http://localhost:1313/tags/go/</link>
+      <pubDate>Sun, 02 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/go/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>并发编程</title>
+      <link>http://localhost:1313/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Sun, 02 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>ElasticSearch</title>
       <link>http://localhost:1313/tags/elasticsearch/</link>
       <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
@@ -240,13 +268,6 @@
       <description></description>
     </item>
     <item>
-      <title>Go</title>
-      <link>http://localhost:1313/tags/go/</link>
-      <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/go/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Testing</title>
       <link>http://localhost:1313/tags/testing/</link>
       <pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate>
@@ -293,13 +314,6 @@
       <link>http://localhost:1313/tags/gmp/</link>
       <pubDate>Thu, 14 Nov 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/tags/gmp/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>并发编程</title>
-      <link>http://localhost:1313/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</link>
-      <pubDate>Thu, 14 Nov 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</guid>
       <description></description>
     </item>
     <item>
